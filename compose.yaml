@@ -1,0 +1,51 @@
+services:
+
+  # The Robot hmi
+  hmi:
+    container_name: robot-hmi
+    build:
+      context: hmi
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - ./hmi:/usr/src/hmi
+      - /usr/src/hmi/node_modules
+    restart: always
+    networks:
+      - hmi-network
+    depends_on:
+      - api
+
+  # The Robot API
+  api:
+    container_name: robot-api
+    restart: always
+    build:
+      context: api
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    depends_on:
+      - storage
+    networks:
+      - storage-network
+      - hmi-network
+    expose:
+      - 3000:3000
+
+  # MongoDB Storage
+  storage:
+    container_name: robot-state
+    restart: always
+    image: mongo:4.2.0
+    volumes:
+      - ./data:/data/db
+    networks:
+      - storage-network
+    expose:
+      - 27017
+
+networks:
+  hmi-network:
+  storage-network:
