@@ -5,6 +5,8 @@
   "dependencies": {
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.15",
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
     "leva": "^0.9.35",
     "lodash.clamp": "^4.0.3",
     "react": "^18.2.0",
@@ -48,6 +50,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:4000"
+  }
 }

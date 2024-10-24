@@ -1,5 +1,6 @@
- 
-import mongoose from "mongoose"
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import path from 'path';
 
 enum NodeName {
     mainColumn = 'main_column',
@@ -10,54 +11,53 @@ enum NodeName {
 }
 
 export interface RobotNode {
-    position: [number, number, number],
-    scale: [number, number, number]
-    rotation?: [number, number, number]
+    position: [number, number, number];
+    scale: [number, number, number];
+    rotation?: [number, number, number];
 }
 
-export type RobotStateDocument = mongoose.Document & {
+export interface RobotStateDocument {
     nodes: {
-        [NodeName.mainColumn]: RobotNode
-        [NodeName.upperArm]: RobotNode
-        [NodeName.wristExtension]: RobotNode
-        [NodeName.hand]: RobotNode
-        [NodeName.gripper]: RobotNode
-    }
+        [NodeName.mainColumn]: RobotNode;
+        [NodeName.upperArm]: RobotNode;
+        [NodeName.wristExtension]: RobotNode;
+        [NodeName.hand]: RobotNode;
+        [NodeName.gripper]: RobotNode;
+    };
 }
 
-const robotStateSchema = new mongoose.Schema<RobotStateDocument>(
-    {
-        nodes: {
-            [NodeName.mainColumn]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.upperArm]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.wristExtension]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.hand]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.gripper]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            }
-        }
-    },
-    {
-        timestamps: true
-    }
-)
+const adapter = new FileSync<{ robotState: RobotStateDocument[] }>(
+    path.join(__dirname, '../data/db.json')
+);
+const db = low(adapter);
 
-export const RobotState = mongoose.model<RobotStateDocument>("RobotState", robotStateSchema)
+// Initialize db with default data if empty
+db.defaults({ robotState: [] }).write();
+
+export const RobotState = {
+    findOne: async (): Promise<RobotStateDocument | null> => {
+        const state = db.get('robotState').first().value();
+        return state || null;
+    },
+
+    findOneAndUpdate: async (
+        query: any,
+        update: RobotStateDocument
+    ): Promise<RobotStateDocument | null> => {
+        db.get('robotState')
+            .find(query)
+            .assign(update)
+            .write();
+        return update;
+    },
+
+    insertMany: async (documents: RobotStateDocument[]): Promise<void> => {
+        db.get('robotState')
+            .push(...documents)
+            .write();
+    },
+
+    find: async (): Promise<RobotStateDocument[]> => {
+        return db.get('robotState').value();
+    }
+};
