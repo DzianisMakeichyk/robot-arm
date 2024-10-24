@@ -1,6 +1,6 @@
-FROM node:lts-bookworm
+FROM node:16-bullseye
 
-# Install Python 3.8+ and build dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-dev \
@@ -13,29 +13,43 @@ RUN apt-get update && apt-get install -y \
     libbluetooth-dev \
     libudev-dev \
     libusb-1.0-0-dev \
+    dbus \
+    systemd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/api
 
-COPY package.json /usr/src/api/package.json
-COPY yarn.lock /usr/src/api/yarn.lock
+# Copy package files
+COPY package.json yarn.lock ./
 
 # Set Python path for node-gyp
 ENV PYTHON=/usr/bin/python3
 
-# Install node-gyp globally with a version that supports Python 3.8
-RUN npm install -g node-gyp@9.0.0
-
 # Install dependencies
 RUN yarn install
 
-COPY . /usr/src/api
+# Copy the rest of the application
+COPY . .
+
+# Create necessary directories and set permissions
+RUN mkdir -p /var/run/dbus \
+    && mkdir -p /var/run/bluetooth \
+    && mkdir -p /etc/bluetooth
+
+# Generate machine-id
+RUN dbus-uuidgen > /var/lib/dbus/machine-id
+
+# Set permissions
+RUN chmod 777 /var/run/bluetooth \
+    && chmod 777 /var/run/dbus
+
+# Copy bluetooth configuration
+COPY bluetooth/main.conf /etc/bluetooth/main.conf
 
 EXPOSE 3000
 
-# Add Bluetooth configuration
-RUN mkdir -p /var/run/dbus
-RUN sed -i 's/#AutoEnable=false/AutoEnable=true/' /etc/bluetooth/main.conf
-
-CMD [ "npm", "run", "watch" ]
+# Start D-Bus and your application
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]

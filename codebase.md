@@ -103,6 +103,30 @@ DiscoverableTimeout = 0
 {"level":"debug","message":"Logging initialized at debug level"}
 {"level":"info","message":"Initializing Bluetooth connection..."}
 {"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"error","message":"Error in Bluetooth initialization: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
+{"level":"error","message":"Failed to initialize Bluetooth: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
+{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"error","message":"Error in Bluetooth initialization: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
+{"level":"error","message":"Failed to initialize Bluetooth: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
+{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
 
 ```
 
@@ -113,10 +137,13 @@ DiscoverableTimeout = 0
 
 # Start D-Bus system bus
 mkdir -p /var/run/dbus
-dbus-daemon --system --fork
+dbus-daemon --system --fork --nopidfile
 
 # Start Bluetooth service
-service bluetooth start || true
+/etc/init.d/bluetooth start || true
+
+# Wait for D-Bus to be ready
+sleep 2
 
 # Start your application
 npm run watch
@@ -158,15 +185,16 @@ RUN yarn install
 # Copy the rest of the application
 COPY . .
 
-# Setup D-Bus system bus
+# Create necessary directories
 RUN mkdir -p /var/run/dbus
+RUN mkdir -p /var/run/bluetooth
+
+# Generate machine-id
 RUN dbus-uuidgen > /var/lib/dbus/machine-id
 
-# Add bluetooth configuration
-RUN mkdir -p /etc/bluetooth
-RUN echo '[General]' > /etc/bluetooth/main.conf
-RUN echo 'ControllerMode = bredr' >> /etc/bluetooth/main.conf
-RUN echo 'AutoEnable=true' >> /etc/bluetooth/main.conf
+# Set permissions
+RUN chmod 777 /var/run/bluetooth
+RUN chmod 777 /var/run/dbus
 
 EXPOSE 3000
 
@@ -834,22 +862,24 @@ services:
       - ./api:/usr/src/api
       - /usr/src/api/node_modules
       - /var/run/dbus:/var/run/dbus
-      - /var/lib/bluetooth:/var/lib/bluetooth
-      - /etc/bluetooth:/etc/bluetooth
     depends_on:
       - storage
-    network_mode: host
     privileged: true
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
-      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - NOBLE_MULTI_ROLE=1
+      - NOBLE_REPORT_ALL_HCI_EVENTS=1
+      - BLENO_HCI_DEVICE_ID=0
       - PYTHON=/usr/bin/python3
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+      - "/dev/mem:/dev/mem"
     cap_add:
       - SYS_ADMIN
       - NET_ADMIN
       - NET_RAW
-    devices:
-      - "/dev/bus/usb:/dev/bus/usb"
-      - "/dev/mem:/dev/mem"
 
   # MongoDB Storage
   storage:
@@ -1084,6 +1114,18 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
+# data/diagnostic.data/metrics.2024-10-24T07-33-29Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T07-53-03Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.interim
+
+This is a binary file of the type: Binary
+
 # data/index-1--188536456211366303.wt
 
 This is a binary file of the type: Binary
@@ -1108,7 +1150,7 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
-# data/journal/WiredTigerLog.0000000047
+# data/journal/WiredTigerLog.0000000049
 
 This is a binary file of the type: Binary
 
@@ -1123,6 +1165,7 @@ This is a binary file of the type: Binary
 # data/mongod.lock
 
 ```lock
+1
 
 ```
 
@@ -1157,7 +1200,7 @@ WiredTiger 3.2.0: (May  9, 2019)
 WiredTiger version
 major=3,minor=2,patch=0
 file:WiredTiger.wt
-access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.298=(addr="018381e4b1316a448481e467d0d3748581e46f2482fa808080e2efc0e22fc0",order=298,time=1729752492,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=755)),checkpoint_lsn=(47,4992),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
+access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.303=(addr="018081e44229f53e8181e45c13e2a18281e394adba808080e2efc0e22fc0",order=303,time=1729756382,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=765)),checkpoint_lsn=(49,256),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
 
 ```
 
