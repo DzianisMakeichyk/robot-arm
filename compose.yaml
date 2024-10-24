@@ -1,3 +1,4 @@
+version: '3'
 services:
 
   # The Robot hmi
@@ -26,13 +27,23 @@ services:
     volumes:
       - ./api:/usr/src/api
       - /usr/src/api/node_modules
+      - /var/run/dbus:/var/run/dbus
+      - /var/lib/bluetooth:/var/lib/bluetooth
+      - /etc/bluetooth:/etc/bluetooth
     depends_on:
       - storage
-    networks:
-      - storage-network
-      - hmi-network
-    expose:
-      - 3000:3000
+    network_mode: host
+    privileged: true
+    environment:
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - PYTHON=/usr/bin/python3
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+      - "/dev/mem:/dev/mem"
 
   # MongoDB Storage
   storage:

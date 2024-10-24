@@ -38,23 +38,154 @@ node_modules
 
 ```
 
+# api/bluetooth/main.conf
+
+```conf
+[General]
+Name = RoboticArm
+Class = 0x000100
+DiscoverableTimeout = 0
+```
+
+# api/debug.log
+
+```log
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Bluetooth adapter state:"}
+{"level":"info","message":"Starting scan for Bluetooth devices..."}
+{"level":"error","message":"MongoDB connection error. Please make sure MongoDB is running. MongooseServerSelectionError: getaddrinfo ENOTFOUND storage"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Bluetooth adapter state:"}
+{"level":"info","message":"Starting scan for Bluetooth devices..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"not seeding"}
+{"level":"info","message":"App is running at http://localhost:3000"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"not seeding"}
+{"level":"info","message":"App is running at http://localhost:3000"}
+{"$__":{"activePaths":{"paths":{"__v":"init","_id":"init","createdAt":"init","nodes.gripper.position":"init","nodes.gripper.rotation":"init","nodes.gripper.scale":"init","nodes.hand.position":"init","nodes.hand.rotation":"init","nodes.hand.scale":"init","nodes.main_column.position":"init","nodes.main_column.rotation":"init","nodes.main_column.scale":"init","nodes.upper_arm.position":"init","nodes.upper_arm.rotation":"init","nodes.upper_arm.scale":"init","nodes.wrist_extension.position":"init","nodes.wrist_extension.rotation":"init","nodes.wrist_extension.scale":"init","updatedAt":"init"},"states":{"default":{},"init":{"__v":true,"_id":true,"createdAt":true,"nodes.gripper.position":true,"nodes.gripper.rotation":true,"nodes.gripper.scale":true,"nodes.hand.position":true,"nodes.hand.rotation":true,"nodes.hand.scale":true,"nodes.main_column.position":true,"nodes.main_column.rotation":true,"nodes.main_column.scale":true,"nodes.upper_arm.position":true,"nodes.upper_arm.rotation":true,"nodes.upper_arm.scale":true,"nodes.wrist_extension.position":true,"nodes.wrist_extension.rotation":true,"nodes.wrist_extension.scale":true,"updatedAt":true}}},"skipId":true},"$isNew":false,"_doc":{"__v":0,"_id":"6711434c365537e919c96c95","createdAt":"2024-10-17T17:03:08.087Z","nodes":{"gripper":{"position":[3.33,5.545,0.006],"rotation":[0,1.5708,0],"scale":[-0.01,-0.132,-0.325]},"hand":{"position":[3.368,5.728,-0.119],"rotation":[0,1.5708,0],"scale":[1,0.068,0.327]},"main_column":{"position":[0,1.462,0],"rotation":[],"scale":[1,1,1]},"upper_arm":{"position":[2.335,0,0.094],"rotation":[],"scale":[0.684,1,1]},"wrist_extension":{"position":[3.231,6.551,0.007],"rotation":[],"scale":[0.264,0.264,0.264]}},"updatedAt":"2024-10-17T17:03:08.087Z"},"level":"info","message":"state =>"}
+{"$__":{"activePaths":{"paths":{"__v":"init","_id":"init","createdAt":"init","nodes.gripper.position":"init","nodes.gripper.rotation":"init","nodes.gripper.scale":"init","nodes.hand.position":"init","nodes.hand.rotation":"init","nodes.hand.scale":"init","nodes.main_column.position":"init","nodes.main_column.rotation":"init","nodes.main_column.scale":"init","nodes.upper_arm.position":"init","nodes.upper_arm.rotation":"init","nodes.upper_arm.scale":"init","nodes.wrist_extension.position":"init","nodes.wrist_extension.rotation":"init","nodes.wrist_extension.scale":"init","updatedAt":"init"},"states":{"default":{},"init":{"__v":true,"_id":true,"createdAt":true,"nodes.gripper.position":true,"nodes.gripper.rotation":true,"nodes.gripper.scale":true,"nodes.hand.position":true,"nodes.hand.rotation":true,"nodes.hand.scale":true,"nodes.main_column.position":true,"nodes.main_column.rotation":true,"nodes.main_column.scale":true,"nodes.upper_arm.position":true,"nodes.upper_arm.rotation":true,"nodes.upper_arm.scale":true,"nodes.wrist_extension.position":true,"nodes.wrist_extension.rotation":true,"nodes.wrist_extension.scale":true,"updatedAt":true}}},"skipId":true},"$isNew":false,"_doc":{"__v":0,"_id":"6711434c365537e919c96c95","createdAt":"2024-10-17T17:03:08.087Z","nodes":{"gripper":{"position":[3.33,5.545,0.006],"rotation":[0,1.5708,0],"scale":[-0.01,-0.132,-0.325]},"hand":{"position":[3.368,5.728,-0.119],"rotation":[0,1.5708,0],"scale":[1,0.068,0.327]},"main_column":{"position":[0,1.462,0],"rotation":[],"scale":[1,1,1]},"upper_arm":{"position":[2.335,0,0.094],"rotation":[],"scale":[0.684,1,1]},"wrist_extension":{"position":[3.231,6.551,0.007],"rotation":[],"scale":[0.264,0.264,0.264]}},"updatedAt":"2024-10-17T17:03:08.087Z"},"level":"info","message":"state =>"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"not seeding"}
+{"level":"info","message":"App is running at http://localhost:3000"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"error","message":"Failed to get Bluetooth adapter: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: No Bluetooth adapter available","stack":"Error: No Bluetooth adapter available\n    at /usr/src/api/dist/ev3/ev3Client.js:40:27\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
+{"level":"info","message":"Enabling simulation mode due to Bluetooth initialization failure"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"error","message":"Failed to get Bluetooth adapter: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: No Bluetooth adapter available","stack":"Error: No Bluetooth adapter available\n    at /usr/src/api/dist/ev3/ev3Client.js:40:27\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
+{"level":"info","message":"Enabling simulation mode due to Bluetooth initialization failure"}
+{"level":"error","message":"MongoDB connection error. Please make sure MongoDB is running. MongooseServerSelectionError: getaddrinfo ENOTFOUND storage"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.3","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.3","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.4","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.4","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.5","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.5","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
+{"level":"info","message":"Retrying initialization (attempt 3/5)..."}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"debug","message":"Logging initialized at debug level"}
+{"level":"info","message":"Initializing Bluetooth connection..."}
+{"level":"info","message":"Getting Bluetooth adapter..."}
+
+```
+
+# api/docker-entrypoint.sh
+
+```sh
+#!/bin/bash
+
+# Start D-Bus system bus
+mkdir -p /var/run/dbus
+dbus-daemon --system --fork
+
+# Start Bluetooth service
+service bluetooth start || true
+
+# Start your application
+npm run watch
+```
+
 # api/Dockerfile
 
 ```
-FROM node:lts-buster-slim
+FROM node:16-bullseye
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-dev \
+    python3-pip \
+    make \
+    gcc \
+    g++ \
+    bluetooth \
+    bluez \
+    libbluetooth-dev \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    dbus \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/api
 
-COPY package.json /usr/src/api/package.json
-COPY yarn.lock /usr/src/api/yarn.lock
+# Copy package files
+COPY package.json yarn.lock ./
+
+# Set Python path for node-gyp
+ENV PYTHON=/usr/bin/python3
+
+# Install dependencies
 RUN yarn install
 
-COPY . /usr/src/api
+# Copy the rest of the application
+COPY . .
+
+# Setup D-Bus system bus
+RUN mkdir -p /var/run/dbus
+RUN dbus-uuidgen > /var/lib/dbus/machine-id
+
+# Add bluetooth configuration
+RUN mkdir -p /etc/bluetooth
+RUN echo '[General]' > /etc/bluetooth/main.conf
+RUN echo 'ControllerMode = bredr' >> /etc/bluetooth/main.conf
+RUN echo 'AutoEnable=true' >> /etc/bluetooth/main.conf
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "watch" ]
+# Start D-Bus and your application
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+```
 
+# api/index.d.ts
+
+```ts
+declare module 'ev3dev-lang' {
+  export class Motor {
+      constructor(port: string);
+      runToRelativePosition(position: number, speed: number): void;
+      position: number;
+  }
+}
 ```
 
 # api/package.json
@@ -76,6 +207,7 @@ CMD [ "npm", "run", "watch" ]
     "express": "^4.17.1",
     "mongodb": "^3.0.7",
     "mongoose": "^6.0.9",
+    "node-ble": "^1.11.0",
     "socket.io": "^4.7.4",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3",
@@ -133,6 +265,9 @@ import {Socket} from 'socket.io/dist/socket'
 import {RobotState} from '../models/RobotState'
 import logger from '../config/logger'
 import data from '../seed.json'
+import EV3Client from '../ev3/ev3Client';
+
+const ev3Client = new EV3Client();
 
 /**
  * Retrieve the current state of the Robot
@@ -140,8 +275,16 @@ import data from '../seed.json'
  * @param socket Socket to respond on
  */
 const getState = async (socket: Socket) => {
-
     const state = await RobotState.findOne({})
+    // const ev3Position = ev3Client.getCurrentPosition();
+    
+    // if (state && state.nodes) {
+    //     state.nodes.main_column.rotation[1] = ev3Position.mainColumn;
+    //     state.nodes.upper_arm.rotation[1] = ev3Position.upperArm;
+    //     state.nodes.wrist_extension.rotation[1] = ev3Position.wrist;
+    //     state.nodes.gripper.position[2] = ev3Position.gripper;
+    // }
+    
     logger.info('state =>', state)
     socket.emit('state', state)
 }
@@ -171,6 +314,45 @@ export default function (socket: Socket, io: Socket) {
             await RobotState.findOneAndUpdate({}, newState, {upsert: true})
             io.emit('state', newState)  // Broadcast the new state to all connected clients
             logger.info('State updated:', newState)
+
+            // Move EV3 robot
+            // if (newState.nodes) {
+            //     if (newState.nodes.main_column) {
+            //         ev3Client.moveMainColumn(newState.nodes.main_column.rotation[1]);
+            //     }
+            //     if (newState.nodes.upper_arm) {
+            //         ev3Client.moveUpperArm(newState.nodes.upper_arm.rotation[1]);
+            //     }
+            //     if (newState.nodes.wrist_extension) {
+            //         ev3Client.moveWrist(newState.nodes.wrist_extension.rotation[1]);
+            //     }
+            //     if (newState.nodes.gripper) {
+            //         ev3Client.moveGripper(newState.nodes.gripper.position[2]);
+            //     }
+            // }
+
+            // v2
+            // if (newState.nodes) {
+            //     if (newState.nodes.main_column && newState.nodes.main_column.rotation) {
+            //         const angle = Math.round(newState.nodes.main_column.rotation[1] * (180/Math.PI));
+            //         await ev3Client.moveMainColumn(angle);
+            //     }
+                
+            //     if (newState.nodes.upper_arm && newState.nodes.upper_arm.rotation) {
+            //         const angle = Math.round(newState.nodes.upper_arm.rotation[1] * (180/Math.PI));
+            //         await ev3Client.moveUpperArm(angle);
+            //     }
+                
+            //     if (newState.nodes.wrist_extension && newState.nodes.wrist_extension.rotation) {
+            //         const angle = Math.round(newState.nodes.wrist_extension.rotation[1] * (180/Math.PI));
+            //         await ev3Client.moveWrist(angle);
+            //     }
+                
+            //     if (newState.nodes.gripper && newState.nodes.gripper.position) {
+            //         const distance = Math.round(newState.nodes.gripper.position[2] * 360);
+            //         await ev3Client.moveGripper(distance);
+            //     }
+            // }
         } catch (error) {
             logger.error('Error updating state:', error)
         }
@@ -178,6 +360,233 @@ export default function (socket: Socket, io: Socket) {
     socket.on("state:get", () => getState(socket))
 }
 
+```
+
+# api/src/ev3/config.ts
+
+```ts
+export const EV3_CONFIG = {
+  bluetoothAddress: '00:16:53:80:5C:A5',
+  port: 1234
+}
+```
+
+# api/src/ev3/ev3Client.ts
+
+```ts
+import { createBluetooth } from 'node-ble';
+import logger from '../config/logger';
+
+class EV3Client {
+    private bluetooth: any;
+    private adapter: any;
+    private device: any;
+    private isConnected: boolean = false;
+    private isSimulated: boolean = false;
+    private readonly EV3_ADDRESS: string = '00:16:53:80:5C:A5';
+    private readonly SERVICE_UUID = 'fff0';
+    private readonly CHARACTERISTIC_UUID = 'fff1';
+    private initializeRetries = 0;
+    private maxInitializeRetries = 5;
+
+    constructor() {
+        this.initializeWithRetry();
+    }
+
+    private async initializeWithRetry() {
+        try {
+            // Wait for Bluetooth services to be fully initialized
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            await this.initializeConnection();
+        } catch (error) {
+            logger.error('Failed to initialize Bluetooth:', error);
+            
+            if (this.initializeRetries < this.maxInitializeRetries) {
+                this.initializeRetries++;
+                logger.info(`Retrying initialization (attempt ${this.initializeRetries}/${this.maxInitializeRetries})...`);
+                setTimeout(() => this.initializeWithRetry(), 5000);
+            } else {
+                logger.error('Max initialization retries reached, enabling simulation mode');
+                this.enableSimulationMode();
+            }
+        }
+    }
+
+    private async initializeConnection() {
+        try {
+            logger.info('Initializing Bluetooth connection...');
+            
+            const { bluetooth, destroy } = createBluetooth();
+            this.bluetooth = bluetooth;
+
+            // Get Bluetooth adapter
+            logger.info('Getting Bluetooth adapter...');
+            this.adapter = await this.bluetooth.defaultAdapter();
+            
+            if (!this.adapter) {
+                throw new Error('No Bluetooth adapter found');
+            }
+
+            logger.info('Bluetooth adapter found');
+
+            // Power on the adapter if it's not already
+            if (!await this.adapter.isPowered()) {
+                logger.info('Powering on Bluetooth adapter...');
+                await this.adapter.setPowered(true);
+            }
+
+            // Start discovery if not already scanning
+            if (!await this.adapter.isDiscovering()) {
+                logger.info('Starting device discovery...');
+                await this.adapter.startDiscovery();
+            }
+
+            logger.info('Searching for EV3 device...');
+            await this.findAndConnect();
+
+        } catch (error) {
+            logger.error('Error in Bluetooth initialization:', error);
+            throw error;
+        }
+    }
+
+    private enableSimulationMode() {
+        logger.info('Enabling simulation mode due to Bluetooth initialization failure');
+        this.isSimulated = true;
+        this.isConnected = true;
+    }
+
+    private async findAndConnect() {
+        try {
+            // Wait for the EV3 device to be discovered
+            const device = await this.adapter.waitDevice(this.EV3_ADDRESS);
+            this.device = device;
+
+            logger.info('EV3 device found, attempting to connect...');
+
+            if (!await this.device.isPaired()) {
+                await this.device.pair();
+                logger.info('Device paired successfully');
+            }
+
+            await this.device.connect();
+            this.isConnected = true;
+            logger.info('Connected to EV3');
+
+            // Get GATT service
+            const gattServer = await this.device.gatt();
+            const service = await gattServer.getPrimaryService(this.SERVICE_UUID);
+            const characteristic = await service.getCharacteristic(this.CHARACTERISTIC_UUID);
+
+            this.setupDisconnectHandler();
+
+        } catch (error) {
+            logger.error('Error connecting to device:', error);
+            this.enableSimulationMode();
+        }
+    }
+
+    private setupDisconnectHandler() {
+        if (this.device) {
+            this.device.on('disconnect', async () => {
+                logger.info('Device disconnected');
+                this.isConnected = false;
+                await this.findAndConnect();
+            });
+        }
+    }
+
+    async sendCommand(command: Buffer) {
+        if (this.isSimulated) {
+            logger.info('Simulation mode - Command logged:', command);
+            return;
+        }
+
+        if (!this.isConnected) {
+            logger.error('Not connected to EV3');
+            return;
+        }
+
+        try {
+            const characteristic = await this.device.getCharacteristic(this.CHARACTERISTIC_UUID);
+            await characteristic.writeValue(command);
+            logger.info('Command sent successfully:', command);
+        } catch (error) {
+            logger.error('Error sending command:', error);
+        }
+    }
+
+    async moveMainColumn(angle: number) {
+        const command = Buffer.from([
+            0x0C, 0x00, 
+            0x00, 
+            0x00, 
+            0x80, 
+            0x00, 
+            0x00, 
+            angle & 0xFF,
+            (angle >> 8) & 0xFF
+        ]);
+        await this.sendCommand(command);
+    }
+
+    async moveUpperArm(angle: number) {
+        const command = Buffer.from([
+            0x0C, 0x00,
+            0x00,
+            0x00,
+            0x80,
+            0x01,
+            0x00,
+            angle & 0xFF,
+            (angle >> 8) & 0xFF
+        ]);
+        await this.sendCommand(command);
+    }
+
+    async moveWrist(angle: number) {
+        const command = Buffer.from([
+            0x0C, 0x00,
+            0x00,
+            0x00,
+            0x80,
+            0x02,
+            0x00,
+            angle & 0xFF,
+            (angle >> 8) & 0xFF
+        ]);
+        await this.sendCommand(command);
+    }
+
+    async moveGripper(distance: number) {
+        const command = Buffer.from([
+            0x0C, 0x00,
+            0x00,
+            0x00,
+            0x80,
+            0x03,
+            0x00,
+            distance & 0xFF,
+            (distance >> 8) & 0xFF
+        ]);
+        await this.sendCommand(command);
+    }
+
+    async disconnect() {
+        if (this.isConnected && !this.isSimulated && this.device) {
+            try {
+                await this.device.disconnect();
+                this.isConnected = false;
+                logger.info('Disconnected from EV3');
+            } catch (error) {
+                logger.error('Error disconnecting:', error);
+            }
+        }
+    }
+}
+
+export default EV3Client;
 ```
 
 # api/src/models/RobotState.ts
@@ -395,6 +804,7 @@ mongoose.connect(process.env.MONGODB_URL, {}).then(() => {
 # compose.yaml
 
 ```yaml
+version: '3'
 services:
 
   # The Robot hmi
@@ -423,13 +833,23 @@ services:
     volumes:
       - ./api:/usr/src/api
       - /usr/src/api/node_modules
+      - /var/run/dbus:/var/run/dbus
+      - /var/lib/bluetooth:/var/lib/bluetooth
+      - /etc/bluetooth:/etc/bluetooth
     depends_on:
       - storage
-    networks:
-      - storage-network
-      - hmi-network
-    expose:
-      - 3000:3000
+    network_mode: host
+    privileged: true
+    environment:
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - PYTHON=/usr/bin/python3
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+      - "/dev/mem:/dev/mem"
 
   # MongoDB Storage
   storage:
@@ -446,7 +866,6 @@ services:
 networks:
   hmi-network:
   storage-network:
-
 ```
 
 # data/_mdb_catalog.wt
@@ -561,6 +980,110 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
+# data/diagnostic.data/metrics.2024-10-21T10-27-26Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T10-51-19Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T10-59-17Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-00-24Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-04-39Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-06-57Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-09-48Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-12-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-22T07-42-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-22-16Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-27-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-33-53Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-40-41Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-43-54Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-52-04Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-53-58Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-55-34Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-57-08Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T14-01-22Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-07-58Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-12-19Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-31-46Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-39-39Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-47-21Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-53-40Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T06-47-58Z-00000
+
+This is a binary file of the type: Binary
+
 # data/index-1--188536456211366303.wt
 
 This is a binary file of the type: Binary
@@ -585,7 +1108,7 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
-# data/journal/WiredTigerLog.0000000021
+# data/journal/WiredTigerLog.0000000047
 
 This is a binary file of the type: Binary
 
@@ -634,7 +1157,7 @@ WiredTiger 3.2.0: (May  9, 2019)
 WiredTiger version
 major=3,minor=2,patch=0
 file:WiredTiger.wt
-access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.197=(addr="018081e45b2f061d8181e42d0b01d38281e49e76141f808080e29fc0e22fc0",order=197,time=1729496534,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=528)),checkpoint_lsn=(21,484864),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
+access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.298=(addr="018381e4b1316a448481e467d0d3748581e46f2482fa808080e2efc0e22fc0",order=298,time=1729752492,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=755)),checkpoint_lsn=(47,4992),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
 
 ```
 
@@ -645,6 +1168,12 @@ This is a binary file of the type: Binary
 # data/WiredTigerLAS.wt
 
 This is a binary file of the type: Binary
+
+# docker-entrypoint.sh
+
+```sh
+
+```
 
 # hmi/.dockerignore
 
@@ -745,7 +1274,7 @@ CMD ["npm", "start"]
       "last 1 safari version"
     ]
   },
-  "proxy": "http://api:3000"
+  "proxy": "http://localhost:4000"
 }
 
 ```
@@ -807,6 +1336,10 @@ CMD ["npm", "start"]
 ```
 
 # hmi/public/robot_v2.glb
+
+This is a binary file of the type: Binary
+
+# hmi/public/robot.glb
 
 This is a binary file of the type: Binary
 
@@ -1959,494 +2492,6 @@ export namespace Robot {
         directions: Vector3[]
     }
 }
-
-```
-
-# hmi/src/utils/iks/CCDIKSolver.js
-
-```js
-import {
-	BufferAttribute,
-	BufferGeometry,
-	Color,
-	Line,
-	LineBasicMaterial,
-	Matrix4,
-	Mesh,
-	MeshBasicMaterial,
-	Object3D,
-	Quaternion,
-	SphereGeometry,
-	Vector3
-} from 'three';
-
-const _q = new Quaternion();
-const _targetPos = new Vector3();
-const _targetVec = new Vector3();
-const _effectorPos = new Vector3();
-const _effectorVec = new Vector3();
-const _linkPos = new Vector3();
-const _invLinkQ = new Quaternion();
-const _linkScale = new Vector3();
-const _axis = new Vector3();
-const _vector = new Vector3();
-const _matrix = new Matrix4();
-
-
-/**
- * CCD Algorithm
- *  - https://sites.google.com/site/auraliusproject/ccd-algorithm
- *
- * // ik parameter example
- * //
- * // target, effector, index in links are bone index in skeleton.bones.
- * // the bones relation should be
- * // <-- parent                                  child -->
- * // links[ n ], links[ n - 1 ], ..., links[ 0 ], effector
- * iks = [ {
- *	target: 1,
- *	effector: 2,
- *	links: [ { index: 5, limitation: new Vector3( 1, 0, 0 ) }, { index: 4, enabled: false }, { index : 3 } ],
- *	iteration: 10,
- *	minAngle: 0.0,
- *	maxAngle: 1.0,
- * } ];
- */
-
-class CCDIKSolver {
-
-	/**
-	 * @param {THREE.SkinnedMesh} mesh
-	 * @param {Array<Object>} iks
-	 */
-	constructor( mesh, iks = [] ) {
-
-		this.mesh = mesh;
-		this.iks = iks;
-
-		this._valid();
-
-	}
-
-	/**
-	 * Update all IK bones.
-	 *
-	 * @return {CCDIKSolver}
-	 */
-	update() {
-
-		const iks = this.iks;
-
-		for ( let i = 0, il = iks.length; i < il; i ++ ) {
-
-			this.updateOne( iks[ i ] );
-
-		}
-
-		return this;
-
-	}
-
-	/**
-	 * Update one IK bone
-	 *
-	 * @param {Object} ik parameter
-	 * @return {CCDIKSolver}
-	 */
-	updateOne( ik ) {
-
-		const bones = this.mesh.skeleton.bones;
-
-		// for reference overhead reduction in loop
-		const math = Math;
-
-		const effector = bones[ ik.effector ];
-		const target = bones[ ik.target ];
-
-		// don't use getWorldPosition() here for the performance
-		// because it calls updateMatrixWorld( true ) inside.
-		_targetPos.setFromMatrixPosition( target.matrixWorld );
-
-		const links = ik.links;
-		const iteration = ik.iteration !== undefined ? ik.iteration : 1;
-
-		for ( let i = 0; i < iteration; i ++ ) {
-
-			let rotated = false;
-
-			for ( let j = 0, jl = links.length; j < jl; j ++ ) {
-
-				const link = bones[ links[ j ].index ];
-
-				// skip this link and following links.
-				// this skip is used for MMD performance optimization.
-				if ( links[ j ].enabled === false ) break;
-
-				const limitation = links[ j ].limitation;
-				const rotationMin = links[ j ].rotationMin;
-				const rotationMax = links[ j ].rotationMax;
-
-				// don't use getWorldPosition/Quaternion() here for the performance
-				// because they call updateMatrixWorld( true ) inside.
-				link.matrixWorld.decompose( _linkPos, _invLinkQ, _linkScale );
-				_invLinkQ.invert();
-				_effectorPos.setFromMatrixPosition( effector.matrixWorld );
-
-				// work in link world
-				_effectorVec.subVectors( _effectorPos, _linkPos );
-				_effectorVec.applyQuaternion( _invLinkQ );
-				_effectorVec.normalize();
-
-				_targetVec.subVectors( _targetPos, _linkPos );
-				_targetVec.applyQuaternion( _invLinkQ );
-				_targetVec.normalize();
-
-				let angle = _targetVec.dot( _effectorVec );
-
-				if ( angle > 1.0 ) {
-
-					angle = 1.0;
-
-				} else if ( angle < - 1.0 ) {
-
-					angle = - 1.0;
-
-				}
-
-				angle = math.acos( angle );
-
-				// skip if changing angle is too small to prevent vibration of bone
-				if ( angle < 1e-5 ) continue;
-
-				if ( ik.minAngle !== undefined && angle < ik.minAngle ) {
-
-					angle = ik.minAngle;
-
-				}
-
-				if ( ik.maxAngle !== undefined && angle > ik.maxAngle ) {
-
-					angle = ik.maxAngle;
-
-				}
-
-				_axis.crossVectors( _effectorVec, _targetVec );
-				_axis.normalize();
-
-				_q.setFromAxisAngle( _axis, angle );
-				link.quaternion.multiply( _q );
-
-				// TODO: re-consider the limitation specification
-				if ( limitation !== undefined ) {
-
-					let c = link.quaternion.w;
-
-					if ( c > 1.0 ) c = 1.0;
-
-					const c2 = math.sqrt( 1 - c * c );
-					link.quaternion.set( limitation.x * c2,
-					                     limitation.y * c2,
-					                     limitation.z * c2,
-					                     c );
-
-				}
-
-				if ( rotationMin !== undefined ) {
-
-					link.rotation.setFromVector3( _vector.setFromEuler( link.rotation ).max( rotationMin ) );
-
-				}
-
-				if ( rotationMax !== undefined ) {
-
-					link.rotation.setFromVector3( _vector.setFromEuler( link.rotation ).min( rotationMax ) );
-
-				}
-
-				link.updateMatrixWorld( true );
-
-				rotated = true;
-
-			}
-
-			if ( ! rotated ) break;
-
-		}
-
-		return this;
-
-	}
-
-	/**
-	 * Creates Helper
-	 *
-	 * @return {CCDIKHelper}
-	 */
-	createHelper() {
-
-		return new CCDIKHelper( this.mesh, this.iks );
-
-	}
-
-	// private methods
-
-	_valid() {
-
-		const iks = this.iks;
-		const bones = this.mesh.skeleton.bones;
-
-		for ( let i = 0, il = iks.length; i < il; i ++ ) {
-
-			const ik = iks[ i ];
-			const effector = bones[ ik.effector ];
-			const links = ik.links;
-			let link0, link1;
-
-			link0 = effector;
-
-			for ( let j = 0, jl = links.length; j < jl; j ++ ) {
-
-				link1 = bones[ links[ j ].index ];
-
-				if ( link0.parent !== link1 ) {
-
-					console.warn( 'THREE.CCDIKSolver: bone ' + link0.name + ' is not the child of bone ' + link1.name );
-
-				}
-
-				link0 = link1;
-
-			}
-
-		}
-
-	}
-
-}
-
-function getPosition( bone, matrixWorldInv ) {
-
-	return _vector
-		.setFromMatrixPosition( bone.matrixWorld )
-		.applyMatrix4( matrixWorldInv );
-
-}
-
-function setPositionOfBoneToAttributeArray( array, index, bone, matrixWorldInv ) {
-
-	const v = getPosition( bone, matrixWorldInv );
-
-	array[ index * 3 + 0 ] = v.x;
-	array[ index * 3 + 1 ] = v.y;
-	array[ index * 3 + 2 ] = v.z;
-
-}
-
-/**
- * Visualize IK bones
- *
- * @param {SkinnedMesh} mesh
- * @param {Array<Object>} iks
- */
-class CCDIKHelper extends Object3D {
-
-	constructor( mesh, iks = [], sphereSize = 0.25 ) {
-
-		super();
-
-		this.root = mesh;
-		this.iks = iks;
-
-		this.matrix.copy( mesh.matrixWorld );
-		this.matrixAutoUpdate = false;
-
-		this.sphereGeometry = new SphereGeometry( sphereSize, 16, 8 );
-
-		this.targetSphereMaterial = new MeshBasicMaterial( {
-			color: new Color( 0xff8888 ),
-			depthTest: false,
-			depthWrite: false,
-			transparent: true
-		} );
-
-		this.effectorSphereMaterial = new MeshBasicMaterial( {
-			color: new Color( 0x88ff88 ),
-			depthTest: false,
-			depthWrite: false,
-			transparent: true
-		} );
-
-		this.linkSphereMaterial = new MeshBasicMaterial( {
-			color: new Color( 0x8888ff ),
-			depthTest: false,
-			depthWrite: false,
-			transparent: true
-		} );
-
-		this.lineMaterial = new LineBasicMaterial( {
-			color: new Color( 0xff0000 ),
-			depthTest: false,
-			depthWrite: false,
-			transparent: true
-		} );
-
-		this._init();
-
-	}
-
-	/**
-	 * Updates IK bones visualization.
-	 */
-	updateMatrixWorld( force ) {
-
-		const mesh = this.root;
-
-		if ( this.visible ) {
-
-			let offset = 0;
-
-			const iks = this.iks;
-			const bones = mesh.skeleton.bones;
-
-			_matrix.copy( mesh.matrixWorld ).invert();
-
-			for ( let i = 0, il = iks.length; i < il; i ++ ) {
-
-				const ik = iks[ i ];
-
-				const targetBone = bones[ ik.target ];
-				const effectorBone = bones[ ik.effector ];
-
-				const targetMesh = this.children[ offset ++ ];
-				const effectorMesh = this.children[ offset ++ ];
-
-				targetMesh.position.copy( getPosition( targetBone, _matrix ) );
-				effectorMesh.position.copy( getPosition( effectorBone, _matrix ) );
-
-				for ( let j = 0, jl = ik.links.length; j < jl; j ++ ) {
-
-					const link = ik.links[ j ];
-					const linkBone = bones[ link.index ];
-
-					const linkMesh = this.children[ offset ++ ];
-
-					linkMesh.position.copy( getPosition( linkBone, _matrix ) );
-
-				}
-
-				const line = this.children[ offset ++ ];
-				const array = line.geometry.attributes.position.array;
-
-				setPositionOfBoneToAttributeArray( array, 0, targetBone, _matrix );
-				setPositionOfBoneToAttributeArray( array, 1, effectorBone, _matrix );
-
-				for ( let j = 0, jl = ik.links.length; j < jl; j ++ ) {
-
-					const link = ik.links[ j ];
-					const linkBone = bones[ link.index ];
-					setPositionOfBoneToAttributeArray( array, j + 2, linkBone, _matrix );
-
-				}
-
-				line.geometry.attributes.position.needsUpdate = true;
-
-			}
-
-		}
-
-		this.matrix.copy( mesh.matrixWorld );
-
-		super.updateMatrixWorld( force );
-
-	}
-
-	/**
-	 * Frees the GPU-related resources allocated by this instance. Call this method whenever this instance is no longer used in your app.
-	 */
-	dispose() {
-
-		this.sphereGeometry.dispose();
-
-		this.targetSphereMaterial.dispose();
-		this.effectorSphereMaterial.dispose();
-		this.linkSphereMaterial.dispose();
-		this.lineMaterial.dispose();
-
-		const children = this.children;
-
-		for ( let i = 0; i < children.length; i ++ ) {
-
-			const child = children[ i ];
-
-			if ( child.isLine ) child.geometry.dispose();
-
-		}
-
-	}
-
-	// private method
-
-	_init() {
-
-		const scope = this;
-		const iks = this.iks;
-
-		function createLineGeometry( ik ) {
-
-			const geometry = new BufferGeometry();
-			const vertices = new Float32Array( ( 2 + ik.links.length ) * 3 );
-			geometry.setAttribute( 'position', new BufferAttribute( vertices, 3 ) );
-
-			return geometry;
-
-		}
-
-		function createTargetMesh() {
-
-			return new Mesh( scope.sphereGeometry, scope.targetSphereMaterial );
-
-		}
-
-		function createEffectorMesh() {
-
-			return new Mesh( scope.sphereGeometry, scope.effectorSphereMaterial );
-
-		}
-
-		function createLinkMesh() {
-
-			return new Mesh( scope.sphereGeometry, scope.linkSphereMaterial );
-
-		}
-
-		function createLine( ik ) {
-
-			return new Line( createLineGeometry( ik ), scope.lineMaterial );
-
-		}
-
-		for ( let i = 0, il = iks.length; i < il; i ++ ) {
-
-			const ik = iks[ i ];
-
-			this.add( createTargetMesh() );
-			this.add( createEffectorMesh() );
-
-			for ( let j = 0, jl = ik.links.length; j < jl; j ++ ) {
-
-				this.add( createLinkMesh() );
-
-			}
-
-			this.add( createLine( ik ) );
-
-		}
-
-	}
-
-}
-
-export { CCDIKSolver, CCDIKHelper };
 
 ```
 
