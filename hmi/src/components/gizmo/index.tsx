@@ -90,6 +90,7 @@ export const Gizmo = ({
             matrixGroup.current.matrix.copy(localMatrix)
 
             // Extract rotation from matrix
+            
             const rotation = new Euler().setFromRotationMatrix(localMatrix);
             const rotationArray: [number, number, number] = [rotation.x, rotation.y, rotation.z];
 
