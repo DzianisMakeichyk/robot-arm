@@ -1,4 +1,3 @@
-import React from 'react'
 import {Gizmo} from '@components/gizmo'
 import {useGLTF} from '@react-three/drei'
 import {Robot} from '@types'
@@ -23,7 +22,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: newMatrix
+                    rotation: data.nodes[nodeName].rotation,
+                    // Note: problem with rotation hand and gripper
+                    // when use newMatrix
+                    // rotation: newMatrix
                 }
             }
         };
@@ -58,8 +60,8 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                        scale={1}
                        userData={[node.upperArm]}
                        onUpdate={(newMatrix) => handleGizmoUpdate(node.upperArm, newMatrix)}>
-                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
 
+                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
                     <Mesh node={nodes[node.wristExtension]} data={data.nodes[node.wristExtension]}/>
                     <Mesh node={nodes[node.hand]} data={data.nodes[node.hand]}/>
 

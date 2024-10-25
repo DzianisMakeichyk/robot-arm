@@ -31,13 +31,6 @@ yarn-error.log*
 
 ```
 
-# api/.dockerignore
-
-```
-node_modules
-
-```
-
 # api/bluetooth/main.conf
 
 ```conf
@@ -45,163 +38,6 @@ node_modules
 Name = RoboticArm
 Class = 0x000100
 DiscoverableTimeout = 0
-```
-
-# api/debug.log
-
-```log
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Bluetooth adapter state:"}
-{"level":"info","message":"Starting scan for Bluetooth devices..."}
-{"level":"error","message":"MongoDB connection error. Please make sure MongoDB is running. MongooseServerSelectionError: getaddrinfo ENOTFOUND storage"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Bluetooth adapter state:"}
-{"level":"info","message":"Starting scan for Bluetooth devices..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"not seeding"}
-{"level":"info","message":"App is running at http://localhost:3000"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"not seeding"}
-{"level":"info","message":"App is running at http://localhost:3000"}
-{"$__":{"activePaths":{"paths":{"__v":"init","_id":"init","createdAt":"init","nodes.gripper.position":"init","nodes.gripper.rotation":"init","nodes.gripper.scale":"init","nodes.hand.position":"init","nodes.hand.rotation":"init","nodes.hand.scale":"init","nodes.main_column.position":"init","nodes.main_column.rotation":"init","nodes.main_column.scale":"init","nodes.upper_arm.position":"init","nodes.upper_arm.rotation":"init","nodes.upper_arm.scale":"init","nodes.wrist_extension.position":"init","nodes.wrist_extension.rotation":"init","nodes.wrist_extension.scale":"init","updatedAt":"init"},"states":{"default":{},"init":{"__v":true,"_id":true,"createdAt":true,"nodes.gripper.position":true,"nodes.gripper.rotation":true,"nodes.gripper.scale":true,"nodes.hand.position":true,"nodes.hand.rotation":true,"nodes.hand.scale":true,"nodes.main_column.position":true,"nodes.main_column.rotation":true,"nodes.main_column.scale":true,"nodes.upper_arm.position":true,"nodes.upper_arm.rotation":true,"nodes.upper_arm.scale":true,"nodes.wrist_extension.position":true,"nodes.wrist_extension.rotation":true,"nodes.wrist_extension.scale":true,"updatedAt":true}}},"skipId":true},"$isNew":false,"_doc":{"__v":0,"_id":"6711434c365537e919c96c95","createdAt":"2024-10-17T17:03:08.087Z","nodes":{"gripper":{"position":[3.33,5.545,0.006],"rotation":[0,1.5708,0],"scale":[-0.01,-0.132,-0.325]},"hand":{"position":[3.368,5.728,-0.119],"rotation":[0,1.5708,0],"scale":[1,0.068,0.327]},"main_column":{"position":[0,1.462,0],"rotation":[],"scale":[1,1,1]},"upper_arm":{"position":[2.335,0,0.094],"rotation":[],"scale":[0.684,1,1]},"wrist_extension":{"position":[3.231,6.551,0.007],"rotation":[],"scale":[0.264,0.264,0.264]}},"updatedAt":"2024-10-17T17:03:08.087Z"},"level":"info","message":"state =>"}
-{"$__":{"activePaths":{"paths":{"__v":"init","_id":"init","createdAt":"init","nodes.gripper.position":"init","nodes.gripper.rotation":"init","nodes.gripper.scale":"init","nodes.hand.position":"init","nodes.hand.rotation":"init","nodes.hand.scale":"init","nodes.main_column.position":"init","nodes.main_column.rotation":"init","nodes.main_column.scale":"init","nodes.upper_arm.position":"init","nodes.upper_arm.rotation":"init","nodes.upper_arm.scale":"init","nodes.wrist_extension.position":"init","nodes.wrist_extension.rotation":"init","nodes.wrist_extension.scale":"init","updatedAt":"init"},"states":{"default":{},"init":{"__v":true,"_id":true,"createdAt":true,"nodes.gripper.position":true,"nodes.gripper.rotation":true,"nodes.gripper.scale":true,"nodes.hand.position":true,"nodes.hand.rotation":true,"nodes.hand.scale":true,"nodes.main_column.position":true,"nodes.main_column.rotation":true,"nodes.main_column.scale":true,"nodes.upper_arm.position":true,"nodes.upper_arm.rotation":true,"nodes.upper_arm.scale":true,"nodes.wrist_extension.position":true,"nodes.wrist_extension.rotation":true,"nodes.wrist_extension.scale":true,"updatedAt":true}}},"skipId":true},"$isNew":false,"_doc":{"__v":0,"_id":"6711434c365537e919c96c95","createdAt":"2024-10-17T17:03:08.087Z","nodes":{"gripper":{"position":[3.33,5.545,0.006],"rotation":[0,1.5708,0],"scale":[-0.01,-0.132,-0.325]},"hand":{"position":[3.368,5.728,-0.119],"rotation":[0,1.5708,0],"scale":[1,0.068,0.327]},"main_column":{"position":[0,1.462,0],"rotation":[],"scale":[1,1,1]},"upper_arm":{"position":[2.335,0,0.094],"rotation":[],"scale":[0.684,1,1]},"wrist_extension":{"position":[3.231,6.551,0.007],"rotation":[],"scale":[0.264,0.264,0.264]}},"updatedAt":"2024-10-17T17:03:08.087Z"},"level":"info","message":"state =>"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"not seeding"}
-{"level":"info","message":"App is running at http://localhost:3000"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"error","message":"Failed to get Bluetooth adapter: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: No Bluetooth adapter available","stack":"Error: No Bluetooth adapter available\n    at /usr/src/api/dist/ev3/ev3Client.js:40:27\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
-{"level":"info","message":"Enabling simulation mode due to Bluetooth initialization failure"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"error","message":"Failed to get Bluetooth adapter: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: No Bluetooth adapter available","stack":"Error: No Bluetooth adapter available\n    at /usr/src/api/dist/ev3/ev3Client.js:40:27\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
-{"level":"info","message":"Enabling simulation mode due to Bluetooth initialization failure"}
-{"level":"error","message":"MongoDB connection error. Please make sure MongoDB is running. MongooseServerSelectionError: getaddrinfo ENOTFOUND storage"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.3","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.3","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.4","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.4","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.5","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.5","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"info","message":"Retrying initialization (attempt 3/5)..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"error","message":"Error in Bluetooth initialization: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
-{"level":"error","message":"Failed to initialize Bluetooth: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
-{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"error","message":"Error in Bluetooth initialization: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
-{"level":"error","message":"Failed to initialize Bluetooth: D-Bus system socket not found. Waiting for D-Bus to initialize...","stack":"Error: D-Bus system socket not found. Waiting for D-Bus to initialize...\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:55:27)\n    at Generator.next (<anonymous>)\n    at /usr/src/api/dist/ev3/ev3Client.js:8:71\n    at new Promise (<anonymous>)\n    at __awaiter (/usr/src/api/dist/ev3/ev3Client.js:4:12)\n    at EV3Client.initializeConnection (/usr/src/api/dist/ev3/ev3Client.js:50:16)\n    at EV3Client.<anonymous> (/usr/src/api/dist/ev3/ev3Client.js:33:28)\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/src/api/dist/ev3/ev3Client.js:5:58)"}
-{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"debug","message":"Logging initialized at debug level"}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.1","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"info","message":"Retrying initialization (attempt 1/5)..."}
-{"level":"info","message":"Initializing Bluetooth connection..."}
-{"level":"info","message":"Getting Bluetooth adapter..."}
-{"level":"error","message":"Error in Bluetooth initialization: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"error","message":"Failed to initialize Bluetooth: Launch helper exited with unknown return code 1","name":"DBusError","reply":{"_sent":false,"_serial":3,"body":["Launch helper exited with unknown return code 1"],"destination":":1.2","errorName":"org.freedesktop.DBus.Error.Spawn.ChildExited","flags":1,"replySerial":2,"sender":"org.freedesktop.DBus","signature":"s","type":3},"stack":"DBusError: Launch helper exited with unknown return code 1\n    at _methodReturnHandlers.<computed> (/usr/src/api/node_modules/dbus-next/lib/bus.js:343:27)\n    at handleMessage (/usr/src/api/node_modules/dbus-next/lib/bus.js:101:11)\n    at EventEmitter.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/bus.js:151:9)\n    at EventEmitter.emit (node:events:513:28)\n    at /usr/src/api/node_modules/dbus-next/lib/connection.js:132:14\n    at USocket.<anonymous> (/usr/src/api/node_modules/dbus-next/lib/message.js:65:9)\n    at USocket.emit (node:events:513:28)\n    at emitReadable_ (node:internal/streams/readable:578:12)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)","text":"Launch helper exited with unknown return code 1","type":"org.freedesktop.DBus.Error.Spawn.ChildExited"}
-{"level":"info","message":"Retrying initialization (attempt 2/5)..."}
-
-```
-
-# api/docker-entrypoint.sh
-
-```sh
-#!/bin/bash
-
-# Start D-Bus system bus
-mkdir -p /var/run/dbus
-dbus-daemon --system --fork --nopidfile
-
-# Start Bluetooth service
-/etc/init.d/bluetooth start || true
-
-# Wait for D-Bus to be ready
-sleep 2
-
-# Start your application
-npm run watch
-```
-
-# api/Dockerfile
-
-```
-FROM node:16-bullseye
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-dev \
-    python3-pip \
-    make \
-    gcc \
-    g++ \
-    bluetooth \
-    bluez \
-    libbluetooth-dev \
-    libudev-dev \
-    libusb-1.0-0-dev \
-    dbus \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /usr/src/api
-
-# Copy package files
-COPY package.json yarn.lock ./
-
-# Set Python path for node-gyp
-ENV PYTHON=/usr/bin/python3
-
-# Install dependencies
-RUN yarn install
-
-# Copy the rest of the application
-COPY . .
-
-# Create necessary directories
-RUN mkdir -p /var/run/dbus
-RUN mkdir -p /var/run/bluetooth
-
-# Generate machine-id
-RUN dbus-uuidgen > /var/lib/dbus/machine-id
-
-# Set permissions
-RUN chmod 777 /var/run/bluetooth
-RUN chmod 777 /var/run/dbus
-
-EXPOSE 3000
-
-# Start D-Bus and your application
-COPY ./docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
 ```
 
 # api/index.d.ts
@@ -216,6 +52,17 @@ declare module 'ev3dev-lang' {
 }
 ```
 
+# api/nodemon.json
+
+```json
+{
+  "watch": ["dist"],
+  "ignore": ["dist/data/*", "*.test.js", "node_modules"],
+  "ext": "js",
+  "exec": "node dist/server.js"
+}
+```
+
 # api/package.json
 
 ```json
@@ -226,30 +73,30 @@ declare module 'ev3dev-lang' {
   "author": "Dzianis Makeichyk",
   "scripts": {
     "start": "node dist/server.js",
-    "watch-node": "nodemon dist/server.js",
+    "dev": "tsc && nodemon",
     "watch-ts": "tsc -w",
-    "watch": "concurrently -k -p \"[{name}]\" \"npm run watch-ts\" \"npm run watch-node\""
+    "build": "tsc && npm run copy-data",
+    "clean": "rm -rf dist",
+    "copy-data": "mkdir -p dist/data && cp src/data/db.json dist/data/"
   },
   "dependencies": {
+    "@abandonware/bleno": "^0.6.1",
+    "@abandonware/noble": "^1.9.2-25",
     "dotenv": "^16.4.1",
     "express": "^4.17.1",
-    "mongodb": "^3.0.7",
-    "mongoose": "^6.0.9",
+    "lowdb": "^1.0.0",
     "node-ble": "^1.11.0",
     "socket.io": "^4.7.4",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3",
     "winston": "^3.11.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/lowdb": "^1.0.9",
     "@types/node": "^20.11.10",
     "@types/socket.io": "^3.0.2",
     "concurrently": "^8.2.2",
-    "nodemon": "^2.0.3"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "nodemon": "^2.0.3",
+    "typescript": "^5.3.3"
   }
 }
 
@@ -260,6 +107,23 @@ declare module 'ev3dev-lang' {
 ```md
 # API
 
+[EV3 BRICK - TOP VIEW]
+
+Motor Ports: [A] [B] [C] [D]
+
+1. Connect the main column (base rotation) motor to Port A
+   - This controls the left/right rotation of the entire arm
+
+2. Connect the upper arm motor to Port B
+   - This controls the up/down movement of the main arm
+
+3. Connect the wrist motor to Port C
+   - This controls the wrist rotation
+
+4. Connect the gripper motor to Port D
+   - This controls the gripper open/close movement
+
+Note: Use LARGE motors for A, B, C and a MEDIUM motor for D
 ```
 
 # api/src/config/logger.ts
@@ -288,106 +152,251 @@ export default logger
 # api/src/controllers/state.controller.ts
 
 ```ts
- 
-import {Socket} from 'socket.io/dist/socket'
-import {RobotState} from '../models/RobotState'
-import logger from '../config/logger'
-import data from '../seed.json'
-import EV3Client from '../ev3/ev3Client';
+import { Socket } from 'socket.io';
+import { RobotState } from '../models/RobotState';
+import logger from '../config/logger';
+import data from '../seed.json';
+import MacBluetoothClient from '../ev3/macBluetoothClient';
+import { MotorConfig, MotorPorts } from '../ev3/portConfig';
 
-const ev3Client = new EV3Client();
+const bluetoothClient = new MacBluetoothClient();
+
+/**
+ * Convert 3D model rotations to H25 motor angles
+ */
+const convertToMotorAngle = (radians: number, motorType: keyof typeof MotorPorts): number => {
+    // Convert radians to degrees
+    let degrees = (radians * 180) / Math.PI;
+    
+    // Get motor configuration
+    const config = MotorConfig[MotorPorts[motorType]];
+    
+    // Clamp to motor limits
+    return Math.max(
+        config.minDegrees,
+        Math.min(config.maxDegrees, degrees)
+    );
+};
+
+/**
+ * Convert gripper position to motor angle
+ */
+const convertGripperPosition = (position: number): number => {
+    const config = MotorConfig[MotorPorts.GRIPPER];
+    // Convert position value to percentage (0-100)
+    const percentage = ((position + 1) / 2) * 100;
+    return Math.max(
+        config.minDegrees,
+        Math.min(config.maxDegrees, percentage)
+    );
+};
+
+/**
+ * Handle H25 robot movements based on 3D model state
+ */
+const handleH25Movements = async (newState: any) => {
+    if (!newState.nodes) return;
+
+    try {
+        // Base rotation (main_column in 3D model maps to BASE motor)
+        if (newState.nodes.main_column?.rotation?.[1] !== undefined) {
+            const angle = convertToMotorAngle(newState.nodes.main_column.rotation[1], 'BASE');
+            logger.info(`Moving base motor to ${angle}°`);
+            await bluetoothClient.moveBase(angle);
+        }
+
+        // Elbow movement (upper_arm in 3D model maps to ELBOW motor)
+        if (newState.nodes.upper_arm?.rotation?.[1] !== undefined) {
+            const angle = convertToMotorAngle(newState.nodes.upper_arm.rotation[1], 'ELBOW');
+            logger.info(`Moving elbow motor to ${angle}°`);
+            await bluetoothClient.moveElbow(angle);
+        }
+
+        // Height adjustment (wrist_extension in 3D model maps to HEIGHT motor)
+        if (newState.nodes.wrist_extension?.rotation?.[1] !== undefined) {
+            const angle = convertToMotorAngle(newState.nodes.wrist_extension.rotation[1], 'HEIGHT');
+            logger.info(`Moving height motor to ${angle}°`);
+            await bluetoothClient.moveHeight(angle);
+        }
+
+        // Gripper control
+        if (newState.nodes.gripper?.position?.[2] !== undefined) {
+            const position = convertGripperPosition(newState.nodes.gripper.position[2]);
+            logger.info(`Moving gripper motor to position ${position}`);
+            await bluetoothClient.moveGripper(position);
+        }
+
+    } catch (error) {
+        logger.error('Error handling H25 movements:', error);
+    }
+};
 
 /**
  * Retrieve the current state of the Robot
- *
- * @param socket Socket to respond on
  */
 const getState = async (socket: Socket) => {
-    const state = await RobotState.findOne({})
-    // const ev3Position = ev3Client.getCurrentPosition();
-    
-    // if (state && state.nodes) {
-    //     state.nodes.main_column.rotation[1] = ev3Position.mainColumn;
-    //     state.nodes.upper_arm.rotation[1] = ev3Position.upperArm;
-    //     state.nodes.wrist_extension.rotation[1] = ev3Position.wrist;
-    //     state.nodes.gripper.position[2] = ev3Position.gripper;
-    // }
-    
-    logger.info('state =>', state)
-    socket.emit('state', state)
-}
+    const state = await RobotState.findOne();
+    logger.info('state =>', state);
+    socket.emit('state', state);
+};
 
 /**
  * Adding some initial seed data at startup if collection is empty
  */
 export const seed = async () => {
-    const state = await RobotState.find({})
-
+    const state = await RobotState.find();
     if (state.length === 0) {
-        logger.info('seeding')
-        await RobotState.insertMany(data)
+        logger.info('seeding');
+        // @ts-ignore
+        await RobotState.insertMany(data);
     } else {
-        logger.info('not seeding')
+        logger.info('not seeding');
     }
-}
+};
 
 /**
  * Map the websocket events to controller methods
- *
- * @param socket Socket to respond to
  */
-export default function (socket: Socket, io: Socket) {
+export default function (socket: Socket) {
+    // Handle initial connection
+    socket.on('connect', () => {
+        logger.info('Client connected, initializing H25 robot arm...');
+        bluetoothClient.calibrateBasePosition()
+            .catch(error => logger.error('Calibration error:', error));
+    });
+
+    // Handle state updates
     socket.on("state:update", async (newState: any) => {
         try {
-            await RobotState.findOneAndUpdate({}, newState, {upsert: true})
-            io.emit('state', newState)  // Broadcast the new state to all connected clients
-            logger.info('State updated:', newState)
+            // logger.info('Received state update:', newState);
+            await RobotState.findOneAndUpdate({}, newState);
+            socket.emit('state', newState);
+            // logger.info('State updated and emitted back');
 
-            // Move EV3 robot
-            // if (newState.nodes) {
-            //     if (newState.nodes.main_column) {
-            //         ev3Client.moveMainColumn(newState.nodes.main_column.rotation[1]);
-            //     }
-            //     if (newState.nodes.upper_arm) {
-            //         ev3Client.moveUpperArm(newState.nodes.upper_arm.rotation[1]);
-            //     }
-            //     if (newState.nodes.wrist_extension) {
-            //         ev3Client.moveWrist(newState.nodes.wrist_extension.rotation[1]);
-            //     }
-            //     if (newState.nodes.gripper) {
-            //         ev3Client.moveGripper(newState.nodes.gripper.position[2]);
-            //     }
-            // }
+            // Handle H25 movements
+            await handleH25Movements(newState);
 
-            // v2
-            // if (newState.nodes) {
-            //     if (newState.nodes.main_column && newState.nodes.main_column.rotation) {
-            //         const angle = Math.round(newState.nodes.main_column.rotation[1] * (180/Math.PI));
-            //         await ev3Client.moveMainColumn(angle);
-            //     }
-                
-            //     if (newState.nodes.upper_arm && newState.nodes.upper_arm.rotation) {
-            //         const angle = Math.round(newState.nodes.upper_arm.rotation[1] * (180/Math.PI));
-            //         await ev3Client.moveUpperArm(angle);
-            //     }
-                
-            //     if (newState.nodes.wrist_extension && newState.nodes.wrist_extension.rotation) {
-            //         const angle = Math.round(newState.nodes.wrist_extension.rotation[1] * (180/Math.PI));
-            //         await ev3Client.moveWrist(angle);
-            //     }
-                
-            //     if (newState.nodes.gripper && newState.nodes.gripper.position) {
-            //         const distance = Math.round(newState.nodes.gripper.position[2] * 360);
-            //         await ev3Client.moveGripper(distance);
-            //     }
-            // }
         } catch (error) {
-            logger.error('Error updating state:', error)
+            logger.error('Error updating state:', error);
+            socket.emit('error', { message: 'Failed to update robot state' });
         }
-    })
-    socket.on("state:get", () => getState(socket))
+    });
+
+    // Handle state requests
+    socket.on("state:get", () => {
+        logger.info('Received state:get request');
+        getState(socket);
+    });
+
+    // Handle calibration requests
+    socket.on("calibrate", async () => {
+        try {
+            await bluetoothClient.calibrateBasePosition();
+            socket.emit('calibration_complete');
+        } catch (error) {
+            logger.error('Calibration error:', error);
+            socket.emit('error', { message: 'Calibration failed' });
+        }
+    });
+
+    // Handle disconnection
+    socket.on("disconnect", async () => {
+        try {
+            // await bluetoothClient.disconnect();
+            logger.info('NOOOOOOO:','Client disconnected, shutting down H25 connection');
+        } catch (error) {
+            logger.error('Error during disconnect:', error);
+        }
+    });
+}
+```
+
+# api/src/data/db.json
+
+```json
+{
+  "robotState": [
+    {
+      "nodes": {
+        "main_column": {
+          "position": [0, 1.462, 0],
+          "scale": [1, 1, 1],
+          "rotation": []
+        },
+        "upper_arm": {
+          "position": [2.335, 0, 0.094],
+          "scale": [0.684, 1, 1],
+          "rotation": []
+        },
+        "wrist_extension": {
+          "position": [3.231, 6.551, 0.007],
+          "scale": [0.264, 0.264, 0.264],
+          "rotation": []
+        },
+        "hand": {
+          "position": [3.368, 5.728, -0.119],
+          "scale": [1, 0.068, 0.327],
+          "rotation": [0, 1.5708, 0]
+        },
+        "gripper": {
+          "position": [3.33, 5.545, 0.006],
+          "scale": [-0.01, -0.132, -0.325],
+          "rotation": [0, 1.5708, 0]
+        }
+      }
+    }
+  ]
+}
+```
+
+# api/src/ev3/blenoService.ts
+
+```ts
+import bleno from '@abandonware/bleno';
+import logger from '../config/logger';
+
+class RobotCharacteristic extends bleno.Characteristic {
+    private _value: Buffer;
+    private _updateCallback: ((data: Buffer) => void) | null = null;
+
+    constructor() {
+        super({
+            uuid: 'fff1',
+            properties: ['write', 'notify'],
+            value: null
+        });
+        this._value = Buffer.alloc(0);
+    }
+
+    onWriteRequest(data: Buffer, offset: number, withoutResponse: boolean, callback: (result: number) => void) {
+        this._value = data;
+        if (this._updateCallback) {
+            this._updateCallback(data);
+        }
+        callback(this.RESULT_SUCCESS);
+    }
+
+    setUpdateValueCallback(callback: (data: Buffer) => void) {
+        this._updateCallback = callback;
+    }
 }
 
+class RobotService extends bleno.PrimaryService {
+    characteristic: RobotCharacteristic;
+
+    constructor() {
+        const characteristic = new RobotCharacteristic();
+        
+        super({
+            uuid: 'fff0',
+            characteristics: [characteristic]
+        });
+
+        this.characteristic = characteristic;
+    }
+}
+
+export default RobotService;
 ```
 
 # api/src/ev3/config.ts
@@ -399,229 +408,383 @@ export const EV3_CONFIG = {
 }
 ```
 
-# api/src/ev3/ev3Client.ts
+# api/src/ev3/macBluetoothClient.ts
 
 ```ts
-import { createBluetooth } from 'node-ble';
+import noble from '@abandonware/noble';
 import logger from '../config/logger';
+import { 
+  MotorPorts, 
+  SensorPorts, 
+  MotorConfig, 
+  SensorConfig,
+  motorPortToHex 
+} from './portConfig';
 
-class EV3Client {
-    private bluetooth: any;
-    private adapter: any;
-    private device: any;
+class MacBluetoothClient {
     private isConnected: boolean = false;
     private isSimulated: boolean = false;
+    private characteristic: any = null;
     private readonly EV3_ADDRESS: string = '00:16:53:80:5C:A5';
     private readonly SERVICE_UUID = 'fff0';
     private readonly CHARACTERISTIC_UUID = 'fff1';
-    private initializeRetries = 0;
-    private maxInitializeRetries = 5;
+
+    /**
+     * EV3 Direct Command Format:
+     * [0x0C] - Direct command, response expected
+     * [0x00] - Header size
+     * [0x00] - Counter
+     * [0x00] - Command type
+     * [0x80] - Output power
+     * [PORT] - Output port (0x00 to 0x03 for motors A-D)
+     * [0x00] - Command subtype
+     * [Angle LSB] - Lower byte of angle
+     * [Angle MSB] - Upper byte of angle
+     */
 
     constructor() {
-        this.initializeWithRetry();
+        this.initialize();
     }
 
-    private async initializeWithRetry() {
+    private initialize() {
         try {
-            // Wait for Bluetooth services to be fully initialized
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            
-            await this.initializeConnection();
-        } catch (error) {
-            logger.error('Failed to initialize Bluetooth:', error);
-            
-            if (this.initializeRetries < this.maxInitializeRetries) {
-                this.initializeRetries++;
-                logger.info(`Retrying initialization (attempt ${this.initializeRetries}/${this.maxInitializeRetries})...`);
-                setTimeout(() => this.initializeWithRetry(), 5000);
-            } else {
-                logger.error('Max initialization retries reached, enabling simulation mode');
-                this.enableSimulationMode();
-            }
-        }
-    }
+            logger.info('Initializing EV3 Bluetooth connection...');
 
-    private async initializeConnection() {
-        try {
-            logger.info('Initializing Bluetooth connection...');
-            
-            const { bluetooth, destroy } = createBluetooth();
-            this.bluetooth = bluetooth;
+            noble.on('stateChange', async (state) => {
+                logger.info('Bluetooth state:', state);
+                if (state === 'poweredOn') {
+                    await this.startScanningForEV3();
+                } else {
+                    noble.stopScanning();
+                }
+            });
 
-            // Get Bluetooth adapter
-            logger.info('Getting Bluetooth adapter...');
-            this.adapter = await this.bluetooth.defaultAdapter();
-            
-            if (!this.adapter) {
-                throw new Error('No Bluetooth adapter found');
-            }
-
-            logger.info('Bluetooth adapter found');
-
-            // Power on the adapter if it's not already
-            if (!await this.adapter.isPowered()) {
-                logger.info('Powering on Bluetooth adapter...');
-                await this.adapter.setPowered(true);
-            }
-
-            // Start discovery if not already scanning
-            if (!await this.adapter.isDiscovering()) {
-                logger.info('Starting device discovery...');
-                await this.adapter.startDiscovery();
-            }
-
-            logger.info('Searching for EV3 device...');
-            await this.findAndConnect();
+            noble.on('discover', async (peripheral) => {
+                logger.info('Found device:', peripheral.address);
+                if (peripheral.address === this.EV3_ADDRESS || 
+                    peripheral.advertisement.localName === 'EV3') {
+                    await this.connectToEV3(peripheral);
+                }
+            });
 
         } catch (error) {
-            logger.error('Error in Bluetooth initialization:', error);
-            throw error;
-        }
-    }
-
-    private enableSimulationMode() {
-        logger.info('Enabling simulation mode due to Bluetooth initialization failure');
-        this.isSimulated = true;
-        this.isConnected = true;
-    }
-
-    private async findAndConnect() {
-        try {
-            // Wait for the EV3 device to be discovered
-            const device = await this.adapter.waitDevice(this.EV3_ADDRESS);
-            this.device = device;
-
-            logger.info('EV3 device found, attempting to connect...');
-
-            if (!await this.device.isPaired()) {
-                await this.device.pair();
-                logger.info('Device paired successfully');
-            }
-
-            await this.device.connect();
-            this.isConnected = true;
-            logger.info('Connected to EV3');
-
-            // Get GATT service
-            const gattServer = await this.device.gatt();
-            const service = await gattServer.getPrimaryService(this.SERVICE_UUID);
-            const characteristic = await service.getCharacteristic(this.CHARACTERISTIC_UUID);
-
-            this.setupDisconnectHandler();
-
-        } catch (error) {
-            logger.error('Error connecting to device:', error);
+            logger.error('Bluetooth initialization error:', error);
             this.enableSimulationMode();
         }
     }
 
-    private setupDisconnectHandler() {
-        if (this.device) {
-            this.device.on('disconnect', async () => {
-                logger.info('Device disconnected');
-                this.isConnected = false;
-                await this.findAndConnect();
-            });
+    private async startScanningForEV3() {
+        try {
+            logger.info('Starting scan for EV3...');
+            await noble.startScanningAsync([this.SERVICE_UUID], false);
+            
+            // Stop scanning after 30 seconds if EV3 not found
+            setTimeout(() => {
+                if (!this.isConnected) {
+                    noble.stopScanning();
+                    logger.warn('EV3 not found after 30 seconds. Enabling simulation mode.');
+                    this.enableSimulationMode();
+                }
+            }, 30000);
+
+        } catch (error) {
+            logger.error('Scan error:', error);
+            this.enableSimulationMode();
         }
     }
 
-    async sendCommand(command: Buffer) {
+    private async connectToEV3(peripheral: any) {
+        try {
+            logger.info('Connecting to EV3...');
+            await noble.stopScanningAsync();
+
+            await peripheral.connectAsync();
+            logger.info('Connected to EV3');
+
+            const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
+            logger.info('Discovered services');
+
+            if (services.length > 0) {
+                const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
+                if (characteristics.length > 0) {
+                    this.characteristic = characteristics[0];
+                    this.isConnected = true;
+                    logger.info('EV3 connection fully established');
+                }
+            }
+
+            peripheral.on('disconnect', () => {
+                logger.info('EV3 disconnected');
+                this.isConnected = false;
+                this.characteristic = null;
+                setTimeout(() => this.startScanningForEV3(), 1000);
+            });
+
+        } catch (error) {
+            logger.error('EV3 connection error:', error);
+            this.enableSimulationMode();
+        }
+    }
+
+    private enableSimulationMode() {
+        if (!this.isSimulated) {
+            logger.info('Enabling simulation mode');
+            this.isSimulated = true;
+        }
+    }
+
+    private async sendCommand(command: Buffer) {
         if (this.isSimulated) {
-            logger.info('Simulation mode - Command logged:', command);
+            logger.info('Simulation mode - Command:', command);
             return;
         }
 
-        if (!this.isConnected) {
-            logger.error('Not connected to EV3');
-            return;
+        if (!this.isConnected || !this.characteristic) {
+            throw new Error('Not connected to EV3');
         }
 
         try {
-            const characteristic = await this.device.getCharacteristic(this.CHARACTERISTIC_UUID);
-            await characteristic.writeValue(command);
+            await this.characteristic.writeAsync(command, false);
             logger.info('Command sent successfully:', command);
         } catch (error) {
             logger.error('Error sending command:', error);
+            this.enableSimulationMode();
+            throw error;
         }
     }
 
-    async moveMainColumn(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00, 
-            0x00, 
-            0x00, 
-            0x80, 
-            0x00, 
-            0x00, 
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
-        await this.sendCommand(command);
-    }
+    async moveBase(angle: number) {
+      const config = MotorConfig[MotorPorts.BASE];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-    async moveUpperArm(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x01,
-            0x00,
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
-        await this.sendCommand(command);
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
 
-    async moveWrist(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x02,
-            0x00,
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
-        await this.sendCommand(command);
-    }
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>>  Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
 
-    async moveGripper(distance: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x03,
-            0x00,
-            distance & 0xFF,
-            (distance >> 8) & 0xFF
-        ]);
-        await this.sendCommand(command);
-    }
+  async moveElbow(angle: number) {
+      const config = MotorConfig[MotorPorts.ELBOW];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-    async disconnect() {
-        if (this.isConnected && !this.isSimulated && this.device) {
-            try {
-                await this.device.disconnect();
-                this.isConnected = false;
-                logger.info('Disconnected from EV3');
-            } catch (error) {
-                logger.error('Error disconnecting:', error);
-            }
-        }
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Moving elbow (Port ${MotorPorts.ELBOW}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
+
+  async moveHeight(angle: number) {
+      const config = MotorConfig[MotorPorts.HEIGHT];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Adjusting height (Port ${MotorPorts.HEIGHT}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
+
+  async moveGripper(position: number) {
+      const config = MotorConfig[MotorPorts.GRIPPER];
+      // Convert position (0-100) to degrees
+      const angle = (position / 100) * (config.maxDegrees - config.minDegrees);
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`Moving gripper (Port ${MotorPorts.GRIPPER}) to ${clampedAngle}°`);
+      await this.sendCommand(command);
+  }
+
+  private createMotorCommand(port: number, angle: number, speed: number): Buffer {
+      return Buffer.from([
+          0x0C,                   // Direct command
+          0x00,                   // Header size
+          0x00,                   // Counter
+          0x00,                   // Command type
+          speed,                  // Motor speed
+          port,                   // Motor port
+          0x00,                   // Subtype
+          angle & 0xFF,           // Angle LSB
+          (angle >> 8) & 0xFF     // Angle MSB
+      ]);
+  }
+
+  async readTouchSensor(): Promise<boolean> {
+      // Implementation for reading touch sensor
+      // This would be used for base position calibration
+      return false; // Placeholder
+  }
+
+  async calibrateBasePosition() {
+      try {
+          logger.info('Starting base position calibration...');
+          // Implementation for base calibration using touch sensor
+      } catch (error) {
+          logger.error('Calibration error:', error);
+      }
+  }
 }
 
-export default EV3Client;
+export default MacBluetoothClient;
+```
+
+# api/src/ev3/portConfig.ts
+
+```ts
+// Motor ports (A, B, C, D)
+export const MotorPorts = {
+  BASE: 'A',          // Base rotation (Large motor)
+  ELBOW: 'B',         // Elbow joint (Large motor)
+  HEIGHT: 'C',        // Height adjustment (Large motor)
+  GRIPPER: 'D'        // Gripper (Medium motor)
+} as const;
+
+// Sensor ports (1, 2, 3, 4)
+export const SensorPorts = {
+  TOUCH: '1',         // Touch sensor for base position
+  COLOR: '2',         // Color sensor (if used)
+  GYRO: '3',          // Gyro sensor (if used)
+  ULTRASONIC: '4'     // Ultrasonic sensor (if used)
+} as const;
+
+// Convert motor port letter to hex value for EV3 command
+export const motorPortToHex = {
+  'A': 0x00,
+  'B': 0x01,
+  'C': 0x02,
+  'D': 0x03
+} as const;
+
+// Convert sensor port number to hex value
+export const sensorPortToHex = {
+  '1': 0x00,
+  '2': 0x01,
+  '3': 0x02,
+  '4': 0x03
+} as const;
+
+// Motor configurations for H25 robot arm
+export const MotorConfig = {
+  [MotorPorts.BASE]: {
+      type: 'LARGE',
+      maxDegrees: 180,
+      minDegrees: -180,
+      defaultSpeed: 30,
+      portNumber: motorPortToHex.A,
+      description: 'Base rotation motor'
+  },
+  [MotorPorts.ELBOW]: {
+      type: 'LARGE',
+      maxDegrees: 90,
+      minDegrees: -90,
+      defaultSpeed: 40,
+      portNumber: motorPortToHex.B,
+      description: 'Elbow joint motor'
+  },
+  [MotorPorts.HEIGHT]: {
+      type: 'LARGE',
+      maxDegrees: 120,
+      minDegrees: 0,
+      defaultSpeed: 35,
+      portNumber: motorPortToHex.C,
+      description: 'Height adjustment motor'
+  },
+  [MotorPorts.GRIPPER]: {
+      type: 'MEDIUM',
+      maxDegrees: 45,
+      minDegrees: 0,
+      defaultSpeed: 25,
+      portNumber: motorPortToHex.D,
+      description: 'Gripper motor'
+  }
+};
+
+// Sensor configurations
+export const SensorConfig = {
+  [SensorPorts.TOUCH]: {
+      type: 'TOUCH',
+      mode: 0x00,
+      description: 'Touch sensor for base position calibration'
+  },
+  [SensorPorts.COLOR]: {
+      type: 'COLOR',
+      mode: 0x00,
+      description: 'Color sensor (if used)'
+  },
+  [SensorPorts.GYRO]: {
+      type: 'GYRO',
+      mode: 0x00,
+      description: 'Gyro sensor (if used)'
+  },
+  [SensorPorts.ULTRASONIC]: {
+      type: 'ULTRASONIC',
+      mode: 0x00,
+      description: 'Ultrasonic sensor (if used)'
+  }
+};
+
+/*
+Physical Connection Guide for H25 Robot Arm:
+
+MOTOR PORTS (Output):
+[A] - Base Motor: Controls the rotation of the entire arm
+[B] - Elbow Motor: Controls the elbow joint movement
+[C] - Height Motor: Controls the vertical movement
+[D] - Gripper Motor: Controls the gripper open/close
+
+SENSOR PORTS (Input):
+[1] - Touch Sensor: Used for base position calibration
+[2] - Color Sensor (optional)
+[3] - Gyro Sensor (optional)
+[4] - Ultrasonic Sensor (optional)
+
+Notes:
+- Use LARGE motors for ports A, B, and C
+- Use MEDIUM motor for port D (gripper)
+- Touch sensor helps calibrate the base position
+*/
 ```
 
 # api/src/models/RobotState.ts
 
 ```ts
- 
-import mongoose from "mongoose"
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import path from 'path';
 
 enum NodeName {
     mainColumn = 'main_column',
@@ -632,58 +795,87 @@ enum NodeName {
 }
 
 export interface RobotNode {
-    position: [number, number, number],
-    scale: [number, number, number]
-    rotation?: [number, number, number]
+    position: [number, number, number];
+    scale: [number, number, number];
+    rotation?: [number, number, number];
 }
 
-export type RobotStateDocument = mongoose.Document & {
+export interface RobotStateDocument {
     nodes: {
-        [NodeName.mainColumn]: RobotNode
-        [NodeName.upperArm]: RobotNode
-        [NodeName.wristExtension]: RobotNode
-        [NodeName.hand]: RobotNode
-        [NodeName.gripper]: RobotNode
-    }
+        [NodeName.mainColumn]: RobotNode;
+        [NodeName.upperArm]: RobotNode;
+        [NodeName.wristExtension]: RobotNode;
+        [NodeName.hand]: RobotNode;
+        [NodeName.gripper]: RobotNode;
+    };
 }
 
-const robotStateSchema = new mongoose.Schema<RobotStateDocument>(
-    {
-        nodes: {
-            [NodeName.mainColumn]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.upperArm]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.wristExtension]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.hand]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            },
-            [NodeName.gripper]: {
-                position: Array<number>,
-                scale: Array<number>,
-                rotation: { type: Array<number>, required: false }
-            }
-        }
-    },
-    {
-        timestamps: true
+const adapter = new FileSync<{ robotState: RobotStateDocument[] }>(
+    path.join(__dirname, '../data/db.json')
+);
+const db = low(adapter);
+
+const testDB: any = {
+    "nodes": {
+      "main_column": {
+        "position": [0, 1.462, 0],
+        "scale": [1, 1, 1],
+        "rotation": []
+      },
+      "upper_arm": {
+        "position": [2.335, 0, 0.094],
+        "scale": [0.684, 1, 1],
+        "rotation": []
+      },
+      "wrist_extension": {
+        "position": [3.231, 6.551, 0.007],
+        "scale": [0.264, 0.264, 0.264],
+        "rotation": []
+      },
+      "hand": {
+        "position": [3.368, 5.728, -0.119],
+        "scale": [1, 0.068, 0.327],
+        "rotation": [0, 1.5708, 0]
+      },
+      "gripper": {
+        "position": [3.33, 5.545, 0.006],
+        "scale": [-0.01, -0.132, -0.325],
+        "rotation": [0, 1.5708, 0]
+      }
     }
-)
+  }
 
-export const RobotState = mongoose.model<RobotStateDocument>("RobotState", robotStateSchema)
+// Initialize db with default data if empty
+db.defaults({ robotState: [] }).write();
 
+export const RobotState = {
+    findOne: async (): Promise<RobotStateDocument | null> => {
+        // const state = db.get('robotState').first().value();
+        const state = testDB;
+        return state || null;
+    },
+
+    findOneAndUpdate: async (
+        query: any,
+        update: RobotStateDocument
+    ): Promise<RobotStateDocument | null> => {
+        db.get('robotState')
+            .find(query)
+            .assign(update)
+            .write();
+        return update;
+    },
+
+    insertMany: async (documents: RobotStateDocument[]): Promise<void> => {
+        db.get('robotState')
+            .push(...documents)
+            .write();
+    },
+
+    find: async (): Promise<RobotStateDocument[]> => {
+        return db.get('robotState').value();
+    }
+};
 ```
 
 # api/src/seed.json
@@ -762,42 +954,86 @@ export const RobotState = mongoose.model<RobotStateDocument>("RobotState", robot
 # api/src/server.ts
 
 ```ts
- 
-import 'dotenv/config'
-import express from 'express'
-import logger from './config/logger'
-import {Server} from 'socket.io'
-import mongoose from 'mongoose'
-import stateController, {seed} from './controllers/state.controller'
+import 'dotenv/config';
+import express from 'express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import logger from './config/logger';
+import stateController, { seed } from './controllers/state.controller';
+import cors from 'cors';
 
-const app = express()
+const app = express();
+const httpServer = createServer(app);
 
-// First ensure we get a mongo connection
-mongoose.connect(process.env.MONGODB_URL, {}).then(() => {
+// Enable CORS
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
-    // seed if needed
-    seed().then(() => {
+// Create Socket.IO instance
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    transports: ['websocket', 'polling']
+});
 
-        // Start Express server
-        const server = app.listen(process.env.PORT, () => {
-            logger.info(`App is running at http://localhost:${process.env.PORT}`)
-        })
+// Initialize the application
+async function initializeApp() {
+    try {
+        await seed();
+        logger.info('Seed check completed');
 
-        // Setup websockets channel
-        const io = new Server(server, {cors: {origin: '*'}})
+        // Socket.IO connection handling
+        io.on('connection', (socket) => {
+            logger.info(`New client connected: ${socket.id}`);
 
-        // 'Bind' the controllers on incoming socket connection
-        io.on('connection', socket => {
-            stateController(socket)
-        })
+            // Debugging socket events
+            // socket.onAny((event, ...args) => {
+            //     logger.info(`Received event "${event}":`, args);
+            // });
 
-    })
+            socket.on('error', (error) => {
+                logger.error(`Socket error for ${socket.id}:`, error);
+            });
 
-}).catch(err => {
-    logger.error(`MongoDB connection error. Please make sure MongoDB is running. ${err}`)
-    process.exit(1)
-})
+            socket.on('disconnect', (reason) => {
+                logger.info(`Client ${socket.id} disconnected: ${reason}`);
+            });
 
+            stateController(socket);
+        });
+
+        const PORT = process.env.PORT || 4000;
+        
+        httpServer.listen(PORT, () => {
+            logger.info(`Server running on port ${PORT}`);
+            logger.info(`WebSocket server URL: ws://localhost:${PORT}`);
+            logger.info(`HTTP server URL: http://localhost:${PORT}`);
+        });
+
+    } catch (err) {
+        logger.error('Server initialization error:', err);
+        process.exit(1);
+    }
+}
+
+// Handle process events
+process.on('uncaughtException', (error) => {
+    logger.error('Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection:', reason);
+});
+
+initializeApp();
+
+export default app;
 ```
 
 # api/tsconfig.json
@@ -827,75 +1063,6 @@ mongoose.connect(process.env.MONGODB_URL, {}).then(() => {
   ]
 }
 
-```
-
-# compose.yaml
-
-```yaml
-version: '3'
-services:
-
-  # The Robot hmi
-  hmi:
-    container_name: robot-hmi
-    build:
-      context: hmi
-    ports:
-      - 3000:3000
-    stdin_open: true
-    volumes:
-      - ./hmi:/usr/src/hmi
-      - /usr/src/hmi/node_modules
-    restart: always
-    networks:
-      - hmi-network
-    depends_on:
-      - api
-
-  # The Robot API
-  api:
-    container_name: robot-api
-    restart: always
-    build:
-      context: api
-    volumes:
-      - ./api:/usr/src/api
-      - /usr/src/api/node_modules
-      - /var/run/dbus:/var/run/dbus
-    depends_on:
-      - storage
-    privileged: true
-    network_mode: host
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    environment:
-      - NOBLE_MULTI_ROLE=1
-      - NOBLE_REPORT_ALL_HCI_EVENTS=1
-      - BLENO_HCI_DEVICE_ID=0
-      - PYTHON=/usr/bin/python3
-    devices:
-      - "/dev/bus/usb:/dev/bus/usb"
-      - "/dev/mem:/dev/mem"
-    cap_add:
-      - SYS_ADMIN
-      - NET_ADMIN
-      - NET_RAW
-
-  # MongoDB Storage
-  storage:
-    container_name: robot-state
-    restart: always
-    image: mongo:4.2.0
-    volumes:
-      - ./data:/data/db
-    networks:
-      - storage-network
-    expose:
-      - 27017
-
-networks:
-  hmi-network:
-  storage-network:
 ```
 
 # data/_mdb_catalog.wt
@@ -1122,7 +1289,15 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
-# data/diagnostic.data/metrics.interim
+# data/diagnostic.data/metrics.2024-10-24T07-57-34Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T08-03-45Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T08-12-21Z-00000
 
 This is a binary file of the type: Binary
 
@@ -1150,7 +1325,7 @@ This is a binary file of the type: Binary
 
 This is a binary file of the type: Binary
 
-# data/journal/WiredTigerLog.0000000049
+# data/journal/WiredTigerLog.0000000052
 
 This is a binary file of the type: Binary
 
@@ -1165,7 +1340,6 @@ This is a binary file of the type: Binary
 # data/mongod.lock
 
 ```lock
-1
 
 ```
 
@@ -1200,7 +1374,7 @@ WiredTiger 3.2.0: (May  9, 2019)
 WiredTiger version
 major=3,minor=2,patch=0
 file:WiredTiger.wt
-access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.303=(addr="018081e44229f53e8181e45c13e2a18281e394adba808080e2efc0e22fc0",order=303,time=1729756382,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=765)),checkpoint_lsn=(49,256),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
+access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.319=(addr="018081e4f733fb958181e42d0b01d38281e491c12dba808080e29fc0e22fc0",order=319,time=1729757888,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=803)),checkpoint_lsn=(52,8960),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
 
 ```
 
@@ -1215,13 +1389,6 @@ This is a binary file of the type: Binary
 # docker-entrypoint.sh
 
 ```sh
-
-```
-
-# hmi/.dockerignore
-
-```
-node_modules
 
 ```
 
@@ -1243,26 +1410,6 @@ module.exports = function override (config) {
 
 ```
 
-# hmi/Dockerfile
-
-```
-
-FROM node:lts-buster
-
-WORKDIR /usr/src/hmi
-
-COPY package.json /usr/src/hmi
-COPY yarn.lock /usr/src/hmi
-RUN yarn install
-
-COPY . /usr/src/hmi
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
-
-```
-
 # hmi/package.json
 
 ```json
@@ -1273,6 +1420,8 @@ CMD ["npm", "start"]
   "dependencies": {
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.15",
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
     "leva": "^0.9.35",
     "lodash.clamp": "^4.0.3",
     "react": "^18.2.0",
@@ -1316,8 +1465,7 @@ CMD ["npm", "start"]
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:4000"
+  }
 }
 
 ```
@@ -1412,44 +1560,128 @@ Disallow:
 # hmi/src/App.tsx
 
 ```tsx
-import React, {useState, useEffect, useCallback} from 'react'
-import {Canvas} from '@react-three/fiber'
-import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei'
-import {Shadows, Ground} from '@components/stage'
-import socketIOClient from 'socket.io-client'
-import {Robot} from '@types'
-import {RobotArm} from "@components/model/RobotArm"
+import React, {useState, useEffect, useCallback} from 'react';
+import {Canvas} from '@react-three/fiber';
+import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
+import {Shadows, Ground} from '@components/stage';
+import socketIOClient from 'socket.io-client';
+import {Robot} from '@types';
+import {RobotArm} from "@components/model/RobotArm";
+
+const SOCKET_SERVER_URL = 'http://localhost:4000';
 
 export default function App() {
-    const [robotData, setRobotData] = useState<Robot.RobotNodes>()
-    const socket = socketIOClient('/')
+    const [robotData, setRobotData] = useState<Robot.RobotNodes>();
+    const [socket, setSocket] = useState<any>(null);
+    const [error, setError] = useState<string>('');
 
+    // Initialize socket connection
     useEffect(() => {
-        if (!robotData) socket.emit("state:get")
+        console.log('Initializing socket connection...');
+        const newSocket = socketIOClient(SOCKET_SERVER_URL, {
+            transports: ['websocket', 'polling'],
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
 
-        socket.on("state", (data: Robot.RobotNodes) => {
-            setRobotData(data)
-        })
+        newSocket.on('connect', () => {
+            console.log('Connected to server, socket id:', newSocket.id);
+            setError('');
+        });
+
+        newSocket.on('connect_error', (error: any) => {
+            console.error('Socket connection error:', error);
+            setError(`Connection error: ${error.message}`);
+        });
+
+        newSocket.on('error', (error: any) => {
+            console.error('Socket error:', error);
+            setError(`Socket error: ${error.message}`);
+        });
+
+        setSocket(newSocket);
 
         return () => {
-            socket.off("state")
+            console.log('Cleaning up socket connection...');
+            newSocket.close();
+        };
+    }, []);
+
+    // Handle initial state and state updates
+    useEffect(() => {
+        if (!socket) return;
+
+        // Request initial state
+        if (!robotData) {
+            console.log('Requesting initial state...');
+            socket.emit("state:get");
         }
-    }, [socket])
+
+        // Listen for state updates
+        socket.on("state", (data: Robot.RobotNodes) => {
+            console.log('Received state update:', data);
+            setRobotData(data);
+        });
+
+        return () => {
+            socket.off("state");
+        };
+    }, [socket, robotData]);
 
     const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
+        if (!socket?.connected) {
+            console.error('Cannot update: Socket not connected');
+            return;
+        }
+
+        console.log('Updating robot data:', newData);
         setRobotData(prevData => {
             if (prevData) {
-                const updatedData = {...prevData, ...newData}
-                socket.emit("state:update", updatedData)
-                return updatedData
+                const updatedData = {...prevData, ...newData};
+                console.log('Emitting state update:', updatedData);
+                socket.emit("state:update", updatedData);
+                return updatedData;
             }
-            return prevData
-        })
-    }, [socket])
+            return prevData;
+        });
+    }, [socket]);
+
+    // Display error if any
+    if (error) {
+        return (
+            <div style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: '#ff4444',
+                color: 'white',
+                padding: '20px',
+                borderRadius: '5px',
+                textAlign: 'center'
+            }}>
+                <div>{error}</div>
+                <button 
+                    onClick={() => window.location.reload()}
+                    style={{
+                        marginTop: '10px',
+                        padding: '5px 15px',
+                        backgroundColor: 'white',
+                        border: 'none',
+                        borderRadius: '3px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Retry
+                </button>
+            </div>
+        );
+    }
 
     return (
         <>
-            {robotData &&
+            {robotData && (
                 <Canvas>
                     <PerspectiveCamera makeDefault fov={40} position={[10, 8, 25]}/>
                     <RobotArm data={robotData} onUpdate={updateRobotData}/>
@@ -1462,9 +1694,9 @@ export default function App() {
                     </GizmoHelper>
                     <Stats/>
                 </Canvas>
-            }
+            )}
         </>
-    )
+    );
 }
 ```
 
@@ -1482,238 +1714,147 @@ export const context = createContext<Robot.GizmoState>(null!)
 # hmi/src/components/gizmo/index.tsx
 
 ```tsx
- 
 import React, {useEffect, useRef} from 'react'
 import {useThree} from '@react-three/fiber'
 import {Translate} from './Translate'
 import {Rotate} from './Rotate'
 import {context} from './context'
-import {Vector3, Matrix4, Box3, Group} from 'three'
+import {Vector3, Matrix4, Box3, Group, Euler} from 'three'
 import {Robot} from '@types'
 
-// local matrices
-const localMatrix0 = new Matrix4()
 const localMatrix = new Matrix4()
+const localMatrix0 = new Matrix4()
 const localMatrix0Inv = new Matrix4()
 const localDeltaMatrix = new Matrix4()
-
-// world matrices
 const worldMatrix0 = new Matrix4()
 const worldMatrix = new Matrix4()
-
-// parent matrices
 const parentMatrix = new Matrix4()
 const parentMatrixInv = new Matrix4()
 
-/**
- * The Gizmo component accepts a configuration and the children (meshes) to control.
- *
- * Both Translate as Rotate is handled. The type of operation is depending on the
- * configuration of activeAxis, disableTranslation and disableRotation. Mixing operations
- * is supported. e.g. a gizmo to rotate and translate with.
- */
-export const Gizmo = ((
-        {
-            scale = 1,
-            matrix,
-            anchor,
-            activeAxes = [true, true, true],
-            disableTranslation = false,
-            disableRotation = false,
-            translationLimits,
-            rotationLimits,
-            userData,
-            onUpdate,
-            children,
-        }: Robot.GizmoProperties) => {
+export const Gizmo = ({
+    scale = 1,
+    matrix,
+    anchor,
+    activeAxes = [true, true, true],
+    disableTranslation = false,
+    disableRotation = false,
+    translationLimits,
+    rotationLimits,
+    userData,
+    onUpdate,
+    children,
+}: Robot.GizmoProperties) => {
+    const invalidate = useThree((state) => state.invalidate)
+    const parentGroup = useRef<Group>(null!)
+    const matrixGroup = useRef<Group>(null!)
+    const gizmoGroup = useRef<Group>(null!)
+    const childrenGroup = useRef<Group>(null!)
 
-        // A handle to the underlying canvas invalidation method.
-        // [useThree] Accesses R3F's internal state (WebGL), containing renderer, canvas, scene, etc.
-        // [state.invalidate] flags the canvas for render, but doesn't render in itself
-        const invalidate = useThree((state) => state.invalidate)
+    useEffect(() => {
+        if (anchor) {
+            const targetGroup = childrenGroup.current
+            const boundingBox = new Box3()
 
-        // grouping the gizmo and objects
-        const parentGroup = useRef<Group>(null!)
-        const matrixGroup = useRef<Group>(null!)
-        const gizmoGroup = useRef<Group>(null!)
-        const childrenGroup = useRef<Group>(null!)
+            if (targetGroup) {
+                targetGroup.updateWorldMatrix(true, true)
+                parentMatrixInv.copy(targetGroup.matrixWorld).invert()
+                boundingBox.makeEmpty()
 
-        useEffect(() => {
+                targetGroup.traverse((object: any) => {
+                    if (!object.geometry) return
+                    if (!object.geometry.boundingBox) object.geometry.computeBoundingBox()
 
-            // if an anchor is given we adjust the gizmo position
-            if (anchor) {
+                    localMatrix.copy(object.matrixWorld).premultiply(parentMatrixInv)
+                    const objectBoundingBox = new Box3()
+                    objectBoundingBox.copy(object.geometry.boundingBox)
+                    objectBoundingBox.applyMatrix4(localMatrix)
+                    boundingBox.union(objectBoundingBox)
+                })
 
-                // the group under control of this gizmo
-                const targetGroup = childrenGroup.current
+                const vectorCenter = new Vector3()
+                const vectorSize = new Vector3()
+                const anchorOffsetVector = new Vector3()
+                const positionVector = new Vector3()
 
-                // calculate a bounding box to determine gizmo location
-                const boundingBox = new Box3()
+                vectorCenter.copy(boundingBox.max).add(boundingBox.min).multiplyScalar(0.5)
+                vectorSize.copy(boundingBox.max).sub(boundingBox.min).multiplyScalar(0.5)
+                anchorOffsetVector.copy(vectorSize).multiply(new Vector3(...anchor)).add(vectorCenter)
+                positionVector.set(0, 0, 0).add(anchorOffsetVector)
+                gizmoGroup.current.position.copy(positionVector)
 
-                if (targetGroup) {
+                invalidate()
+            }
+        }
+    }, [anchor, invalidate])
 
-                    // Update the global transform of the object group
-                    targetGroup.updateWorldMatrix(true, true)
+    const configuration = {
+        onDragStart: () => {
+            console.log('Drag start');
+            localMatrix0.copy(matrixGroup.current.matrix)
+            worldMatrix0.copy(matrixGroup.current.matrixWorld)
+            invalidate()
+        },
 
-                    // Invert the matrix
-                    parentMatrixInv.copy(targetGroup.matrixWorld).invert()
+        onDrag: (worldDeltaMatrix: Matrix4) => {
+            console.log('Dragging');
+            parentMatrix.copy(parentGroup.current.matrixWorld)
+            parentMatrixInv.copy(parentMatrix).invert()
+            worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix)
+            localMatrix.copy(worldMatrix).premultiply(parentMatrixInv)
+            localMatrix0Inv.copy(localMatrix0).invert()
+            localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv)
+            matrixGroup.current.matrix.copy(localMatrix)
 
-                    // Clear the bounding box for the new calculation
-                    boundingBox.makeEmpty()
+            // Extract rotation from matrix
+            
+            const rotation = new Euler().setFromRotationMatrix(localMatrix);
+            const rotationArray: [number, number, number] = [rotation.x, rotation.y, rotation.z];
 
-                    // traverse over the objects in the targetGroup
-                    targetGroup.traverse((object: any) => {
-
-                        // calculate the bounding box for objects with geometry
-                        if (!object.geometry) return
-                        if (!object.geometry.boundingBox) object.geometry.computeBoundingBox()
-
-                        localMatrix.copy(object.matrixWorld).premultiply(parentMatrixInv)
-
-                        // get the bounding box of this object
-                        const objectBoundingBox = new Box3()
-                        objectBoundingBox.copy(object.geometry.boundingBox)
-                        objectBoundingBox.applyMatrix4(localMatrix)
-
-                        // Computes the union of this boundingBox and objectBoundingBox, setting the upper bound of
-                        // boundingBox to the greater of the two boxes' upper bounds and the lower bound of boundingBox
-                        // to the lesser of the two boxes' lower bounds.
-                        boundingBox.union(objectBoundingBox)
-                    })
-
-                    // calculate vectors
-                    const vectorCenter = new Vector3()
-                    const vectorSize = new Vector3()
-
-                    vectorCenter.copy(boundingBox.max).add(boundingBox.min).multiplyScalar(0.5)
-                    vectorSize.copy(boundingBox.max).sub(boundingBox.min).multiplyScalar(0.5)
-
-                    const anchorOffsetVector = new Vector3()
-                    const positionVector = new Vector3()
-
-                    anchorOffsetVector
-                        .copy(vectorSize)
-                        .multiply(new Vector3(...anchor)) // given anchor
-                        .add(vectorCenter)
-
-                    positionVector.set(0, 0, 0).add(anchorOffsetVector)
-
-                    // copy the position to the gizmo group to apply gizmo anchor
-                    gizmoGroup.current.position.copy(positionVector)
-
-                    invalidate()
-                }
+            console.log('Updating rotation:', rotationArray);
+            if (onUpdate) {
+                onUpdate(rotationArray);
             }
 
-        }, [anchor, invalidate])
+            invalidate()
+        },
 
-        /**
-         * The Gizmo configuration contains scale, limits and userdata for the gizmo
-         * and holds the implementation for both Translate and Rotate matrix updates
-         * based on the gizmo mouse pointer events.
-         *
-         * This configuration is stored in Context, see the context.Provider below
-         *
-         * With useMemo we only recalculate when the dependencies have changed since the last render, more specific in
-         * this case when any of the onDragStart, onDrag, onDragEnd dependencies change
-         */
-        const configuration = {
+        onDragEnd: () => {
+            console.log('Drag end');
+            invalidate()
+        },
 
-            /**
-             * onDragStart is invoked by the group onPointerDown with the information on
-             * what operation (Translate/Rotate) which axis, origin and direction array
-             */
-            onDragStart: () => {
-
-                // @todo learn about matrix operations
-                localMatrix0.copy(matrixGroup.current.matrix)
-                worldMatrix0.copy(matrixGroup.current.matrixWorld)
-                invalidate()
-            },
-
-            /**
-             * onDrag is invoked by the group onPointerMove method
-             * which calculated the delta matrix
-             */
-            onDrag: (worldDeltaMatrix: Matrix4) => {
-
-                // @todo learn about matrix operations
-                parentMatrix.copy(parentGroup.current.matrixWorld)
-                parentMatrixInv.copy(parentMatrix).invert()
-
-                // After applying the delta
-                worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix)
-                localMatrix.copy(worldMatrix).premultiply(parentMatrixInv)
-                localMatrix0Inv.copy(localMatrix0).invert()
-                localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv)
-
-                // @todo point of interest, the update of matrix group with change
-                matrixGroup.current.matrix.copy(localMatrix)
-
-                console.log(1, 'matrixGroup:', matrixGroup)
-
-                // Extract the new position from the matrix
-                const position = new Vector3().setFromMatrixPosition(matrixGroup.current.matrix)
-                
-                // Call onUpdate with the new position
-                // if (onUpdate) {
-                //     onUpdate(position.toArray() as [number, number, number])
-                // }
-
-                invalidate()
-            },
-
-            /**
-             * Mouse/pointer up
-             */
-            onDragEnd: () => {
-                invalidate()
-            },
-
-            translationLimits,
-            rotationLimits,
-            scale,
-            userData
-        }
-
-        return (
-            <context.Provider value={configuration}>
-
-                <group ref={parentGroup}>
-
-                    <group ref={matrixGroup} matrix={matrix} matrixAutoUpdate={false}>
-
-                        <group ref={gizmoGroup}>
-
-                            {
-                                !disableTranslation &&
-                              <>
-                                  {activeAxes[0] && <Translate axis={0}/>}
-                                  {activeAxes[1] && <Translate axis={1}/>}
-                                  {activeAxes[2] && <Translate axis={2}/>}
-                              </>
-                            }
-
-                            {
-                                !disableRotation &&
-                              <>
-                                  {activeAxes[0] && activeAxes[1] && <Rotate axis={2}/>}
-                                  {activeAxes[0] && activeAxes[2] && <Rotate axis={1}/>}
-                                  {activeAxes[2] && activeAxes[1] && <Rotate axis={0}/>}
-                              </>
-                            }
-
-                        </group>
-
-                        <group ref={childrenGroup}>{children}</group>
-
-                    </group>
-
-                </group>
-            </context.Provider>
-        )
+        translationLimits,
+        rotationLimits,
+        scale,
+        userData
     }
-)
 
+    return (
+        <context.Provider value={configuration}>
+            <group ref={parentGroup}>
+                <group ref={matrixGroup} matrix={matrix} matrixAutoUpdate={false}>
+                    <group ref={gizmoGroup}>
+                        {!disableTranslation && (
+                            <>
+                                {activeAxes[0] && <Translate axis={0}/>}
+                                {activeAxes[1] && <Translate axis={1}/>}
+                                {activeAxes[2] && <Translate axis={2}/>}
+                            </>
+                        )}
+                        {!disableRotation && (
+                            <>
+                                {activeAxes[0] && activeAxes[1] && <Rotate axis={2}/>}
+                                {activeAxes[0] && activeAxes[2] && <Rotate axis={1}/>}
+                                {activeAxes[2] && activeAxes[1] && <Rotate axis={0}/>}
+                            </>
+                        )}
+                    </group>
+                    <group ref={childrenGroup}>{children}</group>
+                </group>
+            </group>
+        </context.Provider>
+    )
+}
 ```
 
 # hmi/src/components/gizmo/Rotate.tsx
@@ -2217,8 +2358,6 @@ export const Translate: FC<{ axis: 0 | 1 | 2 }> = ({axis}) => {
 # hmi/src/components/mesh/Mesh.tsx
 
 ```tsx
- 
-import React from 'react'
 import {Robot} from '@types'
 import { Euler } from 'three'
 
@@ -2232,7 +2371,9 @@ import { Euler } from 'three'
 
 const Mesh = ({node, data}: Robot.MeshProperties) => {
     //   @ts-ignore
-    const rotation = data.rotation.length > 0 ? new Euler().fromArray(data.rotation) : new Euler(0, 0, 0)
+    const rotation = data.rotation.length < 0 ? new Euler().fromArray(data.rotation) : new Euler(0, 0, 0)
+
+    console.log(88811111, node.name, rotation)
 
     return (
         <mesh geometry={node.geometry}
@@ -2266,32 +2407,48 @@ export {RobotArm} from './RobotArm'
 # hmi/src/components/model/RobotArm.tsx
 
 ```tsx
-import React from 'react'
 import {Gizmo} from '@components/gizmo'
 import {useGLTF} from '@react-three/drei'
 import {Robot} from '@types'
 import Mesh from "@components/mesh/Mesh"
 
 interface RobotProps {
-    data: Robot.RobotNodes
-    onUpdate: (newData: Partial<Robot.RobotNodes>) => void
+    data: Robot.RobotNodes;
+    onUpdate: (newData: Partial<Robot.RobotNodes>) => void;
 }
 
 export const RobotArm = ({data, onUpdate}: RobotProps) => {
-    const {nodes} = useGLTF('/robot.glb') as unknown as Robot.DreiGLTF
-    const node = Robot.NodeName
+    const {nodes} = useGLTF('/robot.glb') as unknown as Robot.DreiGLTF;
+    const node = Robot.NodeName;
 
-    const handleGizmoUpdate = (nodeName: Robot.NodeName, newPosition: [number, number, number]) => {
-        onUpdate({
+    const handleGizmoUpdate = (nodeName: Robot.NodeName, newMatrix: [number, number, number]) => {
+        console.log(`Updating ${nodeName}:`, newMatrix);
+        
+        const newData: Partial<Robot.RobotNodes> = {
             nodes: {
                 ...data.nodes,
                 [nodeName]: {
                     ...data.nodes[nodeName],
-                    position: newPosition
+                    position: data.nodes[nodeName].position,
+                    scale: data.nodes[nodeName].scale,
+                    rotation: newMatrix
                 }
             }
-        })
-    }
+        };
+
+        // Preserve initial rotations for hand and gripper
+        if (newData.nodes) {
+            if (newData.nodes.hand) {
+                newData.nodes.hand.rotation = data.nodes.hand.rotation;
+            }
+            if (newData.nodes.gripper) {
+                newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
+            }
+        }
+
+        console.log('Sending update:', newData);
+        onUpdate(newData);
+    };
 
     return (
         <group>
@@ -2299,7 +2456,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                    disableTranslation
                    activeAxes={[true, false, true]}
                    userData={[node.mainColumn]}
-                   onUpdate={(newPosition) => handleGizmoUpdate(node.mainColumn, newPosition)}>
+                   onUpdate={(newMatrix) => handleGizmoUpdate(node.mainColumn, newMatrix)}>
                 <Mesh node={nodes[node.mainColumn]} data={data.nodes[node.mainColumn]}/>
 
                 <Gizmo activeAxes={[false, true, false]}
@@ -2308,9 +2465,9 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                        anchor={[-0.8, 1.5, 0]}
                        scale={1}
                        userData={[node.upperArm]}
-                       onUpdate={(newPosition) => handleGizmoUpdate(node.upperArm, newPosition)}>
-                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
+                       onUpdate={(newMatrix) => handleGizmoUpdate(node.upperArm, newMatrix)}>
 
+                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
                     <Mesh node={nodes[node.wristExtension]} data={data.nodes[node.wristExtension]}/>
                     <Mesh node={nodes[node.hand]} data={data.nodes[node.hand]}/>
 
@@ -2319,16 +2476,16 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                            anchor={[2, 0, 2]}
                            scale={0.75}
                            userData={[node.gripper]}
-                           onUpdate={(newPosition) => handleGizmoUpdate(node.gripper, newPosition)}>
+                           onUpdate={(newMatrix) => handleGizmoUpdate(node.gripper, newMatrix)}>
                         <Mesh node={nodes[node.gripper]} data={data.nodes[node.gripper]}/>
                     </Gizmo>
                 </Gizmo>
             </Gizmo>
         </group>
-    )
-}
+    );
+};
 
-useGLTF.preload('/robot.glb')
+useGLTF.preload('/robot.glb');
 ```
 
 # hmi/src/components/stage/Ground.tsx
