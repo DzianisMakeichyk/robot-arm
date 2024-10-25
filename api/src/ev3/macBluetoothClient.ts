@@ -1,5 +1,12 @@
 import noble from '@abandonware/noble';
 import logger from '../config/logger';
+import { 
+  MotorPorts, 
+  SensorPorts, 
+  MotorConfig, 
+  SensorConfig,
+  motorPortToHex 
+} from './portConfig';
 
 class MacBluetoothClient {
     private isConnected: boolean = false;
@@ -8,6 +15,19 @@ class MacBluetoothClient {
     private readonly EV3_ADDRESS: string = '00:16:53:80:5C:A5';
     private readonly SERVICE_UUID = 'fff0';
     private readonly CHARACTERISTIC_UUID = 'fff1';
+
+    /**
+     * EV3 Direct Command Format:
+     * [0x0C] - Direct command, response expected
+     * [0x00] - Header size
+     * [0x00] - Counter
+     * [0x00] - Command type
+     * [0x80] - Output power
+     * [PORT] - Output port (0x00 to 0x03 for motors A-D)
+     * [0x00] - Command subtype
+     * [Angle LSB] - Lower byte of angle
+     * [Angle MSB] - Upper byte of angle
+     */
 
     constructor() {
         this.initialize();
@@ -120,98 +140,110 @@ class MacBluetoothClient {
         }
     }
 
-    async moveMainColumn(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00, 
-            0x00, 
-            0x00, 
-            0x80, 
-            0x00, 
-            0x00, 
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
-        
-        if (this.isSimulated) {
-            logger.info('Simulation: Moving main column to angle:', angle);
-            return;
-        }
+    async moveBase(angle: number) {
+      const config = MotorConfig[MotorPorts.BASE];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-        await this.sendCommand(command);
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
 
-    async moveUpperArm(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x01,
-            0x00,
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>>  Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
 
-        if (this.isSimulated) {
-            logger.info('Simulation: Moving upper arm to angle:', angle);
-            return;
-        }
+  async moveElbow(angle: number) {
+      const config = MotorConfig[MotorPorts.ELBOW];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-        await this.sendCommand(command);
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
 
-    async moveWrist(angle: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x02,
-            0x00,
-            angle & 0xFF,
-            (angle >> 8) & 0xFF
-        ]);
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Moving elbow (Port ${MotorPorts.ELBOW}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
 
-        if (this.isSimulated) {
-            logger.info('Simulation: Moving wrist to angle:', angle);
-            return;
-        }
+  async moveHeight(angle: number) {
+      const config = MotorConfig[MotorPorts.HEIGHT];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-        await this.sendCommand(command);
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
 
-    async moveGripper(distance: number) {
-        const command = Buffer.from([
-            0x0C, 0x00,
-            0x00,
-            0x00,
-            0x80,
-            0x03,
-            0x00,
-            distance & 0xFF,
-            (distance >> 8) & 0xFF
-        ]);
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Adjusting height (Port ${MotorPorts.HEIGHT}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
 
-        if (this.isSimulated) {
-            logger.info('Simulation: Moving gripper to distance:', distance);
-            return;
-        }
+  async moveGripper(position: number) {
+      const config = MotorConfig[MotorPorts.GRIPPER];
+      // Convert position (0-100) to degrees
+      const angle = (position / 100) * (config.maxDegrees - config.minDegrees);
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
 
-        await this.sendCommand(command);
-    }
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
 
-    async disconnect() {
-        if (this.isConnected && this.characteristic) {
-            try {
-                await noble.stopScanningAsync();
-                this.isConnected = false;
-                this.characteristic = null;
-                logger.info('Disconnected from EV3');
-            } catch (error) {
-                logger.error('Error disconnecting:', error);
-            }
-        }
-    }
+      logger.info(`Moving gripper (Port ${MotorPorts.GRIPPER}) to ${clampedAngle}°`);
+      await this.sendCommand(command);
+  }
+
+  private createMotorCommand(port: number, angle: number, speed: number): Buffer {
+      return Buffer.from([
+          0x0C,                   // Direct command
+          0x00,                   // Header size
+          0x00,                   // Counter
+          0x00,                   // Command type
+          speed,                  // Motor speed
+          port,                   // Motor port
+          0x00,                   // Subtype
+          angle & 0xFF,           // Angle LSB
+          (angle >> 8) & 0xFF     // Angle MSB
+      ]);
+  }
+
+  async readTouchSensor(): Promise<boolean> {
+      // Implementation for reading touch sensor
+      // This would be used for base position calibration
+      return false; // Placeholder
+  }
+
+  async calibrateBasePosition() {
+      try {
+          logger.info('Starting base position calibration...');
+          // Implementation for base calibration using touch sensor
+      } catch (error) {
+          logger.error('Calibration error:', error);
+      }
+  }
 }
 
 export default MacBluetoothClient;

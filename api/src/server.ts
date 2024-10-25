@@ -4,24 +4,29 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import logger from './config/logger';
 import stateController, { seed } from './controllers/state.controller';
+import cors from 'cors';
 
 const app = express();
 const httpServer = createServer(app);
 
-// Basic health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).send('OK');
-});
+// Enable CORS
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
 // Create Socket.IO instance
 const io = new Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
-    }
+    },
+    transports: ['websocket', 'polling']
 });
 
+// Initialize the application
 async function initializeApp() {
     try {
         await seed();
@@ -31,8 +36,17 @@ async function initializeApp() {
         io.on('connection', (socket) => {
             logger.info(`New client connected: ${socket.id}`);
 
+            // Debugging socket events
+            // socket.onAny((event, ...args) => {
+            //     logger.info(`Received event "${event}":`, args);
+            // });
+
             socket.on('error', (error) => {
                 logger.error(`Socket error for ${socket.id}:`, error);
+            });
+
+            socket.on('disconnect', (reason) => {
+                logger.info(`Client ${socket.id} disconnected: ${reason}`);
             });
 
             stateController(socket);
@@ -42,6 +56,8 @@ async function initializeApp() {
         
         httpServer.listen(PORT, () => {
             logger.info(`Server running on port ${PORT}`);
+            logger.info(`WebSocket server URL: ws://localhost:${PORT}`);
+            logger.info(`HTTP server URL: http://localhost:${PORT}`);
         });
 
     } catch (err) {
@@ -57,11 +73,6 @@ process.on('uncaughtException', (error) => {
 
 process.on('unhandledRejection', (reason, promise) => {
     logger.error('Unhandled Rejection:', reason);
-});
-
-process.on('SIGINT', () => {
-    logger.info('Shutting down server...');
-    process.exit(0);
 });
 
 initializeApp();

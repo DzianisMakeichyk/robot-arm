@@ -1,52 +1,83 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera } from '@react-three/drei'
-import { Shadows, Ground } from '@components/stage'
-import { io } from 'socket.io-client'
-import { Robot } from '@types'
-import { RobotArm } from "@components/model/RobotArm"
+import React, {useState, useEffect, useCallback} from 'react';
+import {Canvas} from '@react-three/fiber';
+import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
+import {Shadows, Ground} from '@components/stage';
+import socketIOClient from 'socket.io-client';
+import {Robot} from '@types';
+import {RobotArm} from "@components/model/RobotArm";
+
+const SOCKET_SERVER_URL = 'http://localhost:4000';
 
 export default function App() {
-    const [robotData, setRobotData] = useState<Robot.RobotNodes>()
+    const [robotData, setRobotData] = useState<Robot.RobotNodes>();
     const [socket, setSocket] = useState<any>(null);
     const [error, setError] = useState<string>('');
 
+    // Initialize socket connection
     useEffect(() => {
-        // Create socket with WebSocket-only configuration
-        const newSocket = io('ws://localhost:4000', {
-            transports: ['websocket'],
+        console.log('Initializing socket connection...');
+        const newSocket = socketIOClient(SOCKET_SERVER_URL, {
+            transports: ['websocket', 'polling'],
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000
         });
 
         newSocket.on('connect', () => {
-            console.log('WebSocket connected');
+            console.log('Connected to server, socket id:', newSocket.id);
             setError('');
-            newSocket.emit('state:get');
         });
 
-        newSocket.on('connect_error', () => {
-            setError('Unable to connect to server. Please ensure the server is running.');
+        newSocket.on('connect_error', (error: any) => {
+            console.error('Socket connection error:', error);
+            setError(`Connection error: ${error.message}`);
         });
 
-        newSocket.on('state', (data: Robot.RobotNodes) => {
-            setRobotData(data);
+        newSocket.on('error', (error: any) => {
+            console.error('Socket error:', error);
+            setError(`Socket error: ${error.message}`);
         });
 
         setSocket(newSocket);
 
         return () => {
+            console.log('Cleaning up socket connection...');
             newSocket.close();
         };
     }, []);
 
+    // Handle initial state and state updates
+    useEffect(() => {
+        if (!socket) return;
+
+        // Request initial state
+        if (!robotData) {
+            console.log('Requesting initial state...');
+            socket.emit("state:get");
+        }
+
+        // Listen for state updates
+        socket.on("state", (data: Robot.RobotNodes) => {
+            console.log('Received state update:', data);
+            setRobotData(data);
+        });
+
+        return () => {
+            socket.off("state");
+        };
+    }, [socket, robotData]);
+
     const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
-        if (!socket?.connected) return;
-        
+        if (!socket?.connected) {
+            console.error('Cannot update: Socket not connected');
+            return;
+        }
+
+        console.log('Updating robot data:', newData);
         setRobotData(prevData => {
             if (prevData) {
                 const updatedData = {...prevData, ...newData};
+                console.log('Emitting state update:', updatedData);
                 socket.emit("state:update", updatedData);
                 return updatedData;
             }
@@ -54,6 +85,7 @@ export default function App() {
         });
     }, [socket]);
 
+    // Display error if any
     if (error) {
         return (
             <div style={{
@@ -67,7 +99,7 @@ export default function App() {
                 borderRadius: '5px',
                 textAlign: 'center'
             }}>
-                {error}
+                <div>{error}</div>
                 <button 
                     onClick={() => window.location.reload()}
                     style={{
