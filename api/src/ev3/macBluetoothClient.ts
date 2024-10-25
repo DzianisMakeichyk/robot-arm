@@ -1,51 +1,37 @@
-import bleno from '@abandonware/bleno';
+import noble from '@abandonware/noble';
 import logger from '../config/logger';
-import RobotService from './blenoService';
 
 class MacBluetoothClient {
     private isConnected: boolean = false;
     private isSimulated: boolean = false;
-    private robotService: RobotService;
-    private readonly NAME = 'RoboticArm';
+    private characteristic: any = null;
+    private readonly EV3_ADDRESS: string = '00:16:53:80:5C:A5';
+    private readonly SERVICE_UUID = 'fff0';
+    private readonly CHARACTERISTIC_UUID = 'fff1';
 
     constructor() {
-        this.robotService = new RobotService();
         this.initialize();
     }
 
     private initialize() {
         try {
-            logger.info('Initializing Bluetooth...');
+            logger.info('Initializing EV3 Bluetooth connection...');
 
-            bleno.on('stateChange', (state) => {
-                logger.info('Bluetooth state changed:', state);
-                
+            noble.on('stateChange', async (state) => {
+                logger.info('Bluetooth state:', state);
                 if (state === 'poweredOn') {
-                    this.startAdvertising();
+                    await this.startScanningForEV3();
                 } else {
-                    bleno.stopAdvertising();
+                    noble.stopScanning();
                 }
             });
 
-            bleno.on('advertisingStart', (error) => {
-                if (error) {
-                    logger.error('Advertising start error:', error);
-                    this.enableSimulationMode();
-                    return;
+            noble.on('discover', async (peripheral) => {
+                logger.info('Found device:', peripheral.address);
+                if (peripheral.address === this.EV3_ADDRESS || 
+                    peripheral.advertisement.localName === 'EV3') {
+                    await this.connectToEV3(peripheral);
                 }
-
-                logger.info('Advertising started...');
-                this.setupServices();
-            });
-
-            bleno.on('accept', (clientAddress) => {
-                logger.info('Client connected:', clientAddress);
-                this.isConnected = true;
-            });
-
-            bleno.on('disconnect', (clientAddress) => {
-                logger.info('Client disconnected:', clientAddress);
-                this.isConnected = false;
             });
 
         } catch (error) {
@@ -54,40 +40,83 @@ class MacBluetoothClient {
         }
     }
 
-    private startAdvertising() {
-        logger.info('Starting advertisement...');
-        bleno.startAdvertising(this.NAME, ['fff0'], (error) => {
-            if (error) {
-                logger.error('Advertisement error:', error);
-                this.enableSimulationMode();
-            }
-        });
+    private async startScanningForEV3() {
+        try {
+            logger.info('Starting scan for EV3...');
+            await noble.startScanningAsync([this.SERVICE_UUID], false);
+            
+            // Stop scanning after 30 seconds if EV3 not found
+            setTimeout(() => {
+                if (!this.isConnected) {
+                    noble.stopScanning();
+                    logger.warn('EV3 not found after 30 seconds. Enabling simulation mode.');
+                    this.enableSimulationMode();
+                }
+            }, 30000);
+
+        } catch (error) {
+            logger.error('Scan error:', error);
+            this.enableSimulationMode();
+        }
     }
 
-    private setupServices() {
-        logger.info('Setting up services...');
-        bleno.setServices([this.robotService], (error) => {
-            if (error) {
-                logger.error('Service setup error:', error);
-                this.enableSimulationMode();
-            } else {
-                logger.info('Services set up successfully');
+    private async connectToEV3(peripheral: any) {
+        try {
+            logger.info('Connecting to EV3...');
+            await noble.stopScanningAsync();
+
+            await peripheral.connectAsync();
+            logger.info('Connected to EV3');
+
+            const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
+            logger.info('Discovered services');
+
+            if (services.length > 0) {
+                const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
+                if (characteristics.length > 0) {
+                    this.characteristic = characteristics[0];
+                    this.isConnected = true;
+                    logger.info('EV3 connection fully established');
+                }
             }
-        });
 
-        this.robotService.characteristic.setUpdateValueCallback((data) => {
-            this.handleIncomingData(data);
-        });
-    }
+            peripheral.on('disconnect', () => {
+                logger.info('EV3 disconnected');
+                this.isConnected = false;
+                this.characteristic = null;
+                setTimeout(() => this.startScanningForEV3(), 1000);
+            });
 
-    private handleIncomingData(data: Buffer) {
-        logger.info('Received data:', data);
+        } catch (error) {
+            logger.error('EV3 connection error:', error);
+            this.enableSimulationMode();
+        }
     }
 
     private enableSimulationMode() {
         if (!this.isSimulated) {
             logger.info('Enabling simulation mode');
             this.isSimulated = true;
+        }
+    }
+
+    private async sendCommand(command: Buffer) {
+        if (this.isSimulated) {
+            logger.info('Simulation mode - Command:', command);
+            return;
+        }
+
+        if (!this.isConnected || !this.characteristic) {
+            throw new Error('Not connected to EV3');
+        }
+
+        try {
+            await this.characteristic.writeAsync(command, false);
+            logger.info('Command sent successfully:', command);
+        } catch (error) {
+            logger.error('Error sending command:', error);
+            this.enableSimulationMode();
+            throw error;
         }
     }
 
@@ -102,29 +131,13 @@ class MacBluetoothClient {
             angle & 0xFF,
             (angle >> 8) & 0xFF
         ]);
-
+        
         if (this.isSimulated) {
             logger.info('Simulation: Moving main column to angle:', angle);
             return;
         }
 
-        try {
-            if (this.isConnected) {
-                this.robotService.characteristic.onWriteRequest(
-                    command,
-                    0,
-                    true,
-                    (result) => {
-                        if (result !== 0) {
-                            logger.error('Error sending command');
-                        }
-                    }
-                );
-            }
-        } catch (error) {
-            logger.error('Error moving main column:', error);
-            this.enableSimulationMode();
-        }
+        await this.sendCommand(command);
     }
 
     async moveUpperArm(angle: number) {
@@ -144,23 +157,7 @@ class MacBluetoothClient {
             return;
         }
 
-        try {
-            if (this.isConnected) {
-                this.robotService.characteristic.onWriteRequest(
-                    command,
-                    0,
-                    true,
-                    (result) => {
-                        if (result !== 0) {
-                            logger.error('Error sending command');
-                        }
-                    }
-                );
-            }
-        } catch (error) {
-            logger.error('Error moving upper arm:', error);
-            this.enableSimulationMode();
-        }
+        await this.sendCommand(command);
     }
 
     async moveWrist(angle: number) {
@@ -180,23 +177,7 @@ class MacBluetoothClient {
             return;
         }
 
-        try {
-            if (this.isConnected) {
-                this.robotService.characteristic.onWriteRequest(
-                    command,
-                    0,
-                    true,
-                    (result) => {
-                        if (result !== 0) {
-                            logger.error('Error sending command');
-                        }
-                    }
-                );
-            }
-        } catch (error) {
-            logger.error('Error moving wrist:', error);
-            this.enableSimulationMode();
-        }
+        await this.sendCommand(command);
     }
 
     async moveGripper(distance: number) {
@@ -216,30 +197,19 @@ class MacBluetoothClient {
             return;
         }
 
-        try {
-            if (this.isConnected) {
-                this.robotService.characteristic.onWriteRequest(
-                    command,
-                    0,
-                    true,
-                    (result) => {
-                        if (result !== 0) {
-                            logger.error('Error sending command');
-                        }
-                    }
-                );
-            }
-        } catch (error) {
-            logger.error('Error moving gripper:', error);
-            this.enableSimulationMode();
-        }
+        await this.sendCommand(command);
     }
 
     async disconnect() {
-        if (this.isConnected) {
-            bleno.stopAdvertising();
-            this.isConnected = false;
-            logger.info('Bluetooth disconnected');
+        if (this.isConnected && this.characteristic) {
+            try {
+                await noble.stopScanningAsync();
+                this.isConnected = false;
+                this.characteristic = null;
+                logger.info('Disconnected from EV3');
+            } catch (error) {
+                logger.error('Error disconnecting:', error);
+            }
         }
     }
 }

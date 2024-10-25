@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@abandonware/bleno": "^0.6.1",
+    "@abandonware/noble": "^1.9.2-25",
     "dotenv": "^16.4.1",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
