@@ -2,20 +2,35 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
 import {Shadows, Ground} from '@components/stage';
-import socketIOClient from 'socket.io-client';
+import socketIOClient, { Socket } from 'socket.io-client';
 import {Robot} from '@types';
 import {RobotArm} from "@components/model/RobotArm";
 
 const SOCKET_SERVER_URL = 'http://localhost:4000';
 
 export default function App() {
-    const [robotData, setRobotData] = useState<Robot.RobotNodes>();
-    const [socket, setSocket] = useState<any>(null);
+    const [robotData, setRobotData] = useState<Robot.RobotNodes>();    
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const [connectionStatus, setConnectionStatus] = useState('disconnected');
+
     const [error, setError] = useState<string>('');
+
+    useEffect(() => {
+        if (!socket) return;
+    
+        socket.on('test', (data: any) => {
+            console.log('Received test from server:', data);
+            socket.emit('test-response', 'Hello from client');
+        });
+    
+        return () => {
+            socket.off('test');
+        };
+    }, [socket]);
 
     // Initialize socket connection
     useEffect(() => {
-        console.log('Initializing socket connection...');
+        console.log('Initializing socket connection to:', SOCKET_SERVER_URL);
         const newSocket = socketIOClient(SOCKET_SERVER_URL, {
             transports: ['websocket', 'polling'],
             reconnection: true,
@@ -24,24 +39,18 @@ export default function App() {
         });
 
         newSocket.on('connect', () => {
-            console.log('Connected to server, socket id:', newSocket.id);
-            setError('');
+            console.log('Socket connected with ID:', newSocket.id);
+            setConnectionStatus('connected');
         });
 
-        newSocket.on('connect_error', (error: any) => {
-            console.error('Socket connection error:', error);
-            setError(`Connection error: ${error.message}`);
-        });
-
-        newSocket.on('error', (error: any) => {
-            console.error('Socket error:', error);
-            setError(`Socket error: ${error.message}`);
+        newSocket.on('disconnect', () => {
+            console.log('Socket disconnected');
+            setConnectionStatus('disconnected');
         });
 
         setSocket(newSocket);
 
         return () => {
-            console.log('Cleaning up socket connection...');
             newSocket.close();
         };
     }, []);
@@ -85,6 +94,57 @@ export default function App() {
         });
     }, [socket]);
 
+    const testMotor = useCallback(() => {
+        console.log('Test motor button clicked');
+        console.log('Socket status:', {
+            connected: socket?.connected,
+            id: socket?.id,
+            status: connectionStatus
+        });
+
+        if (!socket?.connected) {
+            console.error('Socket not connected');
+            return;
+        }
+
+        try {
+            console.log('Emitting test-motor event');
+            socket.emit('test-motor');
+            console.log('Event emitted');
+            
+            // Force emit to ensure it's sent
+            socket.volatile.emit('test-motor');
+            
+        } catch (error) {
+            console.error('Error emitting event:', error);
+        }
+    }, [socket, connectionStatus]);
+
+    useEffect(() => {
+        if (!socket) return;
+    
+        console.log('Setting up socket event listeners...');
+    
+        socket.on('motor-test-complete', (msg: any) => {
+            console.log('Motor test completed:', msg);
+        });
+    
+        socket.on('motor-test-error', (error: any) => {
+            console.error('Motor test error:', error);
+        });
+    
+        // Debug incoming events
+        socket.onAny((eventName: string, ...args: any[]) => {
+            console.log(`Received socket event "${eventName}":`, args);
+        });
+    
+        return () => {
+            console.log('Cleaning up socket event listeners...');
+            socket.off('motor-test-complete');
+            socket.off('motor-test-error');
+        };
+    }, [socket]);
+
     // Display error if any
     if (error) {
         return (
@@ -119,6 +179,37 @@ export default function App() {
 
     return (
         <>
+            <div style={{
+                position: 'fixed',
+                top: '10px',
+                left: '10px',
+                zIndex: 1000,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+            }}>
+                <div style={{
+                    padding: '5px',
+                    background: connectionStatus === 'connected' ? '#4CAF50' : '#f44336',
+                    color: 'white',
+                    borderRadius: '4px'
+                }}>
+                    Socket Status: {connectionStatus}
+                </div>
+                <button
+                    onClick={testMotor}
+                    style={{
+                        padding: '10px',
+                        background: '#2196F3',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Test Motor
+                </button>
+            </div>
             {robotData && (
                 <Canvas>
                     <PerspectiveCamera makeDefault fov={40} position={[10, 8, 25]}/>

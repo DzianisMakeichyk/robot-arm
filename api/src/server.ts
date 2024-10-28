@@ -1,3 +1,5 @@
+// In src/server.ts
+
 import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
@@ -16,7 +18,7 @@ app.use(cors({
     credentials: true
 }));
 
-// Create Socket.IO instance
+// Create Socket.IO instance with debug
 const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:3000",
@@ -26,38 +28,54 @@ const io = new Server(httpServer, {
     transports: ['websocket', 'polling']
 });
 
+io.on('connection', (socket) => {
+    logger.info('=== New Socket Connection ===');
+    logger.info('Socket ID:', socket.id);
+    logger.info('Transport:', socket.conn.transport.name);
+
+    socket.onAny((event, ...args) => {
+        logger.info(`Incoming event "${event}":`, args);
+    });
+
+    stateController(socket);
+});
+
 // Initialize the application
 async function initializeApp() {
     try {
         await seed();
         logger.info('Seed check completed');
 
-        // Socket.IO connection handling
+        // Socket.IO connection handling with detailed logging
         io.on('connection', (socket) => {
-            logger.info(`New client connected: ${socket.id}`);
+            logger.info('=== New Socket Connection ===');
+            logger.info('Socket ID:', socket.id);
+            logger.info('Transport:', socket.conn.transport.name);
+            logger.info('Headers:', socket.handshake.headers);
 
-            // Debugging socket events
-            // socket.onAny((event, ...args) => {
-            //     logger.info(`Received event "${event}":`, args);
-            // });
+            socket.onAny((event, ...args) => {
+                logger.info(`Socket Event "${event}":`, args);
+            });
 
             socket.on('error', (error) => {
-                logger.error(`Socket error for ${socket.id}:`, error);
+                logger.error(`Socket Error (${socket.id}):`, error);
             });
 
             socket.on('disconnect', (reason) => {
-                logger.info(`Client ${socket.id} disconnected: ${reason}`);
+                logger.info(`Socket Disconnected (${socket.id}):`, reason);
             });
 
+            // Initialize state controller
             stateController(socket);
         });
 
         const PORT = process.env.PORT || 4000;
         
         httpServer.listen(PORT, () => {
-            logger.info(`Server running on port ${PORT}`);
-            logger.info(`WebSocket server URL: ws://localhost:${PORT}`);
-            logger.info(`HTTP server URL: http://localhost:${PORT}`);
+            logger.info(`=== Server Started ===`);
+            logger.info(`Port: ${PORT}`);
+            logger.info(`CORS Origin: http://localhost:3000`);
+            logger.info(`Socket.IO transports: websocket, polling`);
         });
 
     } catch (err) {
@@ -66,7 +84,7 @@ async function initializeApp() {
     }
 }
 
-// Handle process events
+// Error handling
 process.on('uncaughtException', (error) => {
     logger.error('Uncaught Exception:', error);
 });

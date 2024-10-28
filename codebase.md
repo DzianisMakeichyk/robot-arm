@@ -82,6 +82,7 @@ declare module 'ev3dev-lang' {
   "dependencies": {
     "@abandonware/bleno": "^0.6.1",
     "@abandonware/noble": "^1.9.2-25",
+    "@stoprocent/noble": "^1.15.1",
     "dotenv": "^16.4.1",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
@@ -311,44 +312,6 @@ export default function (socket: Socket) {
 }
 ```
 
-# api/src/data/db.json
-
-```json
-{
-  "robotState": [
-    {
-      "nodes": {
-        "main_column": {
-          "position": [0, 1.462, 0],
-          "scale": [1, 1, 1],
-          "rotation": []
-        },
-        "upper_arm": {
-          "position": [2.335, 0, 0.094],
-          "scale": [0.684, 1, 1],
-          "rotation": []
-        },
-        "wrist_extension": {
-          "position": [3.231, 6.551, 0.007],
-          "scale": [0.264, 0.264, 0.264],
-          "rotation": []
-        },
-        "hand": {
-          "position": [3.368, 5.728, -0.119],
-          "scale": [1, 0.068, 0.327],
-          "rotation": [0, 1.5708, 0]
-        },
-        "gripper": {
-          "position": [3.33, 5.545, 0.006],
-          "scale": [-0.01, -0.132, -0.325],
-          "rotation": [0, 1.5708, 0]
-        }
-      }
-    }
-  ]
-}
-```
-
 # api/src/ev3/blenoService.ts
 
 ```ts
@@ -408,11 +371,15 @@ export const EV3_CONFIG = {
 }
 ```
 
-# api/src/ev3/macBluetoothClient.ts
+# api/src/ev3/ev3USBClient.ts
 
 ```ts
 import noble from '@abandonware/noble';
+import { exec } from 'child_process';
 import logger from '../config/logger';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 import { 
   MotorPorts, 
   SensorPorts, 
@@ -425,9 +392,25 @@ class MacBluetoothClient {
     private isConnected: boolean = false;
     private isSimulated: boolean = false;
     private characteristic: any = null;
-    private readonly EV3_ADDRESS: string = '00:16:53:80:5C:A5';
-    private readonly SERVICE_UUID = 'fff0';
-    private readonly CHARACTERISTIC_UUID = 'fff1';
+    private readonly EV3_ADDRESS = '00:16:53:80:5C:A5';
+    private readonly EV3_UUID = '0947c3ee3f9b3e84b35dc8c9e9f70afe';
+    // private readonly EV3_UUID = '74670fb1e8773f29a36b1ff4de94bd66';
+    // private readonly EV3_UUID = 'a4ee1d3ea4ca72bb4d5107e75a150133'; waiting
+    // private readonly EV3_UUID = '6a0b29cdc4f11d17c3740af26e16df21'; waiting
+    // private readonly EV3_UUID = '01a5280305e8729b666957de17242945'; scanning
+    // private readonly EV3_UUID = 'e14cfa4b416b247c7392349c6248b376'; scanning
+    // private readonly EV3_UUID = 'b9b95306b76e60a47d05113f4a9703ae';
+
+    // {"level":"info","message":"Found device:","uuid":"b9d0cabb8363c8cbde07f17fbbd06bf5"}
+    // {"level":"info","message":"Found device:","uuid":"b9b95306b76e60a47d05113f4a9703ae"}
+    // {"level":"info","message":"Found device:","uuid":"1f7444e0973f4de069c100a3172284b4"}
+    // {"level":"info","message":"Found device:","uuid":"b03ef4186b0d7f58bfa8b5ec1b85e6a9"}
+    // {"level":"info","message":"Found device:","uuid":"7d513c0580e2a3b246bccb566c9da042"}
+
+    private readonly SERVICE_UUID = '00001101-0000-1000-8000-00805f9b34fb';
+    private readonly CHARACTERISTIC_UUID = '00001101-0000-1000-8000-00805f9b34fb';
+    private readonly ID = '001653805ca5';
+    private readonly GENERIC = '0x1801';
 
     /**
      * EV3 Direct Command Format:
@@ -446,26 +429,34 @@ class MacBluetoothClient {
         this.initialize();
     }
 
-    private initialize() {
+    // {"address":"","level":"info","manufacturerData":"4c0010073b1fa183dc4738","message":"Found device:","uuid":"0947c3ee3f9b3e84b35dc8c9e9f70afe"}
+
+    private async initialize() {
         try {
-            logger.info('Initializing EV3 Bluetooth connection...');
+            logger.info('Initializing Bluetooth connection to EV3');
 
-            noble.on('stateChange', async (state) => {
-                logger.info('Bluetooth state:', state);
-                if (state === 'poweredOn') {
-                    await this.startScanningForEV3();
-                } else {
-                    noble.stopScanning();
-                }
-            });
+            // Get paired devices using system command
+            const { stdout } = await execAsync('system_profiler SPBluetoothDataType -json');
+            const bluetoothData = JSON.parse(stdout);
+            
+            logger.info('Connected Bluetooth devices:', 
+                bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || []);
 
-            noble.on('discover', async (peripheral) => {
-                logger.info('Found device:', peripheral.address);
-                if (peripheral.address === this.EV3_ADDRESS || 
-                    peripheral.advertisement.localName === 'EV3') {
-                    await this.connectToEV3(peripheral);
-                }
-            });
+            // Look for EV3 in connected devices
+            const devices = bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || [];
+
+            const ev3Device = devices.find((device: any) => device.hasOwnProperty('EVA'));
+            // const ev3Device = devices.find((device: any) => 
+            //     device.device_address === this.EV3_ADDRESS
+            // );
+
+            if (ev3Device) {
+                logger.info('Found EV3 in system devices:', ev3Device);
+                await this.connectToKnownDevice(ev3Device);
+            } else {
+                logger.error('EV3 not found in paired devices');
+                this.enableSimulationMode();
+            }
 
         } catch (error) {
             logger.error('Bluetooth initialization error:', error);
@@ -473,57 +464,481 @@ class MacBluetoothClient {
         }
     }
 
-    private async startScanningForEV3() {
+    private async connectToKnownDevice(deviceInfo: any) {
         try {
-            logger.info('Starting scan for EV3...');
-            await noble.startScanningAsync([this.SERVICE_UUID], false);
-            
-            // Stop scanning after 30 seconds if EV3 not found
-            setTimeout(() => {
-                if (!this.isConnected) {
+            logger.info('noble =>',noble);
+
+            noble.on('stateChange', (state) => {
+                if (state === 'poweredOn') {
+                    logger.info('poweredOn => Bluetooth powered on, scanning for EV3...');
+                    noble.startScanning([this.GENERIC], false);
+                } else {
+                    logger.info('stopScanning!!!');
                     noble.stopScanning();
-                    logger.warn('EV3 not found after 30 seconds. Enabling simulation mode.');
-                    this.enableSimulationMode();
                 }
-            }, 30000);
+            });
+
+
+
+            // if (noble._state === 'poweredOn') {
+            //     noble.once('stateChange', async (state) => {
+            //         if (state === 'poweredOn') {
+            //             logger.info('stateChange => Bluetooth powered on, scanning for EV3...');
+            //             await noble.startScanningAsync(['180f'], false);
+            //         } else {
+            //             logger.error('Bluetooth not enabled or unavailable.');
+            //         }
+            //     });
+            // }
+
+
+
+            // noble.on('stateChange', async (state: string) => {
+            //     if (state === 'poweredOn') {
+            //         await noble.startScanningAsync([this.SERVICE_UUID], false);
+            //     } else {
+            //         console.error('Bluetooth not enabled or unavailable.');
+            //     }
+            // });
+
+            noble.on('discover', async (peripheral: any) => {
+                logger.info('------------------------------------');
+                logger.info('peripheral:', peripheral);
+                logger.info('------------------------------------');
+                if (peripheral.address === this.EV3_ADDRESS) {
+                    logger.info('Found matching EV3, connecting...');
+                    await this.connectDevice(peripheral);
+                } else {
+                    logger.info('WOOOOOOOW:', peripheral);
+                }
+            });
 
         } catch (error) {
-            logger.error('Scan error:', error);
+            logger.error('Error connecting to known device:', error);
             this.enableSimulationMode();
         }
     }
 
-    private async connectToEV3(peripheral: any) {
+    private async connectDevice(peripheral: any) {
         try {
-            logger.info('Connecting to EV3...');
+            logger.info('=== Starting EV3 Connection Process ===');
+            logger.info('1. Stopping scan...');
             await noble.stopScanningAsync();
-
+    
+            logger.info('2. Attempting to connect to EV3...');
             await peripheral.connectAsync();
-            logger.info('Connected to EV3');
-
+            logger.info('✓ Connected to peripheral!');
+    
+            logger.info('3. Discovering services...');
             const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
-            logger.info('Discovered services');
-
-            if (services.length > 0) {
-                const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
-                if (characteristics.length > 0) {
-                    this.characteristic = characteristics[0];
-                    this.isConnected = true;
-                    logger.info('EV3 connection fully established');
-                }
+            logger.info(`✓ Found ${services.length} services`);
+    
+            if (services.length === 0) {
+                throw new Error('No services found on EV3');
             }
-
-            peripheral.on('disconnect', () => {
-                logger.info('EV3 disconnected');
+    
+            logger.info('4. Discovering characteristics...');
+            const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
+            logger.info(`✓ Found ${characteristics.length} characteristics`);
+    
+            if (characteristics.length === 0) {
+                throw new Error('No characteristics found on EV3');
+            }
+    
+            this.characteristic = characteristics[0];
+            this.isConnected = true;
+    
+            logger.info('=== EV3 CONNECTION SUCCESSFUL! ===');
+            logger.info('Connection details:', {
+                deviceName: peripheral.advertisement?.localName,
+                deviceAddress: peripheral.address,
+                rssi: peripheral.rssi,
+                serviceUUID: services[0].uuid,
+                characteristicUUID: this.characteristic.uuid
+            });
+    
+            // Set up disconnect handler
+            peripheral.once('disconnect', () => {
+                logger.info('=== EV3 DISCONNECTED ===');
                 this.isConnected = false;
                 this.characteristic = null;
-                setTimeout(() => this.startScanningForEV3(), 1000);
+                // Optionally try to reconnect
+                this.initialize();
+            });
+    
+            return true;
+    
+        } catch (error) {
+            logger.error('=== EV3 CONNECTION FAILED ===');
+            logger.error('Connection error details:', error);
+            this.enableSimulationMode();
+            return false;
+        }
+    }
+    
+    // Add a method to check connection status
+    public isDeviceConnected(): boolean {
+        const status = {
+            isConnected: this.isConnected,
+            hasCharacteristic: !!this.characteristic,
+            isSimulated: this.isSimulated
+        };
+        
+        logger.info('EV3 Connection Status:', status);
+        return this.isConnected && !this.isSimulated;
+    }
+
+    private enableSimulationMode() {
+        if (!this.isSimulated) {
+            logger.info('Enabling simulation mode');
+            this.isSimulated = true;
+        }
+    }
+
+    private async sendCommand(command: Buffer) {
+        if (this.isSimulated) {
+            logger.info('Simulation mode - Command:', command);
+            return;
+        }
+
+        if (!this.isConnected || !this.characteristic) {
+            throw new Error('Not connected to EV3');
+        }
+
+        try {
+            await this.characteristic.writeAsync(command, false);
+            logger.info('Command sent successfully:', command);
+        } catch (error) {
+            logger.error('Error sending command:', error);
+            this.enableSimulationMode();
+            throw error;
+        }
+    }
+
+    async moveBase(angle: number) {
+      const config = MotorConfig[MotorPorts.BASE];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>>  Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
+
+  async moveElbow(angle: number) {
+      const config = MotorConfig[MotorPorts.ELBOW];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Moving elbow (Port ${MotorPorts.ELBOW}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
+
+  async moveHeight(angle: number) {
+      const config = MotorConfig[MotorPorts.HEIGHT];
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`------------------------------------`);
+      logger.info(`====>>>>> Adjusting height (Port ${MotorPorts.HEIGHT}) to ${clampedAngle}°`);
+      logger.info(`------------------------------------`);
+      await this.sendCommand(command);
+  }
+
+  async moveGripper(position: number) {
+      const config = MotorConfig[MotorPorts.GRIPPER];
+      // Convert position (0-100) to degrees
+      const angle = (position / 100) * (config.maxDegrees - config.minDegrees);
+      const clampedAngle = Math.max(
+          config.minDegrees,
+          Math.min(config.maxDegrees, angle)
+      );
+
+      const command = this.createMotorCommand(
+          config.portNumber,
+          clampedAngle,
+          config.defaultSpeed
+      );
+
+      logger.info(`Moving gripper (Port ${MotorPorts.GRIPPER}) to ${clampedAngle}°`);
+      await this.sendCommand(command);
+  }
+
+  private createMotorCommand(port: number, angle: number, speed: number): Buffer {
+      return Buffer.from([
+          0x0C,                   // Direct command
+          0x00,                   // Header size
+          0x00,                   // Counter
+          0x00,                   // Command type
+          speed,                  // Motor speed
+          port,                   // Motor port
+          0x00,                   // Subtype
+          angle & 0xFF,           // Angle LSB
+          (angle >> 8) & 0xFF     // Angle MSB
+      ]);
+  }
+
+  async readTouchSensor(): Promise<boolean> {
+      // Implementation for reading touch sensor
+      // This would be used for base position calibration
+      return false; // Placeholder
+  }
+
+  async calibrateBasePosition() {
+      try {
+          logger.info('Starting base position calibration...');
+          // Implementation for base calibration using touch sensor
+      } catch (error) {
+          logger.error('Calibration error:', error);
+      }
+  }
+}
+
+export default MacBluetoothClient;
+```
+
+# api/src/ev3/macBluetoothClient.ts
+
+```ts
+import noble from '@abandonware/noble';
+import { exec } from 'child_process';
+import logger from '../config/logger';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
+import { 
+  MotorPorts, 
+  SensorPorts, 
+  MotorConfig, 
+  SensorConfig,
+  motorPortToHex 
+} from './portConfig';
+
+class MacBluetoothClient {
+    private isConnected: boolean = false;
+    private isSimulated: boolean = false;
+    private characteristic: any = null;
+    private readonly EV3_ADDRESS = '00:16:53:80:5C:A5';
+    private readonly EV3_UUID = '0947c3ee3f9b3e84b35dc8c9e9f70afe';
+    // private readonly EV3_UUID = '74670fb1e8773f29a36b1ff4de94bd66';
+    // private readonly EV3_UUID = 'a4ee1d3ea4ca72bb4d5107e75a150133'; waiting
+    // private readonly EV3_UUID = '6a0b29cdc4f11d17c3740af26e16df21'; waiting
+    // private readonly EV3_UUID = '01a5280305e8729b666957de17242945'; scanning
+    // private readonly EV3_UUID = 'e14cfa4b416b247c7392349c6248b376'; scanning
+    // private readonly EV3_UUID = 'b9b95306b76e60a47d05113f4a9703ae';
+
+    // {"level":"info","message":"Found device:","uuid":"b9d0cabb8363c8cbde07f17fbbd06bf5"}
+    // {"level":"info","message":"Found device:","uuid":"b9b95306b76e60a47d05113f4a9703ae"}
+    // {"level":"info","message":"Found device:","uuid":"1f7444e0973f4de069c100a3172284b4"}
+    // {"level":"info","message":"Found device:","uuid":"b03ef4186b0d7f58bfa8b5ec1b85e6a9"}
+    // {"level":"info","message":"Found device:","uuid":"7d513c0580e2a3b246bccb566c9da042"}
+
+    private readonly SERVICE_UUID = '00001101-0000-1000-8000-00805f9b34fb';
+    private readonly CHARACTERISTIC_UUID = '00001101-0000-1000-8000-00805f9b34fb';
+    private readonly ID = '001653805ca5';
+    private readonly GENERIC = '0x1801';
+
+    /**
+     * EV3 Direct Command Format:
+     * [0x0C] - Direct command, response expected
+     * [0x00] - Header size
+     * [0x00] - Counter
+     * [0x00] - Command type
+     * [0x80] - Output power
+     * [PORT] - Output port (0x00 to 0x03 for motors A-D)
+     * [0x00] - Command subtype
+     * [Angle LSB] - Lower byte of angle
+     * [Angle MSB] - Upper byte of angle
+     */
+
+    constructor() {
+        this.initialize();
+    }
+
+    // {"address":"","level":"info","manufacturerData":"4c0010073b1fa183dc4738","message":"Found device:","uuid":"0947c3ee3f9b3e84b35dc8c9e9f70afe"}
+
+    private async initialize() {
+        try {
+            logger.info('Initializing Bluetooth connection to EV3');
+
+            // Get paired devices using system command
+            const { stdout } = await execAsync('system_profiler SPBluetoothDataType -json');
+            const bluetoothData = JSON.parse(stdout);
+            
+            logger.info('Connected Bluetooth devices:', 
+                bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || []);
+
+            // Look for EV3 in connected devices
+            const devices = bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || [];
+
+            const ev3Device = devices.find((device: any) => device.hasOwnProperty('EVA'));
+            // const ev3Device = devices.find((device: any) => 
+            //     device.device_address === this.EV3_ADDRESS
+            // );
+
+            if (ev3Device) {
+                logger.info('Found EV3 in system devices:', ev3Device);
+                await this.connectToKnownDevice(ev3Device);
+            } else {
+                logger.error('EV3 not found in paired devices');
+                this.enableSimulationMode();
+            }
+
+        } catch (error) {
+            logger.error('Bluetooth initialization error:', error);
+            this.enableSimulationMode();
+        }
+    }
+
+    private async connectToKnownDevice(deviceInfo: any) {
+        try {
+            logger.info('noble =>',noble);
+
+            noble.on('stateChange', (state) => {
+                if (state === 'poweredOn') {
+                    logger.info('poweredOn => Bluetooth powered on, scanning for EV3...');
+                    noble.startScanning([this.GENERIC], false);
+                } else {
+                    logger.info('stopScanning!!!');
+                    noble.stopScanning();
+                }
+            });
+
+
+
+            // if (noble._state === 'poweredOn') {
+            //     noble.once('stateChange', async (state) => {
+            //         if (state === 'poweredOn') {
+            //             logger.info('stateChange => Bluetooth powered on, scanning for EV3...');
+            //             await noble.startScanningAsync(['180f'], false);
+            //         } else {
+            //             logger.error('Bluetooth not enabled or unavailable.');
+            //         }
+            //     });
+            // }
+
+
+
+            // noble.on('stateChange', async (state: string) => {
+            //     if (state === 'poweredOn') {
+            //         await noble.startScanningAsync([this.SERVICE_UUID], false);
+            //     } else {
+            //         console.error('Bluetooth not enabled or unavailable.');
+            //     }
+            // });
+
+            noble.on('discover', async (peripheral: any) => {
+                logger.info('------------------------------------');
+                logger.info('peripheral:', peripheral);
+                logger.info('------------------------------------');
+                if (peripheral.address === this.EV3_ADDRESS) {
+                    logger.info('Found matching EV3, connecting...');
+                    await this.connectDevice(peripheral);
+                } else {
+                    logger.info('WOOOOOOOW:', peripheral);
+                }
             });
 
         } catch (error) {
-            logger.error('EV3 connection error:', error);
+            logger.error('Error connecting to known device:', error);
             this.enableSimulationMode();
         }
+    }
+
+    private async connectDevice(peripheral: any) {
+        try {
+            logger.info('=== Starting EV3 Connection Process ===');
+            logger.info('1. Stopping scan...');
+            await noble.stopScanningAsync();
+    
+            logger.info('2. Attempting to connect to EV3...');
+            await peripheral.connectAsync();
+            logger.info('✓ Connected to peripheral!');
+    
+            logger.info('3. Discovering services...');
+            const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
+            logger.info(`✓ Found ${services.length} services`);
+    
+            if (services.length === 0) {
+                throw new Error('No services found on EV3');
+            }
+    
+            logger.info('4. Discovering characteristics...');
+            const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
+            logger.info(`✓ Found ${characteristics.length} characteristics`);
+    
+            if (characteristics.length === 0) {
+                throw new Error('No characteristics found on EV3');
+            }
+    
+            this.characteristic = characteristics[0];
+            this.isConnected = true;
+    
+            logger.info('=== EV3 CONNECTION SUCCESSFUL! ===');
+            logger.info('Connection details:', {
+                deviceName: peripheral.advertisement?.localName,
+                deviceAddress: peripheral.address,
+                rssi: peripheral.rssi,
+                serviceUUID: services[0].uuid,
+                characteristicUUID: this.characteristic.uuid
+            });
+    
+            // Set up disconnect handler
+            peripheral.once('disconnect', () => {
+                logger.info('=== EV3 DISCONNECTED ===');
+                this.isConnected = false;
+                this.characteristic = null;
+                // Optionally try to reconnect
+                this.initialize();
+            });
+    
+            return true;
+    
+        } catch (error) {
+            logger.error('=== EV3 CONNECTION FAILED ===');
+            logger.error('Connection error details:', error);
+            this.enableSimulationMode();
+            return false;
+        }
+    }
+    
+    // Add a method to check connection status
+    public isDeviceConnected(): boolean {
+        const status = {
+            isConnected: this.isConnected,
+            hasCharacteristic: !!this.characteristic,
+            isSimulated: this.isSimulated
+        };
+        
+        logger.info('EV3 Connection Status:', status);
+        return this.isConnected && !this.isSimulated;
     }
 
     private enableSimulationMode() {
@@ -1064,327 +1479,6 @@ export default app;
 }
 
 ```
-
-# data/_mdb_catalog.wt
-
-This is a binary file of the type: Binary
-
-# data/collection-0--188536456211366303.wt
-
-This is a binary file of the type: Binary
-
-# data/collection-0--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/collection-2--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/collection-4--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/collection-8--549222828002248186.wt
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-16T13-36-39Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-16T15-26-12Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-16T15-28-48Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-16T16-02-18Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T08-41-12Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T08-45-45Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T08-46-40Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T08-56-07Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T08-58-01Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-00-09Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-01-17Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-05-22Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-08-50Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-34-08Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-36-04Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T09-37-32Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T15-20-47Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T15-22-13Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T15-42-21Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T15-43-17Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-17T15-47-18Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-19T19-10-41Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T10-27-26Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T10-51-19Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T10-59-17Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T11-00-24Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T11-04-39Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T11-06-57Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T11-09-48Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-21T11-12-44Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-22T07-42-44Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-22-16Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-27-44Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-33-53Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-40-41Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-43-54Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-52-04Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-53-58Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-55-34Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T13-57-08Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T14-01-22Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-07-58Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-12-19Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-31-46Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-39-39Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-47-21Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-23T15-53-40Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T06-47-58Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T07-33-29Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T07-53-03Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T07-57-34Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T08-03-45Z-00000
-
-This is a binary file of the type: Binary
-
-# data/diagnostic.data/metrics.2024-10-24T08-12-21Z-00000
-
-This is a binary file of the type: Binary
-
-# data/index-1--188536456211366303.wt
-
-This is a binary file of the type: Binary
-
-# data/index-1--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/index-3--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/index-5--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/index-6--1093803086368506637.wt
-
-This is a binary file of the type: Binary
-
-# data/index-9--549222828002248186.wt
-
-This is a binary file of the type: Binary
-
-# data/journal/WiredTigerLog.0000000052
-
-This is a binary file of the type: Binary
-
-# data/journal/WiredTigerPreplog.0000000001
-
-This is a binary file of the type: Binary
-
-# data/journal/WiredTigerPreplog.0000000002
-
-This is a binary file of the type: Binary
-
-# data/mongod.lock
-
-```lock
-
-```
-
-# data/sizeStorer.wt
-
-This is a binary file of the type: Binary
-
-# data/storage.bson
-
-This is a binary file of the type: Binary
-
-# data/WiredTiger
-
-```
-WiredTiger
-WiredTiger 3.2.0: (May  9, 2019)
-
-```
-
-# data/WiredTiger.lock
-
-```lock
-WiredTiger lock file
-
-```
-
-# data/WiredTiger.turtle
-
-```turtle
-WiredTiger version string
-WiredTiger 3.2.0: (May  9, 2019)
-WiredTiger version
-major=3,minor=2,patch=0
-file:WiredTiger.wt
-access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.319=(addr="018081e4f733fb958181e42d0b01d38281e491c12dba808080e29fc0e22fc0",order=319,time=1729757888,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=803)),checkpoint_lsn=(52,8960),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
-
-```
-
-# data/WiredTiger.wt
-
-This is a binary file of the type: Binary
-
-# data/WiredTigerLAS.wt
-
-This is a binary file of the type: Binary
 
 # docker-entrypoint.sh
 
@@ -2358,6 +2452,8 @@ export const Translate: FC<{ axis: 0 | 1 | 2 }> = ({axis}) => {
 # hmi/src/components/mesh/Mesh.tsx
 
 ```tsx
+ 
+import React from 'react'
 import {Robot} from '@types'
 import { Euler } from 'three'
 
@@ -2371,9 +2467,7 @@ import { Euler } from 'three'
 
 const Mesh = ({node, data}: Robot.MeshProperties) => {
     //   @ts-ignore
-    const rotation = data.rotation.length < 0 ? new Euler().fromArray(data.rotation) : new Euler(0, 0, 0)
-
-    console.log(88811111, node.name, rotation)
+    const rotation = data.rotation.length > 0 ? new Euler().fromArray(data.rotation) : new Euler(0, 0, 0)
 
     return (
         <mesh geometry={node.geometry}
@@ -2431,7 +2525,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: newMatrix
+                    rotation: data.nodes[nodeName].rotation,
+                    // Note: problem with rotation hand and gripper
+                    // when use newMatrix
+                    // rotation: newMatrix
                 }
             }
         };

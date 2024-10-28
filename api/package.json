@@ -14,11 +14,14 @@
   "dependencies": {
     "@abandonware/bleno": "^0.6.1",
     "@abandonware/noble": "^1.9.2-25",
+    "@node-mindstorms/ev3": "^0.0.6",
+    "@node-mindstorms/ev3-protocol": "^0.0.6",
     "@stoprocent/noble": "^1.15.1",
     "dotenv": "^16.4.1",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
     "node-ble": "^1.11.0",
+    "serialport": "^12.0.0",
     "socket.io": "^4.7.4",
     "winston": "^3.11.0"
   },
