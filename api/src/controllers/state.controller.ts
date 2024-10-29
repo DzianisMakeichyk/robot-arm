@@ -3,14 +3,20 @@ import { RobotState } from '../models/RobotState';
 import logger from '../config/logger';
 import data from '../seed.json';
 import EV3SerialClient from '../ev3/ev3SerialClient';
+import EV3BluetoothClient from '../ev3/ev3BluetoothClient';
+import EV3MindstormsClient from '../ev3/ev3MindstormsClient';
 import { MotorConfig, MotorPorts } from '../ev3/portConfig';
 
-const serialClient = new EV3SerialClient();
+// var EV3Robot = require('../ev3/node/EV3Robot');
+// import EV3Robot from '../ev3/node/EV3Robot';
+// const robot = new EV3Robot.Robot();
 
-setInterval(() => {
-    const status = serialClient.getConnectionStatus();
-    logger.info('EV3 Connection Status:', status);
-}, 5000);
+const bluetoothClient = new EV3MindstormsClient();
+
+// setInterval(() => {
+//     const status = bluetoothClient.getConnectionStatus();
+//     logger.info('EV3 Connection Status:', status);
+// }, 5000);
 
 const convertToMotorAngle = (radians: number, motorType: keyof typeof MotorPorts): number => {
     let degrees = (radians * 180) / Math.PI;
@@ -36,30 +42,30 @@ const handleH25Movements = async (newState: any) => {
     try {
         if (newState.nodes.main_column?.rotation?.[1] !== undefined) {
             const angle = convertToMotorAngle(newState.nodes.main_column.rotation[1], 'BASE');
-            logger.info(`Moving base motor to ${angle}°`);        
-            await serialClient.moveBase(angle);
+            logger.info(`(State): Moving base motor to ${angle}°`);        
+            await bluetoothClient.moveBase(angle);
         }
 
-        if (newState.nodes.upper_arm?.rotation?.[1] !== undefined) {
-            const angle = convertToMotorAngle(newState.nodes.upper_arm.rotation[1], 'ELBOW');
-            logger.info(`Moving elbow motor to ${angle}°`);
-            await serialClient.moveElbow(angle);
-        }
+        // if (newState.nodes.upper_arm?.rotation?.[1] !== undefined) {
+        //     const angle = convertToMotorAngle(newState.nodes.upper_arm.rotation[1], 'ELBOW');
+        //     logger.info(`(State): Moving elbow motor to ${angle}°`);
+        //     await bluetoothClient.moveElbow(angle);
+        // }
 
-        if (newState.nodes.wrist_extension?.rotation?.[1] !== undefined) {
-            const angle = convertToMotorAngle(newState.nodes.wrist_extension.rotation[1], 'HEIGHT');
-            logger.info(`Moving height motor to ${angle}°`);
-            await serialClient.moveHeight(angle);
-        }
+        // if (newState.nodes.wrist_extension?.rotation?.[1] !== undefined) {
+        //     const angle = convertToMotorAngle(newState.nodes.wrist_extension.rotation[1], 'HEIGHT');
+        //     logger.info(`(State): Moving height motor to ${angle}°`);
+        //     await bluetoothClient.moveHeight(angle);
+        // }
 
-        if (newState.nodes.gripper?.position?.[2] !== undefined) {
-            const position = convertGripperPosition(newState.nodes.gripper.position[2]);
-            logger.info(`Moving gripper motor to position ${position}`);
-            // logger.info(`------------------------------------`);
-            // logger.info(`=>`, serialClient);
-            // logger.info(`------------------------------------`);
-            await serialClient.moveGripper(position);
-        }
+        // if (newState.nodes.gripper?.position?.[2] !== undefined) {
+        //     const position = convertGripperPosition(newState.nodes.gripper.position[2]);
+        //     logger.info(`(State): Moving gripper motor to position ${position}`);
+        //     // logger.info(`------------------------------------`);
+        //     // logger.info(`=>`, serialClient);
+        //     // logger.info(`------------------------------------`);
+        //     await bluetoothClient.moveGripper(position);
+        // }
 
     } catch (error) {
         logger.error('Error handling H25 movements:', error);
@@ -104,8 +110,8 @@ export default function (socket: Socket) {
 
     socket.on('connect', () => {
         logger.info('Client connected event fired');
-        serialClient.calibrateBasePosition()
-            .catch(error => logger.error('Calibration error:', error));
+        // serialClient.calibrateBasePosition()
+        //     .catch(error => logger.error('Calibration error:', error));
     });
 
     socket.on("state:update", async (newState: any) => {
@@ -130,18 +136,17 @@ export default function (socket: Socket) {
     });
 
     // Test motor handler
-    socket.on('test-motor', () => {
-        logger.info('Test motor event received');
+    socket.on("test-motor", async () => {
+        logger.info('Test motor command received');
         try {
-            serialClient.moveBase(45).then(() => {
-                logger.info('Motor movement completed');
-                socket.emit('motor-test-complete');
-            }).catch(error => {
-                logger.error('Motor movement failed:', error);
-                socket.emit('motor-test-error', error.message);
-            });
+            // Log connection status
+            logger.info('EV3 Status:', bluetoothClient.getStatus());
+            
+            await bluetoothClient.moveBase(45);
+            socket.emit('motor-test-complete', 'Test completed');
         } catch (error) {
-            logger.error('Error in test motor handler:', error);
+            logger.error('Test failed:', error);
+            socket.emit('motor-test-error', error.message);
         }
     });
 }

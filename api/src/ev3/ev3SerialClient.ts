@@ -8,66 +8,110 @@ import {
 import { EV3Protocol } from './ev3Protocol';
 
 class EV3SerialClient {
-  private serialPort: SerialPort | null = null;
-  private isConnected: boolean = false;
-  private isSimulated: boolean = false;
-  private readonly BAUD_RATE = 115200;
-  private readonly PORT_PATH = '/dev/cu.EVA';
+    private serialPort: SerialPort | null = null;
+    private isConnected: boolean = false;
+    private isSimulated: boolean = false;
+    private commandQueue: Array<() => Promise<void>> = [];
+    private isProcessingQueue = false;
+    private readonly PORT_PATH = '/dev/cu.EVA';
 
   constructor() {
       logger.info('Starting EV3 Serial Client...');
       this.initialize();
   }
 
-  private async initialize() {
-      try {
-          logger.info(`Attempting to connect to ${this.PORT_PATH}...`);
+  async testConnection(): Promise<boolean> {
+    try {
+        logger.info('Running connection test sequence...');
+        
+        // Send version request and wait for response
+        const versionCmd = EV3Protocol.createGetVersionCommand();
+        await this.sendCommand(versionCmd);
+        
+        // Wait for response
+        const hasResponse = await new Promise<boolean>((resolve) => {
+            const timeout = setTimeout(() => resolve(false), 1000);
+            
+            const responseHandler = (data: Buffer) => {
+                clearTimeout(timeout);
+                this.serialPort?.removeListener('data', responseHandler);
+                resolve(true);
+            };
+            
+            this.serialPort?.once('data', responseHandler);
+        });
 
-          this.serialPort = new SerialPort({
-              path: this.PORT_PATH,
-              baudRate: this.BAUD_RATE,
-              dataBits: 8,
-              stopBits: 1,
-              parity: 'none',
-              autoOpen: false
-          });
+        if (!hasResponse) {
+            logger.error('No response received from EV3');
+            return false;
+        }
 
-          // Setup event handlers
-          this.serialPort.on('open', () => {
-              this.isConnected = true;
-              logger.info('✓ Serial connection OPENED successfully');
-              this.validateConnection();
-          });
+        logger.info('EV3 responded to test sequence');
+        return true;
 
-          this.serialPort.on('close', () => {
-              this.isConnected = false;
-              logger.info('Serial connection CLOSED');
-          });
+    } catch (error) {
+        logger.error('Connection test failed:', error);
+        return false;
+    }
+}
 
-          this.serialPort.on('error', (error) => {
-              logger.error('Serial connection ERROR:', error);
-              this.enableSimulationMode();
-          });
+private async initialize() {
+    try {
+        logger.info('Initializing EV3 connection...');
+        
+        this.serialPort = new SerialPort({
+            path: '/dev/cu.EVA',
+            baudRate: 115200,
+            dataBits: 8,
+            stopBits: 1,
+            parity: 'none',
+            rtscts: true
+        });
 
-          // Attempt to open the connection
-          return new Promise((resolve, reject) => {
-              this.serialPort?.open((error) => {
-                  if (error) {
-                      logger.error('Failed to open serial port:', error);
-                      this.enableSimulationMode();
-                      reject(error);
-                  } else {
-                      logger.info('Serial port opened, waiting for connection...');
-                      resolve(true);
-                  }
-              });
-          });
+        this.serialPort.on('open', () => {
+            logger.info('Serial port opened');
+            this.isConnected = true;
+            this.verifyConnection();
+        });
 
-      } catch (error) {
-          logger.error('Initialization error:', error);
-          this.enableSimulationMode();
-      }
-  }
+        this.serialPort.on('data', (data) => {
+            logger.info('Received data from EV3:', {
+                hex: data.toString('hex'),
+                bytes: Array.from(data),
+                ascii: data.toString('ascii')
+            });
+        });
+
+        this.serialPort.on('error', (error) => {
+            logger.error('Serial port error:', error);
+            this.enableSimulationMode();
+        });
+
+    } catch (error) {
+        logger.error('Failed to initialize:', error);
+        this.enableSimulationMode();
+    }
+    }
+
+    private async verifyConnection() {
+        try {
+            logger.info('Verifying EV3 connection...');
+
+            // Send version request
+            const versionCmd = EV3Protocol.createGetVersionCommand();
+            await this.sendCommand(versionCmd);
+            logger.info('Version command sent, waiting for response...');
+
+            // Wait a bit and send ping
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const pingCmd = EV3Protocol.createPingCommand();
+            await this.sendCommand(pingCmd);
+            logger.info('Ping command sent, waiting for response...');
+
+        } catch (error) {
+            logger.error('Connection verification failed:', error);
+        }
+    }
 
     private enableSimulationMode() {
         if (!this.isSimulated) {
@@ -76,47 +120,43 @@ class EV3SerialClient {
         }
     }
 
-    private async sendCommand(command: Buffer) {
+private async sendCommand(command: Buffer): Promise<void> {
         if (this.isSimulated) {
             logger.info('Simulation mode - Command:', command);
             return;
         }
 
-        if (!this.isConnected || !this.serialPort) {
-            throw new Error('Not connected to EV3');
-        }
-
         return new Promise((resolve, reject) => {
-            this.serialPort?.write(command, (err) => {
-                if (err) {
-                    logger.error('Error sending command:', err);
-                    reject(err);
-                } else {
-                    this.serialPort?.drain(() => {
-                        logger.info('Command sent successfully:', command);
-                        resolve(true);
-                    });
+            if (!this.serialPort?.isOpen) {
+                reject(new Error('Serial port not open'));
+                return;
+            }
+
+            logger.debug('Sending command:', {
+                hex: command.toString('hex'),
+                bytes: Array.from(command)
+            });
+
+            this.serialPort.write(command, (error) => {
+                if (error) {
+                    logger.error('Write error:', error);
+                    reject(error);
+                    return;
                 }
+
+                this.serialPort?.drain((error) => {
+                    if (error) {
+                        logger.error('Drain error:', error);
+                        reject(error);
+                        return;
+                    }
+
+                    logger.debug('Command sent and drained');
+                    resolve();
+                });
             });
         });
     }
-
-    private async validateConnection() {
-      try {
-          if (!this.serialPort?.isOpen) {
-              throw new Error('Serial port is not open');
-          }
-
-          // Send a test command
-          const testCommand = Buffer.from([0x0F, 0x00, 0x00, 0x00, 0x00]); // Simple test command
-          await this.sendCommand(testCommand);
-          
-          logger.info('✓ Connection validated successfully');
-      } catch (error) {
-          logger.error('Connection validation failed:', error);
-          this.enableSimulationMode();
-      }
-  }
 
     public getConnectionStatus() {
       return {
@@ -127,22 +167,34 @@ class EV3SerialClient {
       };
   }
 
-    async moveBase(angle: number) {
+  async moveBase(angle: number) {
+    try {
         const config = MotorConfig[MotorPorts.BASE];
         const clampedAngle = Math.max(
             config.minDegrees,
             Math.min(config.maxDegrees, angle)
         );
 
+        logger.info('Moving base motor:', {
+            requestedAngle: angle,
+            clampedAngle,
+            port: MotorPorts.BASE
+        });
+
         const command = EV3Protocol.createMotorCommand(
             config.portNumber,
-            config.defaultSpeed,
+            30, // power level
             clampedAngle
         );
 
-        logger.info(`Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
         await this.sendCommand(command);
+        logger.info('Base motor command sent');
+
+    } catch (error) {
+        logger.error('Error moving base:', error);
+        throw error;
     }
+}
 
     async moveElbow(angle: number) {
         const config = MotorConfig[MotorPorts.ELBOW];
