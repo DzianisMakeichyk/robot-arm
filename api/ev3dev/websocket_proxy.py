@@ -8,28 +8,27 @@ EV3_HOST = '192.168.2.3'
 EV3_PORT = 4000
 
 def debug_bytes(data, prefix=""):
-    """Debug binary data"""
-    print(f"{prefix} Length: {len(data)}")
-    print(f"{prefix} Hex: {' '.join(hex(b) for b in data)}")
+    print(prefix + " Length: " + str(len(data)))
+    print(prefix + " Hex: " + ' '.join(hex(b) for b in data))
     try:
-        print(f"{prefix} UTF-8: {data.decode('utf-8', errors='ignore')}")
+        print(prefix + " UTF-8: " + data.decode('utf-8', errors='ignore'))
     except:
-        print(f"{prefix} Can't decode as UTF-8")
+        print(prefix + " Can't decode as UTF-8")
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(('0.0.0.0', BROWSER_PORT))
 server.listen(1)
-print(f"Proxy listening on port {BROWSER_PORT}")
+print("Proxy listening on port " + str(BROWSER_PORT))
 
 while True:
     browser_socket, addr = server.accept()
-    print(f"\nBrowser connected from {addr}")
+    print("\nBrowser connected from " + str(addr))
     
     try:
         # Connect to EV3
         ev3_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(f"Connecting to EV3 at {EV3_HOST}:{EV3_PORT}")
+        print("Connecting to EV3 at " + EV3_HOST + ":" + str(EV3_PORT))
         ev3_socket.connect((EV3_HOST, EV3_PORT))
         print("Connected to EV3")
         
@@ -75,7 +74,7 @@ while True:
             browser_socket.send(ev3_data)
             
     except Exception as e:
-        print(f"\nError: {str(e)}")
+        print("\nError: " + str(e))
     finally:
         print("\nClosing connections")
         browser_socket.close()

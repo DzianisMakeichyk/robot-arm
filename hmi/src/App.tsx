@@ -2,7 +2,6 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
 import {Shadows, Ground} from '@components/stage';
-// import socketIOClient, { Socket } from 'socket.io-client';
 import {Robot} from '@types';
 import {RobotArm} from "@components/model/RobotArm";
 
@@ -13,50 +12,86 @@ export default function App() {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [connectionStatus, setConnectionStatus] = useState('disconnected');
     const [error, setError] = useState<string>('');
-    const [status, setStatus] = useState<string>('');
 
     useEffect(() => {
-        const websocket = new WebSocket('ws://localhost:4001');
+        console.log('Connecting to:', SOCKET_SERVER_URL);
+        const websocket = new WebSocket(SOCKET_SERVER_URL);
         
         websocket.onopen = () => {
-            console.log('Connected to WebSocket');
+            console.log('WebSocket Connected');
+            setConnectionStatus('connected');
             setWs(websocket);
+            
+            // Request initial state
+            websocket.send(JSON.stringify({ action: 'test_motor' }));
         };
 
         websocket.onmessage = (event) => {
-            console.log('Received:', event.data);
+            console.log('Received raw message:', event.data);
             try {
                 const response = JSON.parse(event.data);
-                setStatus(response.message);
+                console.log('Parsed response:', response);
+                
+                if (response.state && response.state.nodes) {
+                    console.log('Updating robot data with:', response.state);
+                    setRobotData(response.state);
+                }
+                
+                if (response.status === 'error') {
+                    console.error('Server error:', response.message);
+                    setError(response.message);
+                }
             } catch (e) {
-                console.error('Error parsing response:', e);
+                console.error('Parse error:', e);
             }
         };
 
+        websocket.onclose = (event) => {
+            console.log('WebSocket closed:', event);
+            setConnectionStatus('disconnected');
+            setWs(null);
+        };
+        
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            setConnectionStatus('error');
+        };
+        
         return () => websocket.close();
     }, []);
 
+    const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            console.error('WebSocket not connected');
+            return;
+        }
+
+        setRobotData(prevData => {
+            if (prevData) {
+                const updatedData = {...prevData, ...newData};
+                console.log('Sending update:', updatedData);
+                ws.send(JSON.stringify({
+                    action: 'update',
+                    ...updatedData
+                }));
+                return updatedData;
+            }
+            return prevData;
+        });
+    }, [ws])
+
     const testMotor = useCallback(() => {
         if (ws?.readyState === WebSocket.OPEN) {
-            console.log('1000');
             ws.send(JSON.stringify({ action: 'test_motor' }));
-            setStatus('Testing motor...');
         } else {
-            setStatus('WebSocket not connected');
+            console.error('WebSocket not connected');
         }
     }, [ws]);
 
-    const testHTTP = async () => {
-        try {
-            const response = await fetch('http://192.168.2.3:4000');
-            console.log('HTTP test response:', response);
-        } catch (error) {
-            console.error('HTTP test failed:', error);
-        }
-    };
+    useEffect(() => {
+        console.log('Current robot data:', robotData);
+    }, [robotData]);
 
-
-    // Display error if any
     if (error) {
         return (
             <div style={{
@@ -120,13 +155,11 @@ export default function App() {
                 >
                     Test Motor
                 </button>
-
-                <button onClick={testHTTP}>Test HTTP Connection</button>
             </div>
             {robotData && (
                 <Canvas>
                     <PerspectiveCamera makeDefault fov={40} position={[10, 8, 25]}/>
-                    {/* <RobotArm data={robotData} onUpdate={updateRobotData}/> */}
+                    <RobotArm data={robotData} onUpdate={updateRobotData}/>
                     <Shadows/>
                     <Ground/>
                     <Environment preset="city"/>
