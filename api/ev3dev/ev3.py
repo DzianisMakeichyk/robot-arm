@@ -7,7 +7,7 @@ from ev3dev2.motor import LargeMotor, OUTPUT_A
 def decode_message(data):
     """Decode WebSocket message"""
     try:
-        print("Raw message:", ' '.join(hex(b) for b in data))  # Debug print
+        print("Raw message:", ' '.join(hex(b) for b in data))
         
         length = data[1] & 0x7F
         mask_start = 2
@@ -24,11 +24,22 @@ def decode_message(data):
             decoded.append(data[i] ^ masks[(i - data_start) % 4])
             
         message = decoded.decode('utf-8')
-        print("Decoded message:", message)  # Debug print
+        print("Decoded message:", message)
         return message
     except Exception as e:
         print("Decoding error:", str(e))
         return None
+
+def create_websocket_frame(data):
+    """Create WebSocket frame"""
+    if isinstance(data, str):
+        data = data.encode()
+    frame = bytearray()
+    frame.append(0x81)  # Text frame
+    length = len(data)
+    frame.append(length)
+    frame.extend(data)
+    return frame
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -80,10 +91,12 @@ while True:
                                 try:
                                     motor = LargeMotor(OUTPUT_A)
                                     motor.on_for_rotations(speed=50, rotations=1)
-                                    # Wysyłamy prostą odpowiedź bez kodowania WebSocket
-                                    client.send(b'\x81\x0bMotor moved')
+                                    # Wysyłamy odpowiedź JSON
+                                    response = '{"status":"success","message":"Motor test completed"}'
+                                    client.send(create_websocket_frame(response))
                                 except Exception as e:
-                                    print("Motor error:", str(e))
+                                    error_response = '{"status":"error","message":"Motor error: ' + str(e) + '"}'
+                                    client.send(create_websocket_frame(error_response))
                     except Exception as e:
                         print("Frame handling error:", str(e))
                         break
