@@ -12,6 +12,11 @@ export default function App() {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [connectionStatus, setConnectionStatus] = useState('disconnected');
     const [error, setError] = useState<string>('');
+    const [motorStatus, setMotorStatus] = useState<{[key: string]: string}>({
+        base: 'unknown',
+        elbow: 'unknown',
+        height: 'unknown'
+    });
 
     useEffect(() => {
         console.log('Connecting to:', SOCKET_SERVER_URL);
@@ -41,6 +46,19 @@ export default function App() {
                     console.error('Server error:', response.message);
                     setError(response.message);
                 }
+                if (response.message) {
+                    const newStatus = {...motorStatus};
+                    if (response.message.includes('Base motor')) {
+                        newStatus.base = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    if (response.message.includes('Elbow motor')) {
+                        newStatus.elbow = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    if (response.message.includes('Height motor')) {
+                        newStatus.height = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    setMotorStatus(newStatus);
+                }
             } catch (e) {
                 console.error('Parse error:', e);
             }
@@ -56,6 +74,8 @@ export default function App() {
             console.error('WebSocket error:', error);
             setConnectionStatus('error');
         };
+
+        
         
         return () => websocket.close();
     }, []);
@@ -155,6 +175,20 @@ export default function App() {
                 >
                     Test Motor
                 </button>
+                <div style={{
+                    padding: '5px',
+                    background: '#333',
+                    color: 'white',
+                    borderRadius: '4px'
+                }}>
+                    Motors: 
+                    <br />
+                    Base: {motorStatus.base}
+                    <br />
+                    Elbow: {motorStatus.elbow}
+                    <br />
+                    Height: {motorStatus.height}
+                </div>
             </div>
             {robotData && (
                 <Canvas>
