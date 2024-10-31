@@ -1,169 +1,175 @@
 import { SerialPort } from 'serialport';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import logger from '../config/logger';
 
-const execAsync = promisify(exec);
+class EV3BrickProtocol {
+    // Command types
+    private static readonly SYSTEM_COMMAND_REPLY = 0x01;
+    private static readonly SYSTEM_COMMAND_NO_REPLY = 0x81;
+    private static readonly DIRECT_COMMAND_REPLY = 0x00;
+    private static readonly DIRECT_COMMAND_NO_REPLY = 0x80;
+
+    // Command bytes
+    private static readonly opOUTPUT_SPEED = 0xA5;
+    private static readonly opOUTPUT_START = 0xA6;
+    private static readonly opOUTPUT_STEP_POWER = 0xAC;
+
+    static createMotorCommand(port: number, speed: number, degrees: number): Buffer {
+        // Calculate command length
+        const commandLength = 11;
+        
+        // Create command buffer
+        const command = Buffer.alloc(commandLength + 2); // +2 for length bytes
+        let offset = 0;
+
+        // Length bytes - Little endian
+        command.writeUInt16LE(commandLength, offset);
+        offset += 2;
+
+        // Message counter
+        command[offset++] = 0x00;
+        command[offset++] = 0x00;
+
+        // Command type - Direct command, no reply
+        command[offset++] = this.DIRECT_COMMAND_NO_REPLY;
+
+        // Global and local variables - None
+        command[offset++] = 0x00;
+        command[offset++] = 0x00;
+
+        // Motor command sequence
+        command[offset++] = this.opOUTPUT_SPEED;  // Set speed command
+        command[offset++] = port;                 // Output port
+        command[offset++] = speed;                // Power/Speed value
+
+        command[offset++] = this.opOUTPUT_STEP_POWER; // Step power command
+        command[offset++] = port;                     // Output port
+
+        // Degrees (positions steps)
+        command.writeInt32LE(degrees, offset);
+        
+        return command;
+    }
+}
 
 class EV3MindstormsClient {
     private serialPort: SerialPort | null = null;
     private isConnected: boolean = false;
-    private readonly PORT_PATH = '/dev/cu.EVA';
-    private readonly BAUD_RATE = 115200;
 
     constructor() {
-        this.initialize().catch(err => {
-            logger.error('Initialization failed:', err);
-        });
+        this.initialize();
     }
 
-    private async checkPort(): Promise<void> {
+    private async initialize() {
         try {
-            // Check if port exists
-            const { stdout: lsOutput } = await execAsync('ls -l /dev/cu.EVA');
-            logger.info('Port file info:', lsOutput.trim());
+            logger.info('Initializing EV3 connection...');
 
-            // Check if port is in use
-            const { stdout: lsofOutput } = await execAsync('lsof /dev/cu.EVA || true');
-            if (lsofOutput.trim()) {
-                logger.warn('Port is in use:', lsofOutput.trim());
-                await execAsync('sudo kill -9 $(lsof -t /dev/cu.EVA) || true');
-                logger.info('Killed existing processes using the port');
-            }
+            this.serialPort = new SerialPort({
+                path: '/dev/cu.EVA',
+                baudRate: 115200,
+                dataBits: 8,
+                stopBits: 1,
+                parity: 'none',
+                rtscts: true
+            });
 
-            // Set permissions
-            await execAsync('sudo chmod 666 /dev/cu.EVA');
-            logger.info('Updated port permissions');
-        } catch (error) {
-            logger.error('Port check failed:', error);
-            throw error;
-        }
-    }
+            this.serialPort.on('open', () => {
+                logger.info('Serial port opened');
+                this.isConnected = true;
+                this.setupDataLogging();
+            });
 
-    private async initialize(): Promise<void> {
-        try {
-            logger.info('Starting initialization...');
-            
-            // First check port
-            await this.checkPort();
-
-            // List available ports
-            const ports = await SerialPort.list();
-            logger.info('Available ports:', ports);
-
-            // Close any existing connections
-            if (this.serialPort?.isOpen) {
-                logger.info('Closing existing connection...');
-                await new Promise<void>(resolve => {
-                    this.serialPort?.close(() => resolve());
-                });
-            }
-
-            // Create new connection with detailed logging
-            return new Promise((resolve, reject) => {
-                logger.info('Creating new serial port...');
-                
-                this.serialPort = new SerialPort({
-                    path: this.PORT_PATH,
-                    baudRate: this.BAUD_RATE,
-                    dataBits: 8,
-                    stopBits: 1,
-                    parity: 'none',
-                    rtscts: true,
-                    autoOpen: false,
-                    lock: false
-                }); // false for no auto-open
-
-                this.serialPort.on('error', (error) => {
-                    logger.error('Serial port error:', error);
-                    this.isConnected = false;
-                });
-
-                logger.info('Opening port...');
-                this.serialPort.open((error) => {
-                    if (error) {
-                        logger.error('Failed to open port:', error);
-                        reject(error);
-                        return;
-                    }
-
-                    logger.info('Port opened successfully');
-                    this.isConnected = true;
-                    
-                    // Send test message
-                    const testMsg = Buffer.from([0xFF, 0x00]);
-                    this.serialPort?.write(testMsg, (err) => {
-                        if (err) {
-                            logger.error('Test write failed:', err);
-                        } else {
-                            logger.info('Test write successful');
-                        }
-                    });
-
-                    resolve();
-                });
+            this.serialPort.on('error', (error) => {
+                logger.error('Serial port error:', error);
             });
 
         } catch (error) {
-            logger.error('Initialization error:', error);
-            throw error;
+            logger.error('Initialization failed:', error);
         }
+    }
+
+    private setupDataLogging() {
+        if (!this.serialPort) return;
+
+        // Set up binary data logging
+        let buffer = Buffer.alloc(0);
+        
+        this.serialPort.on('data', (data: Buffer) => {
+            buffer = Buffer.concat([buffer, data]);
+            
+            // Log every byte we receive
+            logger.info('Received data:', {
+                hex: data.toString('hex'),
+                bytes: Array.from(data),
+                ascii: data.toString('ascii'),
+                buffer: buffer.toString('hex')
+            });
+
+            // Clear buffer if it gets too large
+            if (buffer.length > 1024) {
+                buffer = Buffer.alloc(0);
+            }
+        });
     }
 
     async moveBase(angle: number) {
         try {
-            if (!this.serialPort?.isOpen) {
-                // Try to reinitialize if port is closed
-                logger.info('Port closed, attempting to reinitialize...');
-                await this.initialize();
-            }
+            logger.info('Moving base motor:', { angle });
 
             if (!this.serialPort?.isOpen) {
-                throw new Error('Could not open serial port');
+                throw new Error('Serial port not open');
             }
 
-            const command = Buffer.from([
-                0x0D, 0x00,        // Length
-                0x00, 0x00,        // Counter
-                0x80,              // Direct command
-                0xAE,              // Step speed command
-                0x00,              // Layer
-                0x01,              // Port A
-                30,                // Speed
-                angle & 0xFF,      // Angle LSB
-                (angle >> 8) & 0xFF // Angle MSB
-            ]);
+            // Port A (0x01), speed 50, angle in degrees
+            const command = EV3BrickProtocol.createMotorCommand(0x01, 50, angle);
 
-            return new Promise<void>((resolve, reject) => {
+            logger.debug('Sending command:', {
+                hex: command.toString('hex'),
+                bytes: Array.from(command),
+                length: command.length
+            });
+
+            await new Promise<void>((resolve, reject) => {
                 this.serialPort!.write(command, (error) => {
                     if (error) {
-                        logger.error('Write error:', error);
                         reject(error);
                         return;
                     }
-
+                    
                     this.serialPort!.drain(() => {
-                        logger.info('Command sent successfully:', {
-                            hex: command.toString('hex'),
-                            angle
-                        });
+                        logger.info('Command sent successfully');
                         resolve();
                     });
                 });
             });
+
+            // Start the motor
+            const startCommand = Buffer.from([
+                0x06, 0x00,  // Length
+                0x00, 0x00,  // Counter
+                0x80,        // Direct command, no reply
+                0x00,        // No vars
+                0xA6,        // opOUTPUT_START
+                0x01         // Port A
+            ]);
+
+            await new Promise<void>((resolve, reject) => {
+                this.serialPort!.write(startCommand, (error) => {
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    
+                    this.serialPort!.drain(() => {
+                        logger.info('Start command sent successfully');
+                        resolve();
+                    });
+                });
+            });
+
         } catch (error) {
             logger.error('Move base error:', error);
             throw error;
         }
-    }
-
-    public getStatus() {
-        return {
-            portPath: this.PORT_PATH,
-            isConnected: this.isConnected,
-            portOpen: this.serialPort?.isOpen || false,
-            settings: this.serialPort?.settings
-        };
     }
 }
 

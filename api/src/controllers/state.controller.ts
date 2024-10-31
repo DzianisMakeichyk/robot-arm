@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+import ev3dev from 'ev3dev-lang';
 import { Socket } from 'socket.io';
 import { RobotState } from '../models/RobotState';
 import logger from '../config/logger';
@@ -7,11 +9,12 @@ import EV3BluetoothClient from '../ev3/ev3BluetoothClient';
 import EV3MindstormsClient from '../ev3/ev3MindstormsClient';
 import { MotorConfig, MotorPorts } from '../ev3/portConfig';
 
+
 // var EV3Robot = require('../ev3/node/EV3Robot');
 // import EV3Robot from '../ev3/node/EV3Robot';
 // const robot = new EV3Robot.Robot();
 
-const bluetoothClient = new EV3MindstormsClient();
+const bluetoothClient = new EV3BluetoothClient();
 
 // setInterval(() => {
 //     const status = bluetoothClient.getConnectionStatus();
@@ -140,7 +143,22 @@ export default function (socket: Socket) {
         logger.info('Test motor command received');
         try {
             // Log connection status
-            logger.info('EV3 Status:', bluetoothClient.getStatus());
+            // logger.info('EV3 Status:', bluetoothClient.getStatus());
+
+            logger.info('--->>> Starting motor test sequence...');
+            // @ts-ignore
+            // var defaultBattery = new ev3dev.PowerSupply();
+            // logger.info('Battery:', defaultBattery.voltageVolts);
+
+            // var motor = new ev3dev.Motor(ev3dev.OUTPUT_A);
+            // if(!motor.connected) {
+            //     logger.info("No motor was found on port A. Please connect a tacho motor to port A and try again.");
+            //     process.exit(1);
+            // }
+            
+            // motor.runForDistance(360 * 10, 500, motor.stopActionValues.brake);
+            // ev3dev
+            logger.info('--->>> Ending motor test sequence...');
             
             await bluetoothClient.moveBase(45);
             socket.emit('motor-test-complete', 'Test completed');

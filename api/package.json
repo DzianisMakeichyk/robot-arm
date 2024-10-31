@@ -18,6 +18,7 @@
     "@node-mindstorms/ev3-protocol": "^0.0.6",
     "@stoprocent/noble": "^1.15.1",
     "dotenv": "^16.4.1",
+    "ev3dev-lang": "^1.0.0",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
     "node-ble": "^1.11.0",
