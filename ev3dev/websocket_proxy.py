@@ -43,6 +43,7 @@ while True:
         # Get EV3 response
         ev3_response = ev3_socket.recv(1024)
         debug_bytes(ev3_response, "EV3 response <-")
+    
         
         # Forward to browser
         browser_socket.send(ev3_response)
