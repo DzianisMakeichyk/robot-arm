@@ -2,36 +2,40 @@
 
 ## Intro
 
-* api - A NodeJS project using MongoDB and Websocket connectivity for robot data
-* model - The Mesh of the arm modelled in Blender
-* hmi - A React Application using React Three Fiber and the API over Websockets for the telemetry data.
+### Copy file from MacOS
+scp ev3.py robot@ev3dev.local:/home/robot/
 
-## Running the project
+### Run on EV3
+chmod +x ev3.py
+./ev3.py
 
-* Make sure Docker is installed running: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)
-* Clone the repo and run docker
+### Check connection
+nc -v 192.168.3.1 4000 
 
-```shell
-git clone https://github.com/appeltje-c/robot-arm
-cd robot-arm
-docker compose up -d
-```
+### USB
+Widzę problem - routing idzie przez en0 zamiast en13.
+netstat -nr | grep 192.168.2 
 
-When the project is running, you can open [http://localhost:3000](http://localhost:3000)
+Usuń obecną trasę 
+sudo route delete 192.168.2.0/24 
 
-To stop the containers
+Dodaj poprawną trasę przez en13 sudo route add -net 
+192.168.2.0/24 -interface en13
 
-```shell
-docker compose down
-```
+### Reset USB
+sudo ifconfig en13 down
+sudo route flush 
 
-## What's in the box
+sudo ifconfig en13 192.168.2.1 netmask 255.255.255.0 up 
+sudo route -n add -net 192.168.2.0/24 -interface en13
 
-There are three main projects
+ping -c 3 192.168.3.1
 
-[Hmi](hmi/README.md) : The React App
+### wscat
+wscat -c ws://192.168.2.3:4000 
 
-[API](./api/README.md) : The API
+### EV3
+ip -4 addr show usb0
+netstat -nr
 
-[Model](./model/README.md) : The Arm Model
 
