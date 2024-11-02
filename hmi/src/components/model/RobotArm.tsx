@@ -24,7 +24,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     scale: data.nodes[nodeName].scale,
                     rotation: data.nodes[nodeName].rotation,
                     // Note: problem with rotation hand and gripper
-                    // when use newMatrix
+                    // when use 
                     // rotation: newMatrix
                 }
             }

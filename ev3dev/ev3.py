@@ -128,52 +128,48 @@ def convert_to_motor_angle(rotation, motor_type):
     return 0
 
 def decode_message(data):
-    """Simple WebSocket frame decoder"""
     try:
-        # Check for close frame
-        if len(data) >= 2 and data[0] == 0x88:
-            print("Received close frame")
+        if len(data) < 2:
             return None
 
-        if len(data) < 6:
-            return None
-
-        # Get payload length and mask
-        second_byte = data[1] & 0x7F
-        if second_byte <= 125:
-            payload_length = second_byte
+        # Próbuj jako WebSocket frame
+        if data[0] == 0x81:
+            second_byte = data[1] & 0x7F
             mask_start = 2
-        elif second_byte == 126:
-            payload_length = (data[2] << 8) | data[3]
-            mask_start = 4
-        else:
-            print("Message too long")
-            return None
+            payload_length = 0
 
-        if len(data) < mask_start + 4:
-            print("Message too short")
-            return None
+            if second_byte <= 125:
+                payload_length = second_byte
+            elif second_byte == 126:
+                if len(data) < 4:
+                    return None
+                payload_length = (data[2] << 8) | data[3]
+                mask_start = 4
+                
+            mask = data[mask_start:mask_start + 4]
+            payload = bytearray()
+            
+            for i in range(mask_start + 4, mask_start + 4 + payload_length):
+                payload.append(data[i] ^ mask[(i - (mask_start + 4)) % 4])
 
-        # Get mask key
-        mask = data[mask_start:mask_start + 4]
-        data_start = mask_start + 4
+            return payload.decode('utf-8')
 
-        # Unmask the data
-        payload = bytearray()
-        for i in range(data_start, len(data)):
-            payload.append(data[i] ^ mask[(i - data_start) % 4])
-
+        # Jeśli to nie WebSocket frame, próbuj jako base64
         try:
-            message = payload.decode('utf-8')
-            # Verify if it's valid JSON
-            json.loads(message)
-            return message
-        except UnicodeDecodeError:
-            print("Not a text message")
-            return None
-        except json.JSONDecodeError:
-            print("Not a valid JSON message")
-            return None
+            decoded = base64.b64decode(data)
+            if decoded.startswith(b'{'):
+                return decoded.decode('utf-8')
+        except:
+            pass
+
+        # Próbuj jako surowe bajty
+        try:
+            if data.startswith(b'{'):
+                return data.decode('utf-8')
+        except:
+            pass
+
+        return None
 
     except Exception as e:
         print("Decode error: " + str(e))
@@ -233,15 +229,21 @@ def handle_robot_update(data):
             del state['action']
             
         nodes = state.get('nodes', {})
+        # print("====>>>> Received state update:", nodes)
         response = {"status": "success", "message": [], "state": state}
         
         # Handle base rotation (main_column)
         if 'main_column' in nodes and 'rotation' in nodes['main_column'] and motors['A']:
+            # print("------>>>> main")
             rotation = nodes['main_column']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(-180, min(180, angle))
+
+            # print("------>>>> rotation:", rotation)
+            # print("------>>>> angle:", angle)
+            # print("------>>>> angle:", angle)
             try:
-                motors['A'].on_to_position(speed=20, position=angle)
+                motors['A'].on_for_degrees(speed=20, degrees=1)
                 response["message"].append("Base motor moved")
             except Exception as e:
                 response["message"].append("Base motor error: " + str(e))
@@ -252,18 +254,18 @@ def handle_robot_update(data):
             angle = (rotation * 180) / 3.14159
             angle = max(-90, min(90, angle))
             try:
-                motors['B'].on_to_position(speed=20, position=angle)
+                motors['B'].on_for_degrees(speed=20, degrees=1)
                 response["message"].append("Elbow motor moved")
             except Exception as e:
                 response["message"].append("Elbow motor error: " + str(e))
 
-        # Handle height adjustment (wrist_extension)
-        if 'wrist_extension' in nodes and 'rotation' in nodes['wrist_extension'] and motors['C']:
-            rotation = nodes['wrist_extension']['rotation'][1]
+        # Handle height adjustment (gripper)
+        if 'gripper' in nodes and 'rotation' in nodes['gripper'] and motors['C']:
+            rotation = nodes['gripper']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(0, min(120, angle))
             try:
-                motors['C'].on_to_position(speed=20, position=angle)
+                motors['C'].on_for_degrees(speed=20, degrees=1)
                 response["message"].append("Height motor moved")
             except Exception as e:
                 response["message"].append("Height motor error: " + str(e))
@@ -284,6 +286,36 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(('0.0.0.0', 4000))
 server.listen(1)
 print("Server started on port 4000")
+
+BYTES = [0x6e, 0x66, 0x48, 0x2e, 0x3, 0xc7, 0xad, 0xa6, 0xfa]
+
+def is_valid_json_frame(data):
+   try:
+       if data[0] == 0x81:  # WebSocket text frame
+           mask_start = 2
+           payload_length = data[1] & 0x7F
+           
+           if payload_length == 126:
+               if len(data) < 4:
+                   return False
+               payload_length = (data[2] << 8) | data[3]
+               mask_start = 4
+
+           if len(data) < mask_start + 4 + payload_length:
+               return False
+
+           mask = data[mask_start:mask_start + 4]
+           payload = bytearray()
+           
+           for i in range(mask_start + 4, mask_start + 4 + payload_length):
+               payload.append(data[i] ^ mask[(i - (mask_start + 4)) % 4])
+
+           decoded = payload.decode('utf-8')
+           json.loads(decoded)  # Sprawdź czy to JSON
+           return True
+   except:
+       return False
+   return False
 
 while True:
     try:
@@ -325,6 +357,12 @@ while True:
                       if not data:
                           print("Client disconnected")
                           break
+                      
+                    #   if data[0] in BYTES:  # Pomijamy niepoprawne ramki
+                    #       continue
+                      
+                      if not is_valid_json_frame(data):
+                          continue
 
                       message = decode_message(data)
                       if message:
@@ -335,13 +373,15 @@ while True:
                                   if parsed["action"] == "test_motor":
                                       try:
                                           if motors['A']:
-                                              motors['A'].on_for_rotations(speed=50, rotations=1)
-                                              response = {"status": "success", "message": "Motor test completed"}
+                                              print("Running motor test")
+                                            #   motors['A'].on_for_rotations(speed=50, rotations=1)
+                                            #   response = {"status": "success", "message": "Motor test completed"}
                                           else:
                                               response = {"status": "error", "message": "Motor not available"}
                                       except Exception as e:
                                           response = {"status": "error", "message": str(e)}
                                   elif parsed["action"] == "update":
+                                      print("===>>> Handling robot update <<<===")
                                       response = handle_robot_update(message)
                                   else:
                                       response = {"status": "error", "message": "Unknown action"}
@@ -352,7 +392,8 @@ while True:
                           except Exception as e:
                               print("Error processing message: " + str(e))
                       else:
-                          print("Skipping invalid message")
+                          print("===>>> Skipping invalid data" + str(data))
+                          print("===>>> Skipping invalid message" + str(message))
 
                   except Exception as e:
                       print("Socket error: " + str(e))

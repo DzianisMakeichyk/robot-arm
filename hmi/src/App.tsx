@@ -28,7 +28,7 @@ export default function App() {
             setWs(websocket);
             
             // Request initial state
-            websocket.send(JSON.stringify({ action: 'test_motor' }));
+            // websocket.send(JSON.stringify({ action: 'test_motor' }));
         };
 
         websocket.onmessage = (event) => {
@@ -83,6 +83,7 @@ export default function App() {
     const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             console.error('WebSocket not connected');
+            initWebSocket();
             return;
         }
 
@@ -99,6 +100,33 @@ export default function App() {
             return prevData;
         });
     }, [ws])
+
+    const initWebSocket = useCallback(() => {
+        console.log('Initializing WebSocket...');
+        const websocket = new WebSocket(SOCKET_SERVER_URL);
+        
+        websocket.onclose = (event) => {
+            console.log('WebSocket closed:', event);
+            // Próba ponownego połączenia po 1s
+            setTimeout(initWebSocket, 1000);
+        };
+    
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+    
+        setWs(websocket);
+    }, []);
+    
+    useEffect(() => {
+        initWebSocket();
+        return () => ws?.close();
+    }, []);
+
+
+    useEffect(() => {
+        console.log('=====>>>>', robotData)
+    }, [robotData]);
 
     const testMotor = useCallback(() => {
         if (ws?.readyState === WebSocket.OPEN) {

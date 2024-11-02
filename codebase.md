@@ -31,1454 +31,326 @@ yarn-error.log*
 
 ```
 
-# api/bluetooth/main.conf
+# data/_mdb_catalog.wt
 
-```conf
-[General]
-Name = RoboticArm
-Class = 0x000100
-DiscoverableTimeout = 0
+This is a binary file of the type: Binary
+
+# data/collection-0--188536456211366303.wt
+
+This is a binary file of the type: Binary
+
+# data/collection-0--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/collection-2--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/collection-4--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/collection-8--549222828002248186.wt
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-16T13-36-39Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-16T15-26-12Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-16T15-28-48Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-16T16-02-18Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T08-41-12Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T08-45-45Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T08-46-40Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T08-56-07Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T08-58-01Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-00-09Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-01-17Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-05-22Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-08-50Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-34-08Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-36-04Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T09-37-32Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T15-20-47Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T15-22-13Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T15-42-21Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T15-43-17Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-17T15-47-18Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-19T19-10-41Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T10-27-26Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T10-51-19Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T10-59-17Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-00-24Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-04-39Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-06-57Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-09-48Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-21T11-12-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-22T07-42-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-22-16Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-27-44Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-33-53Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-40-41Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-43-54Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-52-04Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-53-58Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-55-34Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T13-57-08Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T14-01-22Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-07-58Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-12-19Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-31-46Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-39-39Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-47-21Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-23T15-53-40Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T06-47-58Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T07-33-29Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T07-53-03Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T07-57-34Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T08-03-45Z-00000
+
+This is a binary file of the type: Binary
+
+# data/diagnostic.data/metrics.2024-10-24T08-12-21Z-00000
+
+This is a binary file of the type: Binary
+
+# data/index-1--188536456211366303.wt
+
+This is a binary file of the type: Binary
+
+# data/index-1--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/index-3--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/index-5--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/index-6--1093803086368506637.wt
+
+This is a binary file of the type: Binary
+
+# data/index-9--549222828002248186.wt
+
+This is a binary file of the type: Binary
+
+# data/journal/WiredTigerLog.0000000052
+
+This is a binary file of the type: Binary
+
+# data/journal/WiredTigerPreplog.0000000001
+
+This is a binary file of the type: Binary
+
+# data/journal/WiredTigerPreplog.0000000002
+
+This is a binary file of the type: Binary
+
+# data/mongod.lock
+
+```lock
+
 ```
 
-# api/index.d.ts
+# data/sizeStorer.wt
 
-```ts
-declare module 'ev3dev-lang' {
-  export class Motor {
-      constructor(port: string);
-      runToRelativePosition(position: number, speed: number): void;
-      position: number;
-  }
-}
+This is a binary file of the type: Binary
+
+# data/storage.bson
+
+This is a binary file of the type: Binary
+
+# data/WiredTiger
+
 ```
-
-# api/nodemon.json
-
-```json
-{
-  "watch": ["dist"],
-  "ignore": ["dist/data/*", "*.test.js", "node_modules"],
-  "ext": "js",
-  "exec": "node dist/server.js"
-}
-```
-
-# api/package.json
-
-```json
-{
-  "name": "api",
-  "version": "1.0.0",
-  "description": "Lego arm API",
-  "author": "Dzianis Makeichyk",
-  "scripts": {
-    "start": "node dist/server.js",
-    "dev": "tsc && nodemon",
-    "watch-ts": "tsc -w",
-    "build": "tsc && npm run copy-data",
-    "clean": "rm -rf dist",
-    "copy-data": "mkdir -p dist/data && cp src/data/db.json dist/data/"
-  },
-  "dependencies": {
-    "@abandonware/bleno": "^0.6.1",
-    "@abandonware/noble": "^1.9.2-25",
-    "@stoprocent/noble": "^1.15.1",
-    "dotenv": "^16.4.1",
-    "express": "^4.17.1",
-    "lowdb": "^1.0.0",
-    "node-ble": "^1.11.0",
-    "socket.io": "^4.7.4",
-    "winston": "^3.11.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/lowdb": "^1.0.9",
-    "@types/node": "^20.11.10",
-    "@types/socket.io": "^3.0.2",
-    "concurrently": "^8.2.2",
-    "nodemon": "^2.0.3",
-    "typescript": "^5.3.3"
-  }
-}
+WiredTiger
+WiredTiger 3.2.0: (May  9, 2019)
 
 ```
 
-# api/README.md
+# data/WiredTiger.lock
 
-```md
-# API
-
-[EV3 BRICK - TOP VIEW]
-
-Motor Ports: [A] [B] [C] [D]
-
-1. Connect the main column (base rotation) motor to Port A
-   - This controls the left/right rotation of the entire arm
-
-2. Connect the upper arm motor to Port B
-   - This controls the up/down movement of the main arm
-
-3. Connect the wrist motor to Port C
-   - This controls the wrist rotation
-
-4. Connect the gripper motor to Port D
-   - This controls the gripper open/close movement
-
-Note: Use LARGE motors for A, B, C and a MEDIUM motor for D
-```
-
-# api/src/config/logger.ts
-
-```ts
- 
-import winston from "winston"
-
-const logger = winston.createLogger({
-    transports: [
-        new winston.transports.Console({
-            level: process.env.NODE_ENV === "production" ? "error" : "debug"
-        }),
-        new winston.transports.File({filename: "debug.log", level: "debug"})
-    ]
-})
-
-if (process.env.NODE_ENV !== "production") {
-    logger.debug("Logging initialized at debug level")
-}
-
-export default logger
+```lock
+WiredTiger lock file
 
 ```
 
-# api/src/controllers/state.controller.ts
+# data/WiredTiger.turtle
 
-```ts
-import { Socket } from 'socket.io';
-import { RobotState } from '../models/RobotState';
-import logger from '../config/logger';
-import data from '../seed.json';
-import MacBluetoothClient from '../ev3/macBluetoothClient';
-import { MotorConfig, MotorPorts } from '../ev3/portConfig';
+```turtle
+WiredTiger version string
+WiredTiger 3.2.0: (May  9, 2019)
+WiredTiger version
+major=3,minor=2,patch=0
+file:WiredTiger.wt
+access_pattern_hint=none,allocation_size=4KB,app_metadata=,assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none),block_allocation=best,block_compressor=,cache_resident=false,checkpoint=(WiredTigerCheckpoint.319=(addr="018081e4f733fb958181e42d0b01d38281e491c12dba808080e29fc0e22fc0",order=319,time=1729757888,size=24576,newest_durable_ts=0,oldest_start_ts=0,oldest_start_txn=0,newest_stop_ts=-1,newest_stop_txn=-11,write_gen=803)),checkpoint_lsn=(52,8960),checksum=uncompressed,collator=,columns=,dictionary=0,encryption=(keyid=,name=),format=btree,huffman_key=,huffman_value=,id=0,ignore_in_memory_cache_size=false,internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=S,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=0,log=(enabled=true),memory_page_image_max=0,memory_page_max=5MB,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,value_format=S,version=(major=1,minor=1)
 
-const bluetoothClient = new MacBluetoothClient();
-
-/**
- * Convert 3D model rotations to H25 motor angles
- */
-const convertToMotorAngle = (radians: number, motorType: keyof typeof MotorPorts): number => {
-    // Convert radians to degrees
-    let degrees = (radians * 180) / Math.PI;
-    
-    // Get motor configuration
-    const config = MotorConfig[MotorPorts[motorType]];
-    
-    // Clamp to motor limits
-    return Math.max(
-        config.minDegrees,
-        Math.min(config.maxDegrees, degrees)
-    );
-};
-
-/**
- * Convert gripper position to motor angle
- */
-const convertGripperPosition = (position: number): number => {
-    const config = MotorConfig[MotorPorts.GRIPPER];
-    // Convert position value to percentage (0-100)
-    const percentage = ((position + 1) / 2) * 100;
-    return Math.max(
-        config.minDegrees,
-        Math.min(config.maxDegrees, percentage)
-    );
-};
-
-/**
- * Handle H25 robot movements based on 3D model state
- */
-const handleH25Movements = async (newState: any) => {
-    if (!newState.nodes) return;
-
-    try {
-        // Base rotation (main_column in 3D model maps to BASE motor)
-        if (newState.nodes.main_column?.rotation?.[1] !== undefined) {
-            const angle = convertToMotorAngle(newState.nodes.main_column.rotation[1], 'BASE');
-            logger.info(`Moving base motor to ${angle}°`);
-            await bluetoothClient.moveBase(angle);
-        }
-
-        // Elbow movement (upper_arm in 3D model maps to ELBOW motor)
-        if (newState.nodes.upper_arm?.rotation?.[1] !== undefined) {
-            const angle = convertToMotorAngle(newState.nodes.upper_arm.rotation[1], 'ELBOW');
-            logger.info(`Moving elbow motor to ${angle}°`);
-            await bluetoothClient.moveElbow(angle);
-        }
-
-        // Height adjustment (wrist_extension in 3D model maps to HEIGHT motor)
-        if (newState.nodes.wrist_extension?.rotation?.[1] !== undefined) {
-            const angle = convertToMotorAngle(newState.nodes.wrist_extension.rotation[1], 'HEIGHT');
-            logger.info(`Moving height motor to ${angle}°`);
-            await bluetoothClient.moveHeight(angle);
-        }
-
-        // Gripper control
-        if (newState.nodes.gripper?.position?.[2] !== undefined) {
-            const position = convertGripperPosition(newState.nodes.gripper.position[2]);
-            logger.info(`Moving gripper motor to position ${position}`);
-            await bluetoothClient.moveGripper(position);
-        }
-
-    } catch (error) {
-        logger.error('Error handling H25 movements:', error);
-    }
-};
-
-/**
- * Retrieve the current state of the Robot
- */
-const getState = async (socket: Socket) => {
-    const state = await RobotState.findOne();
-    logger.info('state =>', state);
-    socket.emit('state', state);
-};
-
-/**
- * Adding some initial seed data at startup if collection is empty
- */
-export const seed = async () => {
-    const state = await RobotState.find();
-    if (state.length === 0) {
-        logger.info('seeding');
-        // @ts-ignore
-        await RobotState.insertMany(data);
-    } else {
-        logger.info('not seeding');
-    }
-};
-
-/**
- * Map the websocket events to controller methods
- */
-export default function (socket: Socket) {
-    // Handle initial connection
-    socket.on('connect', () => {
-        logger.info('Client connected, initializing H25 robot arm...');
-        bluetoothClient.calibrateBasePosition()
-            .catch(error => logger.error('Calibration error:', error));
-    });
-
-    // Handle state updates
-    socket.on("state:update", async (newState: any) => {
-        try {
-            // logger.info('Received state update:', newState);
-            await RobotState.findOneAndUpdate({}, newState);
-            socket.emit('state', newState);
-            // logger.info('State updated and emitted back');
-
-            // Handle H25 movements
-            await handleH25Movements(newState);
-
-        } catch (error) {
-            logger.error('Error updating state:', error);
-            socket.emit('error', { message: 'Failed to update robot state' });
-        }
-    });
-
-    // Handle state requests
-    socket.on("state:get", () => {
-        logger.info('Received state:get request');
-        getState(socket);
-    });
-
-    // Handle calibration requests
-    socket.on("calibrate", async () => {
-        try {
-            await bluetoothClient.calibrateBasePosition();
-            socket.emit('calibration_complete');
-        } catch (error) {
-            logger.error('Calibration error:', error);
-            socket.emit('error', { message: 'Calibration failed' });
-        }
-    });
-
-    // Handle disconnection
-    socket.on("disconnect", async () => {
-        try {
-            // await bluetoothClient.disconnect();
-            logger.info('NOOOOOOO:','Client disconnected, shutting down H25 connection');
-        } catch (error) {
-            logger.error('Error during disconnect:', error);
-        }
-    });
-}
 ```
 
-# api/src/ev3/blenoService.ts
+# data/WiredTiger.wt
 
-```ts
-import bleno from '@abandonware/bleno';
-import logger from '../config/logger';
+This is a binary file of the type: Binary
 
-class RobotCharacteristic extends bleno.Characteristic {
-    private _value: Buffer;
-    private _updateCallback: ((data: Buffer) => void) | null = null;
+# data/WiredTigerLAS.wt
 
-    constructor() {
-        super({
-            uuid: 'fff1',
-            properties: ['write', 'notify'],
-            value: null
-        });
-        this._value = Buffer.alloc(0);
-    }
-
-    onWriteRequest(data: Buffer, offset: number, withoutResponse: boolean, callback: (result: number) => void) {
-        this._value = data;
-        if (this._updateCallback) {
-            this._updateCallback(data);
-        }
-        callback(this.RESULT_SUCCESS);
-    }
-
-    setUpdateValueCallback(callback: (data: Buffer) => void) {
-        this._updateCallback = callback;
-    }
-}
-
-class RobotService extends bleno.PrimaryService {
-    characteristic: RobotCharacteristic;
-
-    constructor() {
-        const characteristic = new RobotCharacteristic();
-        
-        super({
-            uuid: 'fff0',
-            characteristics: [characteristic]
-        });
-
-        this.characteristic = characteristic;
-    }
-}
-
-export default RobotService;
-```
-
-# api/src/ev3/config.ts
-
-```ts
-export const EV3_CONFIG = {
-  bluetoothAddress: '00:16:53:80:5C:A5',
-  port: 1234
-}
-```
-
-# api/src/ev3/ev3USBClient.ts
-
-```ts
-import noble from '@abandonware/noble';
-import { exec } from 'child_process';
-import logger from '../config/logger';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
-import { 
-  MotorPorts, 
-  SensorPorts, 
-  MotorConfig, 
-  SensorConfig,
-  motorPortToHex 
-} from './portConfig';
-
-class MacBluetoothClient {
-    private isConnected: boolean = false;
-    private isSimulated: boolean = false;
-    private characteristic: any = null;
-    private readonly EV3_ADDRESS = '00:16:53:80:5C:A5';
-    private readonly EV3_UUID = '0947c3ee3f9b3e84b35dc8c9e9f70afe';
-    // private readonly EV3_UUID = '74670fb1e8773f29a36b1ff4de94bd66';
-    // private readonly EV3_UUID = 'a4ee1d3ea4ca72bb4d5107e75a150133'; waiting
-    // private readonly EV3_UUID = '6a0b29cdc4f11d17c3740af26e16df21'; waiting
-    // private readonly EV3_UUID = '01a5280305e8729b666957de17242945'; scanning
-    // private readonly EV3_UUID = 'e14cfa4b416b247c7392349c6248b376'; scanning
-    // private readonly EV3_UUID = 'b9b95306b76e60a47d05113f4a9703ae';
-
-    // {"level":"info","message":"Found device:","uuid":"b9d0cabb8363c8cbde07f17fbbd06bf5"}
-    // {"level":"info","message":"Found device:","uuid":"b9b95306b76e60a47d05113f4a9703ae"}
-    // {"level":"info","message":"Found device:","uuid":"1f7444e0973f4de069c100a3172284b4"}
-    // {"level":"info","message":"Found device:","uuid":"b03ef4186b0d7f58bfa8b5ec1b85e6a9"}
-    // {"level":"info","message":"Found device:","uuid":"7d513c0580e2a3b246bccb566c9da042"}
-
-    private readonly SERVICE_UUID = '00001101-0000-1000-8000-00805f9b34fb';
-    private readonly CHARACTERISTIC_UUID = '00001101-0000-1000-8000-00805f9b34fb';
-    private readonly ID = '001653805ca5';
-    private readonly GENERIC = '0x1801';
-
-    /**
-     * EV3 Direct Command Format:
-     * [0x0C] - Direct command, response expected
-     * [0x00] - Header size
-     * [0x00] - Counter
-     * [0x00] - Command type
-     * [0x80] - Output power
-     * [PORT] - Output port (0x00 to 0x03 for motors A-D)
-     * [0x00] - Command subtype
-     * [Angle LSB] - Lower byte of angle
-     * [Angle MSB] - Upper byte of angle
-     */
-
-    constructor() {
-        this.initialize();
-    }
-
-    // {"address":"","level":"info","manufacturerData":"4c0010073b1fa183dc4738","message":"Found device:","uuid":"0947c3ee3f9b3e84b35dc8c9e9f70afe"}
-
-    private async initialize() {
-        try {
-            logger.info('Initializing Bluetooth connection to EV3');
-
-            // Get paired devices using system command
-            const { stdout } = await execAsync('system_profiler SPBluetoothDataType -json');
-            const bluetoothData = JSON.parse(stdout);
-            
-            logger.info('Connected Bluetooth devices:', 
-                bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || []);
-
-            // Look for EV3 in connected devices
-            const devices = bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || [];
-
-            const ev3Device = devices.find((device: any) => device.hasOwnProperty('EVA'));
-            // const ev3Device = devices.find((device: any) => 
-            //     device.device_address === this.EV3_ADDRESS
-            // );
-
-            if (ev3Device) {
-                logger.info('Found EV3 in system devices:', ev3Device);
-                await this.connectToKnownDevice(ev3Device);
-            } else {
-                logger.error('EV3 not found in paired devices');
-                this.enableSimulationMode();
-            }
-
-        } catch (error) {
-            logger.error('Bluetooth initialization error:', error);
-            this.enableSimulationMode();
-        }
-    }
-
-    private async connectToKnownDevice(deviceInfo: any) {
-        try {
-            logger.info('noble =>',noble);
-
-            noble.on('stateChange', (state) => {
-                if (state === 'poweredOn') {
-                    logger.info('poweredOn => Bluetooth powered on, scanning for EV3...');
-                    noble.startScanning([this.GENERIC], false);
-                } else {
-                    logger.info('stopScanning!!!');
-                    noble.stopScanning();
-                }
-            });
-
-
-
-            // if (noble._state === 'poweredOn') {
-            //     noble.once('stateChange', async (state) => {
-            //         if (state === 'poweredOn') {
-            //             logger.info('stateChange => Bluetooth powered on, scanning for EV3...');
-            //             await noble.startScanningAsync(['180f'], false);
-            //         } else {
-            //             logger.error('Bluetooth not enabled or unavailable.');
-            //         }
-            //     });
-            // }
-
-
-
-            // noble.on('stateChange', async (state: string) => {
-            //     if (state === 'poweredOn') {
-            //         await noble.startScanningAsync([this.SERVICE_UUID], false);
-            //     } else {
-            //         console.error('Bluetooth not enabled or unavailable.');
-            //     }
-            // });
-
-            noble.on('discover', async (peripheral: any) => {
-                logger.info('------------------------------------');
-                logger.info('peripheral:', peripheral);
-                logger.info('------------------------------------');
-                if (peripheral.address === this.EV3_ADDRESS) {
-                    logger.info('Found matching EV3, connecting...');
-                    await this.connectDevice(peripheral);
-                } else {
-                    logger.info('WOOOOOOOW:', peripheral);
-                }
-            });
-
-        } catch (error) {
-            logger.error('Error connecting to known device:', error);
-            this.enableSimulationMode();
-        }
-    }
-
-    private async connectDevice(peripheral: any) {
-        try {
-            logger.info('=== Starting EV3 Connection Process ===');
-            logger.info('1. Stopping scan...');
-            await noble.stopScanningAsync();
-    
-            logger.info('2. Attempting to connect to EV3...');
-            await peripheral.connectAsync();
-            logger.info('✓ Connected to peripheral!');
-    
-            logger.info('3. Discovering services...');
-            const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
-            logger.info(`✓ Found ${services.length} services`);
-    
-            if (services.length === 0) {
-                throw new Error('No services found on EV3');
-            }
-    
-            logger.info('4. Discovering characteristics...');
-            const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
-            logger.info(`✓ Found ${characteristics.length} characteristics`);
-    
-            if (characteristics.length === 0) {
-                throw new Error('No characteristics found on EV3');
-            }
-    
-            this.characteristic = characteristics[0];
-            this.isConnected = true;
-    
-            logger.info('=== EV3 CONNECTION SUCCESSFUL! ===');
-            logger.info('Connection details:', {
-                deviceName: peripheral.advertisement?.localName,
-                deviceAddress: peripheral.address,
-                rssi: peripheral.rssi,
-                serviceUUID: services[0].uuid,
-                characteristicUUID: this.characteristic.uuid
-            });
-    
-            // Set up disconnect handler
-            peripheral.once('disconnect', () => {
-                logger.info('=== EV3 DISCONNECTED ===');
-                this.isConnected = false;
-                this.characteristic = null;
-                // Optionally try to reconnect
-                this.initialize();
-            });
-    
-            return true;
-    
-        } catch (error) {
-            logger.error('=== EV3 CONNECTION FAILED ===');
-            logger.error('Connection error details:', error);
-            this.enableSimulationMode();
-            return false;
-        }
-    }
-    
-    // Add a method to check connection status
-    public isDeviceConnected(): boolean {
-        const status = {
-            isConnected: this.isConnected,
-            hasCharacteristic: !!this.characteristic,
-            isSimulated: this.isSimulated
-        };
-        
-        logger.info('EV3 Connection Status:', status);
-        return this.isConnected && !this.isSimulated;
-    }
-
-    private enableSimulationMode() {
-        if (!this.isSimulated) {
-            logger.info('Enabling simulation mode');
-            this.isSimulated = true;
-        }
-    }
-
-    private async sendCommand(command: Buffer) {
-        if (this.isSimulated) {
-            logger.info('Simulation mode - Command:', command);
-            return;
-        }
-
-        if (!this.isConnected || !this.characteristic) {
-            throw new Error('Not connected to EV3');
-        }
-
-        try {
-            await this.characteristic.writeAsync(command, false);
-            logger.info('Command sent successfully:', command);
-        } catch (error) {
-            logger.error('Error sending command:', error);
-            this.enableSimulationMode();
-            throw error;
-        }
-    }
-
-    async moveBase(angle: number) {
-      const config = MotorConfig[MotorPorts.BASE];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>>  Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveElbow(angle: number) {
-      const config = MotorConfig[MotorPorts.ELBOW];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>> Moving elbow (Port ${MotorPorts.ELBOW}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveHeight(angle: number) {
-      const config = MotorConfig[MotorPorts.HEIGHT];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>> Adjusting height (Port ${MotorPorts.HEIGHT}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveGripper(position: number) {
-      const config = MotorConfig[MotorPorts.GRIPPER];
-      // Convert position (0-100) to degrees
-      const angle = (position / 100) * (config.maxDegrees - config.minDegrees);
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`Moving gripper (Port ${MotorPorts.GRIPPER}) to ${clampedAngle}°`);
-      await this.sendCommand(command);
-  }
-
-  private createMotorCommand(port: number, angle: number, speed: number): Buffer {
-      return Buffer.from([
-          0x0C,                   // Direct command
-          0x00,                   // Header size
-          0x00,                   // Counter
-          0x00,                   // Command type
-          speed,                  // Motor speed
-          port,                   // Motor port
-          0x00,                   // Subtype
-          angle & 0xFF,           // Angle LSB
-          (angle >> 8) & 0xFF     // Angle MSB
-      ]);
-  }
-
-  async readTouchSensor(): Promise<boolean> {
-      // Implementation for reading touch sensor
-      // This would be used for base position calibration
-      return false; // Placeholder
-  }
-
-  async calibrateBasePosition() {
-      try {
-          logger.info('Starting base position calibration...');
-          // Implementation for base calibration using touch sensor
-      } catch (error) {
-          logger.error('Calibration error:', error);
-      }
-  }
-}
-
-export default MacBluetoothClient;
-```
-
-# api/src/ev3/macBluetoothClient.ts
-
-```ts
-import noble from '@abandonware/noble';
-import { exec } from 'child_process';
-import logger from '../config/logger';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
-import { 
-  MotorPorts, 
-  SensorPorts, 
-  MotorConfig, 
-  SensorConfig,
-  motorPortToHex 
-} from './portConfig';
-
-class MacBluetoothClient {
-    private isConnected: boolean = false;
-    private isSimulated: boolean = false;
-    private characteristic: any = null;
-    private readonly EV3_ADDRESS = '00:16:53:80:5C:A5';
-    private readonly EV3_UUID = '0947c3ee3f9b3e84b35dc8c9e9f70afe';
-    // private readonly EV3_UUID = '74670fb1e8773f29a36b1ff4de94bd66';
-    // private readonly EV3_UUID = 'a4ee1d3ea4ca72bb4d5107e75a150133'; waiting
-    // private readonly EV3_UUID = '6a0b29cdc4f11d17c3740af26e16df21'; waiting
-    // private readonly EV3_UUID = '01a5280305e8729b666957de17242945'; scanning
-    // private readonly EV3_UUID = 'e14cfa4b416b247c7392349c6248b376'; scanning
-    // private readonly EV3_UUID = 'b9b95306b76e60a47d05113f4a9703ae';
-
-    // {"level":"info","message":"Found device:","uuid":"b9d0cabb8363c8cbde07f17fbbd06bf5"}
-    // {"level":"info","message":"Found device:","uuid":"b9b95306b76e60a47d05113f4a9703ae"}
-    // {"level":"info","message":"Found device:","uuid":"1f7444e0973f4de069c100a3172284b4"}
-    // {"level":"info","message":"Found device:","uuid":"b03ef4186b0d7f58bfa8b5ec1b85e6a9"}
-    // {"level":"info","message":"Found device:","uuid":"7d513c0580e2a3b246bccb566c9da042"}
-
-    private readonly SERVICE_UUID = '00001101-0000-1000-8000-00805f9b34fb';
-    private readonly CHARACTERISTIC_UUID = '00001101-0000-1000-8000-00805f9b34fb';
-    private readonly ID = '001653805ca5';
-    private readonly GENERIC = '0x1801';
-
-    /**
-     * EV3 Direct Command Format:
-     * [0x0C] - Direct command, response expected
-     * [0x00] - Header size
-     * [0x00] - Counter
-     * [0x00] - Command type
-     * [0x80] - Output power
-     * [PORT] - Output port (0x00 to 0x03 for motors A-D)
-     * [0x00] - Command subtype
-     * [Angle LSB] - Lower byte of angle
-     * [Angle MSB] - Upper byte of angle
-     */
-
-    constructor() {
-        this.initialize();
-    }
-
-    // {"address":"","level":"info","manufacturerData":"4c0010073b1fa183dc4738","message":"Found device:","uuid":"0947c3ee3f9b3e84b35dc8c9e9f70afe"}
-
-    private async initialize() {
-        try {
-            logger.info('Initializing Bluetooth connection to EV3');
-
-            // Get paired devices using system command
-            const { stdout } = await execAsync('system_profiler SPBluetoothDataType -json');
-            const bluetoothData = JSON.parse(stdout);
-            
-            logger.info('Connected Bluetooth devices:', 
-                bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || []);
-
-            // Look for EV3 in connected devices
-            const devices = bluetoothData?.SPBluetoothDataType?.[0]?.device_connected || [];
-
-            const ev3Device = devices.find((device: any) => device.hasOwnProperty('EVA'));
-            // const ev3Device = devices.find((device: any) => 
-            //     device.device_address === this.EV3_ADDRESS
-            // );
-
-            if (ev3Device) {
-                logger.info('Found EV3 in system devices:', ev3Device);
-                await this.connectToKnownDevice(ev3Device);
-            } else {
-                logger.error('EV3 not found in paired devices');
-                this.enableSimulationMode();
-            }
-
-        } catch (error) {
-            logger.error('Bluetooth initialization error:', error);
-            this.enableSimulationMode();
-        }
-    }
-
-    private async connectToKnownDevice(deviceInfo: any) {
-        try {
-            logger.info('noble =>',noble);
-
-            noble.on('stateChange', (state) => {
-                if (state === 'poweredOn') {
-                    logger.info('poweredOn => Bluetooth powered on, scanning for EV3...');
-                    noble.startScanning([this.GENERIC], false);
-                } else {
-                    logger.info('stopScanning!!!');
-                    noble.stopScanning();
-                }
-            });
-
-
-
-            // if (noble._state === 'poweredOn') {
-            //     noble.once('stateChange', async (state) => {
-            //         if (state === 'poweredOn') {
-            //             logger.info('stateChange => Bluetooth powered on, scanning for EV3...');
-            //             await noble.startScanningAsync(['180f'], false);
-            //         } else {
-            //             logger.error('Bluetooth not enabled or unavailable.');
-            //         }
-            //     });
-            // }
-
-
-
-            // noble.on('stateChange', async (state: string) => {
-            //     if (state === 'poweredOn') {
-            //         await noble.startScanningAsync([this.SERVICE_UUID], false);
-            //     } else {
-            //         console.error('Bluetooth not enabled or unavailable.');
-            //     }
-            // });
-
-            noble.on('discover', async (peripheral: any) => {
-                logger.info('------------------------------------');
-                logger.info('peripheral:', peripheral);
-                logger.info('------------------------------------');
-                if (peripheral.address === this.EV3_ADDRESS) {
-                    logger.info('Found matching EV3, connecting...');
-                    await this.connectDevice(peripheral);
-                } else {
-                    logger.info('WOOOOOOOW:', peripheral);
-                }
-            });
-
-        } catch (error) {
-            logger.error('Error connecting to known device:', error);
-            this.enableSimulationMode();
-        }
-    }
-
-    private async connectDevice(peripheral: any) {
-        try {
-            logger.info('=== Starting EV3 Connection Process ===');
-            logger.info('1. Stopping scan...');
-            await noble.stopScanningAsync();
-    
-            logger.info('2. Attempting to connect to EV3...');
-            await peripheral.connectAsync();
-            logger.info('✓ Connected to peripheral!');
-    
-            logger.info('3. Discovering services...');
-            const services = await peripheral.discoverServicesAsync([this.SERVICE_UUID]);
-            logger.info(`✓ Found ${services.length} services`);
-    
-            if (services.length === 0) {
-                throw new Error('No services found on EV3');
-            }
-    
-            logger.info('4. Discovering characteristics...');
-            const characteristics = await services[0].discoverCharacteristicsAsync([this.CHARACTERISTIC_UUID]);
-            logger.info(`✓ Found ${characteristics.length} characteristics`);
-    
-            if (characteristics.length === 0) {
-                throw new Error('No characteristics found on EV3');
-            }
-    
-            this.characteristic = characteristics[0];
-            this.isConnected = true;
-    
-            logger.info('=== EV3 CONNECTION SUCCESSFUL! ===');
-            logger.info('Connection details:', {
-                deviceName: peripheral.advertisement?.localName,
-                deviceAddress: peripheral.address,
-                rssi: peripheral.rssi,
-                serviceUUID: services[0].uuid,
-                characteristicUUID: this.characteristic.uuid
-            });
-    
-            // Set up disconnect handler
-            peripheral.once('disconnect', () => {
-                logger.info('=== EV3 DISCONNECTED ===');
-                this.isConnected = false;
-                this.characteristic = null;
-                // Optionally try to reconnect
-                this.initialize();
-            });
-    
-            return true;
-    
-        } catch (error) {
-            logger.error('=== EV3 CONNECTION FAILED ===');
-            logger.error('Connection error details:', error);
-            this.enableSimulationMode();
-            return false;
-        }
-    }
-    
-    // Add a method to check connection status
-    public isDeviceConnected(): boolean {
-        const status = {
-            isConnected: this.isConnected,
-            hasCharacteristic: !!this.characteristic,
-            isSimulated: this.isSimulated
-        };
-        
-        logger.info('EV3 Connection Status:', status);
-        return this.isConnected && !this.isSimulated;
-    }
-
-    private enableSimulationMode() {
-        if (!this.isSimulated) {
-            logger.info('Enabling simulation mode');
-            this.isSimulated = true;
-        }
-    }
-
-    private async sendCommand(command: Buffer) {
-        if (this.isSimulated) {
-            logger.info('Simulation mode - Command:', command);
-            return;
-        }
-
-        if (!this.isConnected || !this.characteristic) {
-            throw new Error('Not connected to EV3');
-        }
-
-        try {
-            await this.characteristic.writeAsync(command, false);
-            logger.info('Command sent successfully:', command);
-        } catch (error) {
-            logger.error('Error sending command:', error);
-            this.enableSimulationMode();
-            throw error;
-        }
-    }
-
-    async moveBase(angle: number) {
-      const config = MotorConfig[MotorPorts.BASE];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>>  Moving base (Port ${MotorPorts.BASE}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveElbow(angle: number) {
-      const config = MotorConfig[MotorPorts.ELBOW];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>> Moving elbow (Port ${MotorPorts.ELBOW}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveHeight(angle: number) {
-      const config = MotorConfig[MotorPorts.HEIGHT];
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`------------------------------------`);
-      logger.info(`====>>>>> Adjusting height (Port ${MotorPorts.HEIGHT}) to ${clampedAngle}°`);
-      logger.info(`------------------------------------`);
-      await this.sendCommand(command);
-  }
-
-  async moveGripper(position: number) {
-      const config = MotorConfig[MotorPorts.GRIPPER];
-      // Convert position (0-100) to degrees
-      const angle = (position / 100) * (config.maxDegrees - config.minDegrees);
-      const clampedAngle = Math.max(
-          config.minDegrees,
-          Math.min(config.maxDegrees, angle)
-      );
-
-      const command = this.createMotorCommand(
-          config.portNumber,
-          clampedAngle,
-          config.defaultSpeed
-      );
-
-      logger.info(`Moving gripper (Port ${MotorPorts.GRIPPER}) to ${clampedAngle}°`);
-      await this.sendCommand(command);
-  }
-
-  private createMotorCommand(port: number, angle: number, speed: number): Buffer {
-      return Buffer.from([
-          0x0C,                   // Direct command
-          0x00,                   // Header size
-          0x00,                   // Counter
-          0x00,                   // Command type
-          speed,                  // Motor speed
-          port,                   // Motor port
-          0x00,                   // Subtype
-          angle & 0xFF,           // Angle LSB
-          (angle >> 8) & 0xFF     // Angle MSB
-      ]);
-  }
-
-  async readTouchSensor(): Promise<boolean> {
-      // Implementation for reading touch sensor
-      // This would be used for base position calibration
-      return false; // Placeholder
-  }
-
-  async calibrateBasePosition() {
-      try {
-          logger.info('Starting base position calibration...');
-          // Implementation for base calibration using touch sensor
-      } catch (error) {
-          logger.error('Calibration error:', error);
-      }
-  }
-}
-
-export default MacBluetoothClient;
-```
-
-# api/src/ev3/portConfig.ts
-
-```ts
-// Motor ports (A, B, C, D)
-export const MotorPorts = {
-  BASE: 'A',          // Base rotation (Large motor)
-  ELBOW: 'B',         // Elbow joint (Large motor)
-  HEIGHT: 'C',        // Height adjustment (Large motor)
-  GRIPPER: 'D'        // Gripper (Medium motor)
-} as const;
-
-// Sensor ports (1, 2, 3, 4)
-export const SensorPorts = {
-  TOUCH: '1',         // Touch sensor for base position
-  COLOR: '2',         // Color sensor (if used)
-  GYRO: '3',          // Gyro sensor (if used)
-  ULTRASONIC: '4'     // Ultrasonic sensor (if used)
-} as const;
-
-// Convert motor port letter to hex value for EV3 command
-export const motorPortToHex = {
-  'A': 0x00,
-  'B': 0x01,
-  'C': 0x02,
-  'D': 0x03
-} as const;
-
-// Convert sensor port number to hex value
-export const sensorPortToHex = {
-  '1': 0x00,
-  '2': 0x01,
-  '3': 0x02,
-  '4': 0x03
-} as const;
-
-// Motor configurations for H25 robot arm
-export const MotorConfig = {
-  [MotorPorts.BASE]: {
-      type: 'LARGE',
-      maxDegrees: 180,
-      minDegrees: -180,
-      defaultSpeed: 30,
-      portNumber: motorPortToHex.A,
-      description: 'Base rotation motor'
-  },
-  [MotorPorts.ELBOW]: {
-      type: 'LARGE',
-      maxDegrees: 90,
-      minDegrees: -90,
-      defaultSpeed: 40,
-      portNumber: motorPortToHex.B,
-      description: 'Elbow joint motor'
-  },
-  [MotorPorts.HEIGHT]: {
-      type: 'LARGE',
-      maxDegrees: 120,
-      minDegrees: 0,
-      defaultSpeed: 35,
-      portNumber: motorPortToHex.C,
-      description: 'Height adjustment motor'
-  },
-  [MotorPorts.GRIPPER]: {
-      type: 'MEDIUM',
-      maxDegrees: 45,
-      minDegrees: 0,
-      defaultSpeed: 25,
-      portNumber: motorPortToHex.D,
-      description: 'Gripper motor'
-  }
-};
-
-// Sensor configurations
-export const SensorConfig = {
-  [SensorPorts.TOUCH]: {
-      type: 'TOUCH',
-      mode: 0x00,
-      description: 'Touch sensor for base position calibration'
-  },
-  [SensorPorts.COLOR]: {
-      type: 'COLOR',
-      mode: 0x00,
-      description: 'Color sensor (if used)'
-  },
-  [SensorPorts.GYRO]: {
-      type: 'GYRO',
-      mode: 0x00,
-      description: 'Gyro sensor (if used)'
-  },
-  [SensorPorts.ULTRASONIC]: {
-      type: 'ULTRASONIC',
-      mode: 0x00,
-      description: 'Ultrasonic sensor (if used)'
-  }
-};
-
-/*
-Physical Connection Guide for H25 Robot Arm:
-
-MOTOR PORTS (Output):
-[A] - Base Motor: Controls the rotation of the entire arm
-[B] - Elbow Motor: Controls the elbow joint movement
-[C] - Height Motor: Controls the vertical movement
-[D] - Gripper Motor: Controls the gripper open/close
-
-SENSOR PORTS (Input):
-[1] - Touch Sensor: Used for base position calibration
-[2] - Color Sensor (optional)
-[3] - Gyro Sensor (optional)
-[4] - Ultrasonic Sensor (optional)
-
-Notes:
-- Use LARGE motors for ports A, B, and C
-- Use MEDIUM motor for port D (gripper)
-- Touch sensor helps calibrate the base position
-*/
-```
-
-# api/src/models/RobotState.ts
-
-```ts
-import low from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
-import path from 'path';
-
-enum NodeName {
-    mainColumn = 'main_column',
-    upperArm = 'upper_arm',
-    wristExtension = 'wrist_extension',
-    hand = 'hand',
-    gripper = 'gripper'
-}
-
-export interface RobotNode {
-    position: [number, number, number];
-    scale: [number, number, number];
-    rotation?: [number, number, number];
-}
-
-export interface RobotStateDocument {
-    nodes: {
-        [NodeName.mainColumn]: RobotNode;
-        [NodeName.upperArm]: RobotNode;
-        [NodeName.wristExtension]: RobotNode;
-        [NodeName.hand]: RobotNode;
-        [NodeName.gripper]: RobotNode;
-    };
-}
-
-const adapter = new FileSync<{ robotState: RobotStateDocument[] }>(
-    path.join(__dirname, '../data/db.json')
-);
-const db = low(adapter);
-
-const testDB: any = {
-    "nodes": {
-      "main_column": {
-        "position": [0, 1.462, 0],
-        "scale": [1, 1, 1],
-        "rotation": []
-      },
-      "upper_arm": {
-        "position": [2.335, 0, 0.094],
-        "scale": [0.684, 1, 1],
-        "rotation": []
-      },
-      "wrist_extension": {
-        "position": [3.231, 6.551, 0.007],
-        "scale": [0.264, 0.264, 0.264],
-        "rotation": []
-      },
-      "hand": {
-        "position": [3.368, 5.728, -0.119],
-        "scale": [1, 0.068, 0.327],
-        "rotation": [0, 1.5708, 0]
-      },
-      "gripper": {
-        "position": [3.33, 5.545, 0.006],
-        "scale": [-0.01, -0.132, -0.325],
-        "rotation": [0, 1.5708, 0]
-      }
-    }
-  }
-
-// Initialize db with default data if empty
-db.defaults({ robotState: [] }).write();
-
-export const RobotState = {
-    findOne: async (): Promise<RobotStateDocument | null> => {
-        // const state = db.get('robotState').first().value();
-        const state = testDB;
-        return state || null;
-    },
-
-    findOneAndUpdate: async (
-        query: any,
-        update: RobotStateDocument
-    ): Promise<RobotStateDocument | null> => {
-        db.get('robotState')
-            .find(query)
-            .assign(update)
-            .write();
-        return update;
-    },
-
-    insertMany: async (documents: RobotStateDocument[]): Promise<void> => {
-        db.get('robotState')
-            .push(...documents)
-            .write();
-    },
-
-    find: async (): Promise<RobotStateDocument[]> => {
-        return db.get('robotState').value();
-    }
-};
-```
-
-# api/src/seed.json
-
-```json
-[
-  {
-    "nodes": {
-      "main_column": {
-        "position": [
-          0,
-          1.462,
-          0
-        ],
-        "scale": [
-          1,
-          1,
-          1
-        ]
-      },
-      "upper_arm": {
-        "position": [
-          2.335,
-          0,
-          0.094
-        ],
-        "scale": [
-          0.684,
-          1,
-          1
-        ]
-      },
-      "wrist_extension": {
-        "position": [
-          3.231,
-          6.551,
-          0.007
-        ],
-        "scale": [
-          0.264,
-          0.264,
-          0.264
-        ]
-      },
-      "hand": {
-        "position": [
-          3.368,
-          5.728,
-          -0.119
-        ],
-        "scale": [
-          1,
-          0.068,
-          0.327
-        ],
-        "rotation": [0, 1.5708, 0]
-      },
-      "gripper": {
-        "position": [
-          3.33,
-          5.545,
-          0.006
-        ],
-        "scale": [
-          -0.01,
-          -0.132,
-          -0.325
-        ],
-        "rotation": [0, 1.5708, 0]
-      }
-    }
-  }
-]
-```
-
-# api/src/server.ts
-
-```ts
-import 'dotenv/config';
-import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import logger from './config/logger';
-import stateController, { seed } from './controllers/state.controller';
-import cors from 'cors';
-
-const app = express();
-const httpServer = createServer(app);
-
-// Enable CORS
-app.use(cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true
-}));
-
-// Create Socket.IO instance
-const io = new Server(httpServer, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-        credentials: true
-    },
-    transports: ['websocket', 'polling']
-});
-
-// Initialize the application
-async function initializeApp() {
-    try {
-        await seed();
-        logger.info('Seed check completed');
-
-        // Socket.IO connection handling
-        io.on('connection', (socket) => {
-            logger.info(`New client connected: ${socket.id}`);
-
-            // Debugging socket events
-            // socket.onAny((event, ...args) => {
-            //     logger.info(`Received event "${event}":`, args);
-            // });
-
-            socket.on('error', (error) => {
-                logger.error(`Socket error for ${socket.id}:`, error);
-            });
-
-            socket.on('disconnect', (reason) => {
-                logger.info(`Client ${socket.id} disconnected: ${reason}`);
-            });
-
-            stateController(socket);
-        });
-
-        const PORT = process.env.PORT || 4000;
-        
-        httpServer.listen(PORT, () => {
-            logger.info(`Server running on port ${PORT}`);
-            logger.info(`WebSocket server URL: ws://localhost:${PORT}`);
-            logger.info(`HTTP server URL: http://localhost:${PORT}`);
-        });
-
-    } catch (err) {
-        logger.error('Server initialization error:', err);
-        process.exit(1);
-    }
-}
-
-// Handle process events
-process.on('uncaughtException', (error) => {
-    logger.error('Uncaught Exception:', error);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-    logger.error('Unhandled Rejection:', reason);
-});
-
-initializeApp();
-
-export default app;
-```
-
-# api/tsconfig.json
-
-```json
-{
-  "compilerOptions": {
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "src/types/*"
-      ]
-    }
-  },
-  "include": [
-    "src/**/*"
-  ]
-}
-
-```
+This is a binary file of the type: Binary
 
 # docker-entrypoint.sh
 
@@ -1486,22 +358,567 @@ export default app;
 
 ```
 
+# ev3dev/ev3.py
+
+```py
+#!/usr/bin/env python3
+import socket
+import base64
+import hashlib
+import json
+from ev3dev2.motor import (
+    Motor,
+    LargeMotor,
+    MediumMotor,
+    OUTPUT_A,
+    OUTPUT_B,
+    OUTPUT_C
+)
+import os
+
+# Globalne zmienne dla silników
+motors = {
+    'A': None,
+    'B': None,
+    'C': None
+}
+
+# Default robot state
+DEFAULT_ROBOT_STATE = {
+    "nodes": {
+        "main_column": {
+            "position": [0, 1.462, 0],
+            "scale": [1, 1, 1],
+            "rotation": [0, 0, 0]
+        },
+        "upper_arm": {
+            "position": [2.335, 0, 0.094],
+            "scale": [0.684, 1, 1],
+            "rotation": [0, 0, 0]
+        },
+        "wrist_extension": {
+            "position": [3.231, 6.551, 0.007],
+            "scale": [0.264, 0.264, 0.264],
+            "rotation": [0, 0, 0]
+        },
+        "hand": {
+            "position": [3.368, 5.728, -0.119],
+            "scale": [1, 0.068, 0.327],
+            "rotation": [0, 1.5708, 0]
+        },
+        "gripper": {
+            "position": [3.33, 5.545, 0.006],
+            "scale": [-0.01, -0.132, -0.325],
+            "rotation": [0, 1.5708, 0]
+        }
+    }
+}
+
+def check_motors():
+    """Check which motors are connected"""
+    motors = {}
+    print("Scanning for motors...")
+    
+    # List all motor devices
+    try:
+        motor_path = "/sys/class/tacho-motor/"
+        if os.path.exists(motor_path):
+            devices = os.listdir(motor_path)
+            print("Found devices: " + str(devices))
+            
+            for device in devices:
+                try:
+                    with open(os.path.join(motor_path, device, 'address'), 'r') as f:
+                        port = f.read().strip()
+                        with open(os.path.join(motor_path, device, 'driver_name'), 'r') as f:
+                            driver = f.read().strip()
+                        print("Found " + driver + " on port: " + port)
+                except:
+                    print("Cannot read info for device: " + device)
+    except Exception as e:
+        print("Error scanning devices: " + str(e))
+
+    # Try to initialize motors
+    for port in [OUTPUT_A, OUTPUT_B, OUTPUT_C]:
+        try:
+            motor = get_motor(port)
+            if motor:
+                port_name = port.strip('ev3-ports:out')
+                motors[port] = True
+                print("Motor on port " + port_name + " initialized successfully")
+            else:
+                port_name = port.strip('ev3-ports:out')
+                motors[port] = False
+                print("No motor found on port " + port_name)
+        except Exception as e:
+            port_name = port.strip('ev3-ports:out')
+            motors[port] = False
+            print("Error on port " + port_name + ": " + str(e))
+    return motors
+
+def get_motor(port):
+    """Safely get motor instance with correct type"""
+    try:
+        # Sprawdź typ silnika
+        motor_path = "/sys/class/tacho-motor/"
+        for device in os.listdir(motor_path):
+            with open(os.path.join(motor_path, device, 'address'), 'r') as f:
+                if port in f.read():
+                    # Sprawdź czy to średni czy duży silnik
+                    with open(os.path.join(motor_path, device, 'driver_name'), 'r') as f:
+                        driver = f.read()
+                        if 'lego-ev3-m-motor' in driver:
+                            print("Initializing Medium Motor on " + port)
+                            return MediumMotor(port)
+                        else:
+                            print("Initializing Large Motor on " + port)
+                            return LargeMotor(port)
+    except Exception as e:
+        print("Error initializing motor on port " + port + ": " + str(e))
+        return None
+
+def convert_to_motor_angle(rotation, motor_type):
+    # Convert radians to degrees
+    degrees = (rotation * 180) / 3.14159
+    
+    # Apply motor-specific limits and scaling
+    if motor_type == "BASE":
+        return max(-180, min(180, degrees))
+    elif motor_type == "ELBOW":
+        return max(-90, min(90, degrees))
+    elif motor_type == "HEIGHT":
+        return max(0, min(120, degrees))
+    return 0
+
+def decode_message(data):
+    """Simple WebSocket frame decoder"""
+    try:
+        # Check for close frame
+        if len(data) >= 2 and data[0] == 0x88:
+            print("Received close frame")
+            return None
+
+        if len(data) < 6:
+            return None
+
+        # Get payload length and mask
+        second_byte = data[1] & 0x7F
+        if second_byte <= 125:
+            payload_length = second_byte
+            mask_start = 2
+        elif second_byte == 126:
+            payload_length = (data[2] << 8) | data[3]
+            mask_start = 4
+        else:
+            print("Message too long")
+            return None
+
+        if len(data) < mask_start + 4:
+            print("Message too short")
+            return None
+
+        # Get mask key
+        mask = data[mask_start:mask_start + 4]
+        data_start = mask_start + 4
+
+        # Unmask the data
+        payload = bytearray()
+        for i in range(data_start, len(data)):
+            payload.append(data[i] ^ mask[(i - data_start) % 4])
+
+        try:
+            message = payload.decode('utf-8')
+            # Verify if it's valid JSON
+            json.loads(message)
+            return message
+        except UnicodeDecodeError:
+            print("Not a text message")
+            return None
+        except json.JSONDecodeError:
+            print("Not a valid JSON message")
+            return None
+
+    except Exception as e:
+        print("Decode error: " + str(e))
+        return None
+
+def create_websocket_frame(data):
+    """Simple WebSocket frame encoder"""
+    try:
+        if isinstance(data, str):
+            data = data.encode('utf-8')
+
+        length = len(data)
+        frame = bytearray()
+        frame.append(0x81)  # Text frame
+
+        if length <= 125:
+            frame.append(length)
+        elif length <= 65535:
+            frame.append(126)
+            frame.append((length >> 8) & 0xFF)
+            frame.append(length & 0xFF)
+        else:
+            return None  # Don't handle huge frames
+
+        frame.extend(data)
+        return bytes(frame)
+    except Exception as e:
+        print("Encode error: " + str(e))
+        return None
+
+def initialize_motors():
+    """Initialize motors once"""
+    print("Initializing motors...")
+    try:
+        motors['A'] = MediumMotor(OUTPUT_A)
+        print("Medium Motor on port A initialized")
+    except Exception as e:
+        print("Error initializing port A: " + str(e))
+
+    try:
+        motors['B'] = LargeMotor(OUTPUT_B)
+        print("Large Motor on port B initialized")
+    except Exception as e:
+        print("Error initializing port B: " + str(e))
+
+    try:
+        motors['C'] = LargeMotor(OUTPUT_C)
+        print("Large Motor on port C initialized")
+    except Exception as e:
+        print("Error initializing port C: " + str(e))
+
+def handle_robot_update(data):
+    """Handle robot update using global motors"""
+    try:
+        state = json.loads(data)
+        if 'action' in state:
+            del state['action']
+            
+        nodes = state.get('nodes', {})
+        response = {"status": "success", "message": [], "state": state}
+        
+        # Handle base rotation (main_column)
+        if 'main_column' in nodes and 'rotation' in nodes['main_column'] and motors['A']:
+            rotation = nodes['main_column']['rotation'][1]
+            angle = (rotation * 180) / 3.14159
+            angle = max(-180, min(180, angle))
+            try:
+                motors['A'].on_to_position(speed=20, position=angle)
+                response["message"].append("Base motor moved")
+            except Exception as e:
+                response["message"].append("Base motor error: " + str(e))
+
+        # Handle elbow movement (upper_arm)
+        if 'upper_arm' in nodes and 'rotation' in nodes['upper_arm'] and motors['B']:
+            rotation = nodes['upper_arm']['rotation'][1]
+            angle = (rotation * 180) / 3.14159
+            angle = max(-90, min(90, angle))
+            try:
+                motors['B'].on_to_position(speed=20, position=angle)
+                response["message"].append("Elbow motor moved")
+            except Exception as e:
+                response["message"].append("Elbow motor error: " + str(e))
+
+        # Handle height adjustment (wrist_extension)
+        if 'wrist_extension' in nodes and 'rotation' in nodes['wrist_extension'] and motors['C']:
+            rotation = nodes['wrist_extension']['rotation'][1]
+            angle = (rotation * 180) / 3.14159
+            angle = max(0, min(120, angle))
+            try:
+                motors['C'].on_to_position(speed=20, position=angle)
+                response["message"].append("Height motor moved")
+            except Exception as e:
+                response["message"].append("Height motor error: " + str(e))
+            
+        response["message"] = "; ".join(response["message"])
+        return response
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# Inicjalizacja silników przy starcie
+initialize_motors()
+
+print("Checking available motors...")
+available_motors = check_motors()
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(('0.0.0.0', 4000))
+server.listen(1)
+print("Server started on port 4000")
+
+while True:
+    try:
+        client, addr = server.accept()
+        print("Connected from: " + str(addr))
+        
+        data = client.recv(1024)
+        text_data = data.decode('utf-8', errors='ignore')
+        
+        if "Upgrade: websocket" in text_data:
+            key = ""
+            for line in text_data.split('\n'):
+                if "Sec-WebSocket-Key" in line:
+                    key = line.split(': ')[1].strip()
+                    
+            if key:
+                accept = base64.b64encode(
+                    hashlib.sha1((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode())
+                    .digest()
+                ).decode()
+                
+                response = (
+                    "HTTP/1.1 101 Switching Protocols\r\n"
+                    "Upgrade: websocket\r\n"
+                    "Connection: Upgrade\r\n"
+                    "Sec-WebSocket-Accept: " + accept + "\r\n"
+                    "\r\n"
+                )
+                client.send(response.encode())
+                print("WebSocket connection established")
+                
+                # Send initial state
+                initial_state = {"status": "success", "state": DEFAULT_ROBOT_STATE}
+                client.send(create_websocket_frame(json.dumps(initial_state)))
+                
+                while True:
+                  try:
+                      data = client.recv(1024)
+                      if not data:
+                          print("Client disconnected")
+                          break
+
+                      message = decode_message(data)
+                      if message:
+                          print("Received message:", message)
+                          try:
+                              parsed = json.loads(message)
+                              if "action" in parsed:
+                                  if parsed["action"] == "test_motor":
+                                      try:
+                                          if motors['A']:
+                                              motors['A'].on_for_rotations(speed=50, rotations=1)
+                                              response = {"status": "success", "message": "Motor test completed"}
+                                          else:
+                                              response = {"status": "error", "message": "Motor not available"}
+                                      except Exception as e:
+                                          response = {"status": "error", "message": str(e)}
+                                  elif parsed["action"] == "update":
+                                      response = handle_robot_update(message)
+                                  else:
+                                      response = {"status": "error", "message": "Unknown action"}
+
+                                  frame = create_websocket_frame(json.dumps(response))
+                                  if frame:
+                                      client.send(frame)
+                          except Exception as e:
+                              print("Error processing message: " + str(e))
+                      else:
+                          print("Skipping invalid message")
+
+                  except Exception as e:
+                      print("Socket error: " + str(e))
+                      break
+    except Exception as e:
+        print("Main loop error: " + str(e))
+    finally:
+        client.close()
+```
+
+# ev3dev/motor_test.py
+
+```py
+#!/usr/bin/env python3
+from ev3dev2.motor import LargeMotor, OUTPUT_A
+from time import sleep
+
+# Initialize Motor A
+motor = LargeMotor(OUTPUT_A)
+
+# Run the motor forward at 50% speed
+motor.on(speed=50)
+
+# Let the motor run for 2 seconds
+sleep(2)
+
+# Stop the motor
+motor.off()
+```
+
+# ev3dev/websocket_proxy.py
+
+```py
+#!/usr/bin/env python3
+import socket
+import base64
+import hashlib
+
+BROWSER_PORT = 4001
+EV3_HOST = '192.168.2.3'
+EV3_PORT = 4000
+
+def debug_bytes(data, prefix=""):
+    print(prefix + " Length: " + str(len(data)))
+    print(prefix + " Hex: " + ' '.join(hex(b) for b in data))
+    try:
+        print(prefix + " UTF-8: " + data.decode('utf-8', errors='ignore'))
+    except:
+        print(prefix + " Can't decode as UTF-8")
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(('0.0.0.0', BROWSER_PORT))
+server.listen(1)
+print("Proxy listening on port " + str(BROWSER_PORT))
+
+while True:
+    browser_socket, addr = server.accept()
+    print("\nBrowser connected from " + str(addr))
+    
+    try:
+        # Connect to EV3
+        ev3_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("Connecting to EV3 at " + EV3_HOST + ":" + str(EV3_PORT))
+        ev3_socket.connect((EV3_HOST, EV3_PORT))
+        print("Connected to EV3")
+        
+        # Forward initial WebSocket handshake
+        data = browser_socket.recv(1024)
+        debug_bytes(data, "Browser handshake ->")
+        
+        # Send to EV3
+        print("\nForwarding to EV3...")
+        ev3_socket.send(data)
+        
+        # Get EV3 response
+        ev3_response = ev3_socket.recv(1024)
+        debug_bytes(ev3_response, "EV3 response <-")
+    
+        
+        # Forward to browser
+        browser_socket.send(ev3_response)
+        
+        print("\nHandshake complete, entering message loop")
+        
+        while True:
+            # Get message from browser
+            browser_data = browser_socket.recv(1024)
+            if not browser_data:
+                print("Browser closed connection")
+                break
+                
+            debug_bytes(browser_data, "\nBrowser message ->")
+            
+            # Forward to EV3
+            print("Forwarding to EV3...")
+            ev3_socket.send(browser_data)
+            
+            # Get EV3 response
+            ev3_data = ev3_socket.recv(1024)
+            if not ev3_data:
+                print("EV3 closed connection")
+                break
+                
+            debug_bytes(ev3_data, "EV3 response <-")
+            
+            # Forward to browser
+            browser_socket.send(ev3_data)
+            
+    except Exception as e:
+        print("\nError: " + str(e))
+    finally:
+        print("\nClosing connections")
+        browser_socket.close()
+        ev3_socket.close()
+```
+
+# ev3dev/websocket_test.py
+
+```py
+#!/usr/bin/env python3
+import socket
+import base64
+import hashlib
+import random
+import sys
+
+def create_websocket_key():
+    random_bytes = bytes(random.getrandbits(8) for _ in range(16))
+    return base64.b64encode(random_bytes).decode()
+
+def create_handshake_request(host, port):
+    key = create_websocket_key()
+    request = (
+        f"GET / HTTP/1.1\r\n"
+        f"Host: {host}:{port}\r\n"
+        "Upgrade: websocket\r\n"
+        "Connection: Upgrade\r\n"
+        f"Sec-WebSocket-Key: {key}\r\n"
+        "Sec-WebSocket-Version: 13\r\n"
+        "\r\n"
+    )
+    return request, key
+
+def test_websocket():
+    host = '192.168.2.3'
+    port = 4000
+    
+    print(f"Connecting to {host}:{port}")
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    try:
+        sock.connect((host, port))
+        print("Connected!")
+        
+        request, key = create_handshake_request(host, port)
+        print("Sending handshake...")
+        sock.send(request.encode())
+        
+        response = sock.recv(1024).decode()
+        print("\nReceived response:")
+        print(response)
+        
+        # Test sending message
+        print("\nSending test message...")
+        sock.send(b"Hello from Python client!")
+        
+        data = sock.recv(1024)
+        print("Received:", data)
+        
+    except Exception as e:
+        print("Error:", str(e))
+    finally:
+        sock.close()
+
+if __name__ == "__main__":
+    test_websocket()
+```
+
 # hmi/config-overrides.js
 
 ```js
 const { alias } = require('react-app-rewire-alias')
+const webpackConfig = require('./webserver.config');
 
-module.exports = function override (config) {
+module.exports = function override(config, env) {
+  // Wyłącz HMR i WebSocket
+  config.devServer = {
+    ...config.devServer,
+    hot: false,
+    webSocketServer: false
+  };
+
+  // Istniejące aliasy
   alias({
     '@components': 'src/components',
     '@styles': 'src/styles',
     '@types': 'src/types',
     '@utils': 'src/utils'
-  })(config)
+  })(config);
 
-  return config
+  return config;
 }
-
 ```
 
 # hmi/package.json
@@ -1521,7 +938,6 @@ module.exports = function override (config) {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "socket.io-client": "^4.7.4",
     "stats.js": "^0.17.0",
     "three": "^0.161.0"
   },
@@ -1537,7 +953,8 @@ module.exports = function override (config) {
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "start": "FAST_REFRESH=false WDS_SOCKET_PORT=0 GENERATE_SOURCEMAP=false react-app-rewired start",
+    "dev": "npx serve -s build",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
@@ -1658,90 +1075,116 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
 import {Shadows, Ground} from '@components/stage';
-import socketIOClient from 'socket.io-client';
 import {Robot} from '@types';
 import {RobotArm} from "@components/model/RobotArm";
 
-const SOCKET_SERVER_URL = 'http://localhost:4000';
+const SOCKET_SERVER_URL = 'ws://localhost:4001';
 
 export default function App() {
-    const [robotData, setRobotData] = useState<Robot.RobotNodes>();
-    const [socket, setSocket] = useState<any>(null);
+    const [robotData, setRobotData] = useState<Robot.RobotNodes>();    
+    const [ws, setWs] = useState<WebSocket | null>(null);
+    const [connectionStatus, setConnectionStatus] = useState('disconnected');
     const [error, setError] = useState<string>('');
+    const [motorStatus, setMotorStatus] = useState<{[key: string]: string}>({
+        base: 'unknown',
+        elbow: 'unknown',
+        height: 'unknown'
+    });
 
-    // Initialize socket connection
     useEffect(() => {
-        console.log('Initializing socket connection...');
-        const newSocket = socketIOClient(SOCKET_SERVER_URL, {
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000
-        });
-
-        newSocket.on('connect', () => {
-            console.log('Connected to server, socket id:', newSocket.id);
-            setError('');
-        });
-
-        newSocket.on('connect_error', (error: any) => {
-            console.error('Socket connection error:', error);
-            setError(`Connection error: ${error.message}`);
-        });
-
-        newSocket.on('error', (error: any) => {
-            console.error('Socket error:', error);
-            setError(`Socket error: ${error.message}`);
-        });
-
-        setSocket(newSocket);
-
-        return () => {
-            console.log('Cleaning up socket connection...');
-            newSocket.close();
+        console.log('Connecting to:', SOCKET_SERVER_URL);
+        const websocket = new WebSocket(SOCKET_SERVER_URL);
+        
+        websocket.onopen = () => {
+            console.log('WebSocket Connected');
+            setConnectionStatus('connected');
+            setWs(websocket);
+            
+            // Request initial state
+            // websocket.send(JSON.stringify({ action: 'test_motor' }));
         };
+
+        websocket.onmessage = (event) => {
+            console.log('Received raw message:', event.data);
+            try {
+                const response = JSON.parse(event.data);
+                console.log('Parsed response:', response);
+                
+                if (response.state && response.state.nodes) {
+                    console.log('Updating robot data with:', response.state);
+                    setRobotData(response.state);
+                }
+                
+                if (response.status === 'error') {
+                    console.error('Server error:', response.message);
+                    setError(response.message);
+                }
+                if (response.message) {
+                    const newStatus = {...motorStatus};
+                    if (response.message.includes('Base motor')) {
+                        newStatus.base = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    if (response.message.includes('Elbow motor')) {
+                        newStatus.elbow = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    if (response.message.includes('Height motor')) {
+                        newStatus.height = response.message.includes('not available') ? 'disconnected' : 'connected';
+                    }
+                    setMotorStatus(newStatus);
+                }
+            } catch (e) {
+                console.error('Parse error:', e);
+            }
+        };
+
+        websocket.onclose = (event) => {
+            console.log('WebSocket closed:', event);
+            setConnectionStatus('disconnected');
+            setWs(null);
+        };
+        
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            setConnectionStatus('error');
+        };
+
+        
+        
+        return () => websocket.close();
     }, []);
 
-    // Handle initial state and state updates
-    useEffect(() => {
-        if (!socket) return;
-
-        // Request initial state
-        if (!robotData) {
-            console.log('Requesting initial state...');
-            socket.emit("state:get");
-        }
-
-        // Listen for state updates
-        socket.on("state", (data: Robot.RobotNodes) => {
-            console.log('Received state update:', data);
-            setRobotData(data);
-        });
-
-        return () => {
-            socket.off("state");
-        };
-    }, [socket, robotData]);
-
     const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
-        if (!socket?.connected) {
-            console.error('Cannot update: Socket not connected');
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            console.error('WebSocket not connected');
             return;
         }
 
-        console.log('Updating robot data:', newData);
         setRobotData(prevData => {
             if (prevData) {
                 const updatedData = {...prevData, ...newData};
-                console.log('Emitting state update:', updatedData);
-                socket.emit("state:update", updatedData);
+                console.log('Sending update:', updatedData);
+                ws.send(JSON.stringify({
+                    action: 'update',
+                    ...updatedData
+                }));
                 return updatedData;
             }
             return prevData;
         });
-    }, [socket]);
+    }, [ws])
 
-    // Display error if any
+    const testMotor = useCallback(() => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ action: 'test_motor' }));
+        } else {
+            console.error('WebSocket not connected');
+        }
+    }, [ws]);
+
+    useEffect(() => {
+        console.log('Current robot data:', robotData);
+    }, [robotData]);
+
     if (error) {
         return (
             <div style={{
@@ -1775,6 +1218,51 @@ export default function App() {
 
     return (
         <>
+            <div style={{
+                position: 'fixed',
+                top: '10px',
+                left: '10px',
+                zIndex: 1000,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+            }}>
+                <div style={{
+                    padding: '5px',
+                    background: connectionStatus === 'connected' ? '#4CAF50' : '#f44336',
+                    color: 'white',
+                    borderRadius: '4px'
+                }}>
+                    Socket Status: {connectionStatus}
+                </div>
+                <button
+                    onClick={testMotor}
+                    style={{
+                        padding: '10px',
+                        background: '#2196F3',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Test Motor
+                </button>
+                <div style={{
+                    padding: '5px',
+                    background: '#333',
+                    color: 'white',
+                    borderRadius: '4px'
+                }}>
+                    Motors: 
+                    <br />
+                    Base: {motorStatus.base}
+                    <br />
+                    Elbow: {motorStatus.elbow}
+                    <br />
+                    Height: {motorStatus.height}
+                </div>
+            </div>
             {robotData && (
                 <Canvas>
                     <PerspectiveCamera makeDefault fov={40} position={[10, 8, 25]}/>
@@ -2516,7 +2004,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const node = Robot.NodeName;
 
     const handleGizmoUpdate = (nodeName: Robot.NodeName, newMatrix: [number, number, number]) => {
-        console.log(`Updating ${nodeName}:`, newMatrix);
+        console.log(`Updating ${nodeName} rotation:`, newMatrix);
         
         const newData: Partial<Robot.RobotNodes> = {
             nodes: {
@@ -2525,25 +2013,11 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: data.nodes[nodeName].rotation,
-                    // Note: problem with rotation hand and gripper
-                    // when use newMatrix
-                    // rotation: newMatrix
+                    rotation: newMatrix
                 }
             }
         };
 
-        // Preserve initial rotations for hand and gripper
-        if (newData.nodes) {
-            if (newData.nodes.hand) {
-                newData.nodes.hand.rotation = data.nodes.hand.rotation;
-            }
-            if (newData.nodes.gripper) {
-                newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
-            }
-        }
-
-        console.log('Sending update:', newData);
         onUpdate(newData);
     };
 
@@ -2949,6 +2423,17 @@ export {
 
 ```
 
+# hmi/webserver.config.js
+
+```js
+module.exports = {
+  devServer: {
+    hot: false,
+    webSocketServer: false
+  }
+};
+```
+
 # model/crane copy.blend
 
 This is a binary file of the type: Binary
@@ -3032,6 +2517,17 @@ to a ready to use jsx file.
 
 This is a binary file of the type: Binary
 
+# package.json
+
+```json
+{
+  "dependencies": {
+    "serialport": "^12.0.0"
+  }
+}
+
+```
+
 # README.md
 
 ```md
@@ -3039,38 +2535,42 @@ This is a binary file of the type: Binary
 
 ## Intro
 
-* api - A NodeJS project using MongoDB and Websocket connectivity for robot data
-* model - The Mesh of the arm modelled in Blender
-* hmi - A React Application using React Three Fiber and the API over Websockets for the telemetry data.
+### Copy file from MacOS
+scp ev3.py robot@ev3dev.local:/home/robot/
 
-## Running the project
+### Run on EV3
+chmod +x ev3.py
+./ev3.py
 
-* Make sure Docker is installed running: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)
-* Clone the repo and run docker
+### Check connection
+nc -v 192.168.3.1 4000 
 
-\`\`\`shell
-git clone https://github.com/appeltje-c/robot-arm
-cd robot-arm
-docker compose up -d
-\`\`\`
+### USB
+Widzę problem - routing idzie przez en0 zamiast en13.
+netstat -nr | grep 192.168.2 
 
-When the project is running, you can open [http://localhost:3000](http://localhost:3000)
+Usuń obecną trasę 
+sudo route delete 192.168.2.0/24 
 
-To stop the containers
+Dodaj poprawną trasę przez en13 sudo route add -net 
+192.168.2.0/24 -interface en13
 
-\`\`\`shell
-docker compose down
-\`\`\`
+### Reset USB
+sudo ifconfig en13 down
+sudo route flush 
 
-## What's in the box
+sudo ifconfig en13 192.168.2.1 netmask 255.255.255.0 up 
+sudo route -n add -net 192.168.2.0/24 -interface en13
 
-There are three main projects
+ping -c 3 192.168.3.1
 
-[Hmi](hmi/README.md) : The React App
+### wscat
+wscat -c ws://192.168.2.3:4000 
 
-[API](./api/README.md) : The API
+### EV3
+ip -4 addr show usb0
+netstat -nr
 
-[Model](./model/README.md) : The Arm Model
 
 
 ```
