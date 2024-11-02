@@ -22,7 +22,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: newMatrix,
+                    rotation: data.nodes[nodeName].rotation,
                     _updated: true
                 }
             }
