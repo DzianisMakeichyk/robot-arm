@@ -22,24 +22,31 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: data.nodes[nodeName].rotation,
-                    // Note: problem with rotation hand and gripper
-                    // when use 
-                    // rotation: newMatrix
+                    rotation: newMatrix,
+                    _updated: true
                 }
             }
         };
-
+    
         // Preserve initial rotations for hand and gripper
         if (newData.nodes) {
             if (newData.nodes.hand) {
                 newData.nodes.hand.rotation = data.nodes.hand.rotation;
             }
-            if (newData.nodes.gripper) {
+            if (newData.nodes.gripper && nodeName !== node.gripper) {
                 newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
             }
         }
-
+    
+        // Reset _updated flag for other nodes
+        Object.keys(newData.nodes || {}).forEach((key) => {
+            // @ts-ignore
+            if (key !== nodeName && newData.nodes && newData.nodes[key]) {
+                // @ts-ignore
+                newData.nodes[key]._updated = false;
+            }
+        });
+    
         console.log('Sending update:', newData);
         onUpdate(newData);
     };

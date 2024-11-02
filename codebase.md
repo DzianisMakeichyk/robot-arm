@@ -364,6 +364,7 @@ This is a binary file of the type: Binary
 #!/usr/bin/env python3
 import socket
 import base64
+import random
 import hashlib
 import json
 from ev3dev2.motor import (
@@ -491,52 +492,48 @@ def convert_to_motor_angle(rotation, motor_type):
     return 0
 
 def decode_message(data):
-    """Simple WebSocket frame decoder"""
     try:
-        # Check for close frame
-        if len(data) >= 2 and data[0] == 0x88:
-            print("Received close frame")
+        if len(data) < 2:
             return None
 
-        if len(data) < 6:
-            return None
-
-        # Get payload length and mask
-        second_byte = data[1] & 0x7F
-        if second_byte <= 125:
-            payload_length = second_byte
+        # Próbuj jako WebSocket frame
+        if data[0] == 0x81:
+            second_byte = data[1] & 0x7F
             mask_start = 2
-        elif second_byte == 126:
-            payload_length = (data[2] << 8) | data[3]
-            mask_start = 4
-        else:
-            print("Message too long")
-            return None
+            payload_length = 0
 
-        if len(data) < mask_start + 4:
-            print("Message too short")
-            return None
+            if second_byte <= 125:
+                payload_length = second_byte
+            elif second_byte == 126:
+                if len(data) < 4:
+                    return None
+                payload_length = (data[2] << 8) | data[3]
+                mask_start = 4
+                
+            mask = data[mask_start:mask_start + 4]
+            payload = bytearray()
+            
+            for i in range(mask_start + 4, mask_start + 4 + payload_length):
+                payload.append(data[i] ^ mask[(i - (mask_start + 4)) % 4])
 
-        # Get mask key
-        mask = data[mask_start:mask_start + 4]
-        data_start = mask_start + 4
+            return payload.decode('utf-8')
 
-        # Unmask the data
-        payload = bytearray()
-        for i in range(data_start, len(data)):
-            payload.append(data[i] ^ mask[(i - data_start) % 4])
-
+        # Jeśli to nie WebSocket frame, próbuj jako base64
         try:
-            message = payload.decode('utf-8')
-            # Verify if it's valid JSON
-            json.loads(message)
-            return message
-        except UnicodeDecodeError:
-            print("Not a text message")
-            return None
-        except json.JSONDecodeError:
-            print("Not a valid JSON message")
-            return None
+            decoded = base64.b64decode(data)
+            if decoded.startswith(b'{'):
+                return decoded.decode('utf-8')
+        except:
+            pass
+
+        # Próbuj jako surowe bajty
+        try:
+            if data.startswith(b'{'):
+                return data.decode('utf-8')
+        except:
+            pass
+
+        return None
 
     except Exception as e:
         print("Decode error: " + str(e))
@@ -596,15 +593,21 @@ def handle_robot_update(data):
             del state['action']
             
         nodes = state.get('nodes', {})
+        # print("====>>>> Received state update:", nodes)
         response = {"status": "success", "message": [], "state": state}
         
         # Handle base rotation (main_column)
         if 'main_column' in nodes and 'rotation' in nodes['main_column'] and motors['A']:
+            # print("------>>>> main")
             rotation = nodes['main_column']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(-180, min(180, angle))
+
+            # print("------>>>> rotation:", rotation)
+            # print("------>>>> angle:", angle)
+            # print("------>>>> angle:", angle)
             try:
-                motors['A'].on_to_position(speed=20, position=angle)
+                motors['A'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
                 response["message"].append("Base motor moved")
             except Exception as e:
                 response["message"].append("Base motor error: " + str(e))
@@ -615,18 +618,18 @@ def handle_robot_update(data):
             angle = (rotation * 180) / 3.14159
             angle = max(-90, min(90, angle))
             try:
-                motors['B'].on_to_position(speed=20, position=angle)
+                motors['B'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
                 response["message"].append("Elbow motor moved")
             except Exception as e:
                 response["message"].append("Elbow motor error: " + str(e))
 
-        # Handle height adjustment (wrist_extension)
-        if 'wrist_extension' in nodes and 'rotation' in nodes['wrist_extension'] and motors['C']:
-            rotation = nodes['wrist_extension']['rotation'][1]
+        # Handle height adjustment (gripper)
+        if 'gripper' in nodes and 'rotation' in nodes['gripper'] and motors['C']:
+            rotation = nodes['gripper']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(0, min(120, angle))
             try:
-                motors['C'].on_to_position(speed=20, position=angle)
+                motors['C'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
                 response["message"].append("Height motor moved")
             except Exception as e:
                 response["message"].append("Height motor error: " + str(e))
@@ -647,6 +650,36 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(('0.0.0.0', 4000))
 server.listen(1)
 print("Server started on port 4000")
+
+BYTES = [0x6e, 0x66, 0x48, 0x2e, 0x3, 0xc7, 0xad, 0xa6, 0xfa]
+
+def is_valid_json_frame(data):
+   try:
+       if data[0] == 0x81:  # WebSocket text frame
+           mask_start = 2
+           payload_length = data[1] & 0x7F
+           
+           if payload_length == 126:
+               if len(data) < 4:
+                   return False
+               payload_length = (data[2] << 8) | data[3]
+               mask_start = 4
+
+           if len(data) < mask_start + 4 + payload_length:
+               return False
+
+           mask = data[mask_start:mask_start + 4]
+           payload = bytearray()
+           
+           for i in range(mask_start + 4, mask_start + 4 + payload_length):
+               payload.append(data[i] ^ mask[(i - (mask_start + 4)) % 4])
+
+           decoded = payload.decode('utf-8')
+           json.loads(decoded)  # Sprawdź czy to JSON
+           return True
+   except:
+       return False
+   return False
 
 while True:
     try:
@@ -688,6 +721,12 @@ while True:
                       if not data:
                           print("Client disconnected")
                           break
+                      
+                    #   if data[0] in BYTES:  # Pomijamy niepoprawne ramki
+                    #       continue
+                      
+                      if not is_valid_json_frame(data):
+                          continue
 
                       message = decode_message(data)
                       if message:
@@ -698,13 +737,15 @@ while True:
                                   if parsed["action"] == "test_motor":
                                       try:
                                           if motors['A']:
-                                              motors['A'].on_for_rotations(speed=50, rotations=1)
-                                              response = {"status": "success", "message": "Motor test completed"}
+                                              print("Running motor test")
+                                            #   motors['A'].on_for_rotations(speed=50, rotations=1)
+                                            #   response = {"status": "success", "message": "Motor test completed"}
                                           else:
                                               response = {"status": "error", "message": "Motor not available"}
                                       except Exception as e:
                                           response = {"status": "error", "message": str(e)}
                                   elif parsed["action"] == "update":
+                                      print("===>>> Handling robot update <<<===")
                                       response = handle_robot_update(message)
                                   else:
                                       response = {"status": "error", "message": "Unknown action"}
@@ -715,7 +756,8 @@ while True:
                           except Exception as e:
                               print("Error processing message: " + str(e))
                       else:
-                          print("Skipping invalid message")
+                          print("===>>> Skipping invalid data" + str(data))
+                          print("===>>> Skipping invalid message" + str(message))
 
                   except Exception as e:
                       print("Socket error: " + str(e))
@@ -751,86 +793,94 @@ motor.off()
 ```py
 #!/usr/bin/env python3
 import socket
+import select
 import base64
 import hashlib
 
 BROWSER_PORT = 4001
-EV3_HOST = '192.168.2.3'
+EV3_HOST = '192.168.2.3' 
 EV3_PORT = 4000
 
-def debug_bytes(data, prefix=""):
-    print(prefix + " Length: " + str(len(data)))
-    print(prefix + " Hex: " + ' '.join(hex(b) for b in data))
-    try:
-        print(prefix + " UTF-8: " + data.decode('utf-8', errors='ignore'))
-    except:
-        print(prefix + " Can't decode as UTF-8")
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind(('0.0.0.0', BROWSER_PORT))
-server.listen(1)
-print("Proxy listening on port " + str(BROWSER_PORT))
-
-while True:
-    browser_socket, addr = server.accept()
-    print("\nBrowser connected from " + str(addr))
+def handle_websocket_connection(browser_socket, ev3_socket):
+    # Ustaw non-blocking mode
+    browser_socket.setblocking(0)
+    ev3_socket.setblocking(0)
     
-    try:
-        # Connect to EV3
-        ev3_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("Connecting to EV3 at " + EV3_HOST + ":" + str(EV3_PORT))
-        ev3_socket.connect((EV3_HOST, EV3_PORT))
-        print("Connected to EV3")
-        
-        # Forward initial WebSocket handshake
-        data = browser_socket.recv(1024)
-        debug_bytes(data, "Browser handshake ->")
-        
-        # Send to EV3
-        print("\nForwarding to EV3...")
-        ev3_socket.send(data)
-        
-        # Get EV3 response
-        ev3_response = ev3_socket.recv(1024)
-        debug_bytes(ev3_response, "EV3 response <-")
+    inputs = [browser_socket, ev3_socket]
     
-        
-        # Forward to browser
-        browser_socket.send(ev3_response)
-        
-        print("\nHandshake complete, entering message loop")
-        
-        while True:
-            # Get message from browser
-            browser_data = browser_socket.recv(1024)
-            if not browser_data:
-                print("Browser closed connection")
-                break
+    while True:
+        try:
+            readable, _, exceptional = select.select(inputs, [], inputs, 1.0)
+            
+            for sock in readable:
+                if sock is browser_socket:
+                    # Dane z przeglądarki
+                    data = sock.recv(1024)
+                    if not data:
+                        print("Browser disconnected")
+                        return
+                        
+                    if data[0] == 0x81:  # WebSocket text frame
+                        print("Browser -> EV3 (WS frame)")
+                        ev3_socket.send(data)
+                    
+                elif sock is ev3_socket:
+                    # Dane z EV3
+                    data = sock.recv(1024)
+                    if not data:
+                        print("EV3 disconnected")
+                        return
+                        
+                    print("EV3 -> Browser")
+                    browser_socket.send(data)
+                    
+            for sock in exceptional:
+                print("Socket exception")
+                return
                 
-            debug_bytes(browser_data, "\nBrowser message ->")
+        except Exception as e:
+            print("Connection error: " + str(e))
+            return
+
+def main():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(('0.0.0.0', BROWSER_PORT))
+    server.listen(1)
+    print("Proxy listening on port " + str(BROWSER_PORT))
+
+    while True:
+        try:
+            browser_socket, addr = server.accept()
+            print("Browser connected from " + str(addr))
             
-            # Forward to EV3
-            print("Forwarding to EV3...")
-            ev3_socket.send(browser_data)
+            ev3_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print("Connecting to EV3...")
+            ev3_socket.connect((EV3_HOST, EV3_PORT))
+            print("Connected to EV3")
             
-            # Get EV3 response
-            ev3_data = ev3_socket.recv(1024)
-            if not ev3_data:
-                print("EV3 closed connection")
-                break
-                
-            debug_bytes(ev3_data, "EV3 response <-")
+            # WebSocket handshake
+            init_data = browser_socket.recv(1024)
+            ev3_socket.send(init_data)
+            response = ev3_socket.recv(1024)
+            browser_socket.send(response)
             
-            # Forward to browser
-            browser_socket.send(ev3_data)
+            print("Starting WebSocket relay")
+            handle_websocket_connection(browser_socket, ev3_socket)
             
-    except Exception as e:
-        print("\nError: " + str(e))
-    finally:
-        print("\nClosing connections")
-        browser_socket.close()
-        ev3_socket.close()
+        except Exception as e:
+            print("Error: " + str(e))
+        finally:
+            try:
+                browser_socket.close()
+                ev3_socket.close()
+            except:
+                pass
+        
+        print("Connection closed, restarting...")
+
+if __name__ == "__main__":
+    main()
 ```
 
 # ev3dev/websocket_test.py
@@ -1156,6 +1206,7 @@ export default function App() {
     const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             console.error('WebSocket not connected');
+            initWebSocket();
             return;
         }
 
@@ -1172,6 +1223,33 @@ export default function App() {
             return prevData;
         });
     }, [ws])
+
+    const initWebSocket = useCallback(() => {
+        console.log('Initializing WebSocket...');
+        const websocket = new WebSocket(SOCKET_SERVER_URL);
+        
+        websocket.onclose = (event) => {
+            console.log('WebSocket closed:', event);
+            // Próba ponownego połączenia po 1s
+            setTimeout(initWebSocket, 1000);
+        };
+    
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+    
+        setWs(websocket);
+    }, []);
+    
+    useEffect(() => {
+        initWebSocket();
+        return () => ws?.close();
+    }, []);
+
+
+    useEffect(() => {
+        console.log('=====>>>>', robotData)
+    }, [robotData]);
 
     const testMotor = useCallback(() => {
         if (ws?.readyState === WebSocket.OPEN) {
@@ -2004,7 +2082,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const node = Robot.NodeName;
 
     const handleGizmoUpdate = (nodeName: Robot.NodeName, newMatrix: [number, number, number]) => {
-        console.log(`Updating ${nodeName} rotation:`, newMatrix);
+        console.log(`Updating ${nodeName}:`, newMatrix);
         
         const newData: Partial<Robot.RobotNodes> = {
             nodes: {
@@ -2013,11 +2091,25 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: newMatrix
+                    rotation: data.nodes[nodeName].rotation,
+                    // Note: problem with rotation hand and gripper
+                    // when use 
+                    // rotation: newMatrix
                 }
             }
         };
 
+        // Preserve initial rotations for hand and gripper
+        if (newData.nodes) {
+            if (newData.nodes.hand) {
+                newData.nodes.hand.rotation = data.nodes.hand.rotation;
+            }
+            if (newData.nodes.gripper) {
+                newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
+            }
+        }
+
+        console.log('Sending update:', newData);
         onUpdate(newData);
     };
 
