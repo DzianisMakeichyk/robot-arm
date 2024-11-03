@@ -17,11 +17,18 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const [startRotation, setStartRotation] = useState<{[key: string]: number}>({});
     const [startPosition, setStartPosition] = useState<{[key: string]: number}>({});
     const [currentPositions, setCurrentPositions] = useState<{[key: string]: number}>({});
+    const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
     const [currentRotations, setCurrentRotations] = useState<{[key: string]: [number, number, number]}>({
         [node.mainColumn]: [0,0,0],
         [node.upperArm]: [0,0,0],
         [node.gripper]: [0,0,0]
     });
+
+    const SCALE_FACTORS = {
+        [node.mainColumn]: 4,
+        [node.upperArm]: 180,  // Zwiększony współczynnik dla upperArm
+        [node.gripper]: 180    // Taki sam współczynnik dla grippera
+    };
     
     const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
         if (nodeName === node.upperArm) {
@@ -30,22 +37,17 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                 ...prev,
                 [nodeName]: height
             }));
-            console.log(`Current height for ${nodeName}:`, height);
         } else if (nodeName === node.gripper) {
-            const position = transform.position[2]; // Use Z axis for gripper
+            const position = transform.position[2];
             setCurrentPositions(prev => ({
                 ...prev,
                 [nodeName]: position
             }));
-            console.log(`Current position for ${nodeName}:`, position);
         } else {
             setCurrentRotations(prev => ({
                 ...prev,
                 [nodeName]: transform.rotation
             }));
-            const euler = new Euler().fromArray(transform.rotation);
-            const currentDegrees = (euler.y * 180) / Math.PI;
-            console.log(`Current rotation for ${nodeName}:`, currentDegrees);
         }
     };
 
@@ -55,21 +57,11 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                 ...prev,
                 [nodeName]: transform.position[1]
             }));
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: transform.position[1]
-            }));
-            console.log(`Start height for ${nodeName}:`, transform.position[1]);
         } else if (nodeName === node.gripper) {
             setStartPosition(prev => ({
                 ...prev,
                 [nodeName]: transform.position[2]
             }));
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: transform.position[2]
-            }));
-            console.log(`Start position for ${nodeName}:`, transform.position[2]);
         } else {
             const euler = new Euler().fromArray(transform.rotation);
             const degrees = (euler.y * 180) / Math.PI;
@@ -77,14 +69,15 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                 ...prev,
                 [nodeName]: degrees
             }));
-            console.log(`Start rotation for ${nodeName}:`, degrees);
         }
     };
 
+
     const handleDragEnd = (nodeName: Robot.NodeName) => {
-        const newData: Partial<Robot.RobotNodes> = {
+        // Dane dla EV3
+        const ev3Data: Partial<Robot.RobotNodes> = {
             nodes: {
-                ...data.nodes,
+                ...data.nodes // Kopiujemy wszystkie oryginalne dane
             }
         };
 
@@ -94,83 +87,57 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const heightChange = currentHeight - initialHeight;
             const angleChange = heightChange * 90 * -1 * 2;
 
-            console.log("==>> currentHeight:", currentHeight);
-            console.log("==>> initialHeight:", initialHeight);
-            console.log("==>> heightChange:", heightChange);
-            console.log("==>> angleChange:", angleChange);
-
-            newData.nodes[nodeName] = {
-                ...data.nodes[nodeName],
-                position: [data.nodes[nodeName].position[0], currentHeight, data.nodes[nodeName].position[2]],
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: data.nodes[nodeName].rotation,
                 rotationDegrees: angleChange,
                 _updated: true
             };
-
-            console.log(`Sending height change as angle for ${nodeName}:`, angleChange);
         } 
-        
-        if (nodeName === node.gripper) {
+        else if (nodeName === node.gripper) {
             const currentPosition = currentPositions[nodeName] || 0;
             const initialPosition = startPosition[nodeName] || 0;
             const positionChange = currentPosition - initialPosition;
             const angleChange = positionChange * 90 * -1 * 2;
 
-            console.log("==>> currentPosition:", currentPosition);
-            console.log("==>> initialPosition:", initialPosition);
-            console.log("==>> positionChange:", positionChange);
-            console.log("==>> angleChange:", angleChange);
-
-            newData.nodes[nodeName] = {
-                ...data.nodes[nodeName],
-                position: [data.nodes[nodeName].position[0], data.nodes[nodeName].position[1], currentPosition],
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: data.nodes[nodeName].rotation,
                 rotationDegrees: angleChange,
                 _updated: true
             };
-
-            console.log(`Sending position change as angle for ${nodeName}:`, angleChange);
-        } 
-        
-        if (nodeName === node.mainColumn) {
+        }
+        else if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(currentRotations[nodeName]);
             const endDegrees = (euler.y * 180) / Math.PI;
             let totalRotation = endDegrees - (startRotation[nodeName] || 0);
+            totalRotation *= 4;
 
-            if (nodeName === node.mainColumn) {
-                totalRotation *= 4;
-            }
-
-            console.log(666,  'nodeName:', nodeName)
-            if (nodeName === node.gripper) {
-                console.log(666,  'totalRotation:', totalRotation)
-                totalRotation *= 0.5;
-            }
-
-            newData.nodes[nodeName] = {
-                ...data.nodes[nodeName],
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
                 position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: currentRotations[nodeName],
                 rotationDegrees: totalRotation,
                 _updated: true
             };
-
-            console.log(`Sending rotation to robot for ${nodeName}:`, totalRotation);
         }
 
-        Object.keys(data.nodes).forEach((key) => {
+        // Reset updated flag dla innych węzłów
+        Object.keys(ev3Data.nodes).forEach((key) => {
             if (key !== nodeName) {
-                newData.nodes[key] = {
-                    ...data.nodes[key],
+                ev3Data.nodes[key] = {
+                    ...data.nodes[key], // Zachowujemy oryginalne dane
                     _updated: false
                 };
             }
         });
 
-        onUpdate(newData);
+        onUpdate(ev3Data);
     };
 
     return (
@@ -179,10 +146,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                    disableTranslation
                    activeAxes={[true, false, true]}
                    userData={[node.mainColumn]}
-                   onDragStart={() => handleDragStart(node.mainColumn, {position: data.nodes[node.mainColumn].position, rotation: currentRotations[node.mainColumn]})}
+                   onDragStart={() => handleDragStart(node.mainColumn, {position: visualData.nodes[node.mainColumn].position, rotation: visualData.nodes[node.mainColumn].rotation})}
                    onDragEnd={() => handleDragEnd(node.mainColumn)}
                    onUpdate={(transform) => handleGizmoUpdate(node.mainColumn, transform)}>
-                <Mesh node={nodes[node.mainColumn]} data={data.nodes[node.mainColumn]}/>
+                <Mesh node={nodes[node.mainColumn]} data={visualData.nodes[node.mainColumn]}/>
 
                 <Gizmo activeAxes={[false, true, false]}
                        translationLimits={[undefined, [-1, .8], undefined]}
@@ -190,22 +157,22 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                        anchor={[-0.8, 1.5, 0]}
                        scale={1}
                        userData={[node.upperArm]}
-                       onDragStart={() => handleDragStart(node.upperArm, {position: data.nodes[node.upperArm].position, rotation: [0,0,0]})}
+                       onDragStart={() => handleDragStart(node.upperArm, {position: visualData.nodes[node.upperArm].position, rotation: visualData.nodes[node.upperArm].rotation})}
                        onDragEnd={() => handleDragEnd(node.upperArm)}
                        onUpdate={(transform) => handleGizmoUpdate(node.upperArm, transform)}>
-                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
-                    <Mesh node={nodes[node.wristExtension]} data={data.nodes[node.wristExtension]}/>
-                    <Mesh node={nodes[node.hand]} data={data.nodes[node.hand]}/>
+                    <Mesh node={nodes[node.upperArm]} data={visualData.nodes[node.upperArm]}/>
+                    <Mesh node={nodes[node.wristExtension]} data={visualData.nodes[node.wristExtension]}/>
+                    <Mesh node={nodes[node.hand]} data={visualData.nodes[node.hand]}/>
 
                     <Gizmo activeAxes={[false, false, true]}
                            translationLimits={[undefined, undefined, [0, 0.4]]}
                            anchor={[2, 0, 2]}
                            scale={0.75}
                            userData={[node.gripper]}
-                           onDragStart={() => handleDragStart(node.gripper, {position: data.nodes[node.gripper].position, rotation: [0,0,0]})}
+                           onDragStart={() => handleDragStart(node.gripper, {position: visualData.nodes[node.gripper].position, rotation: visualData.nodes[node.gripper].rotation})}
                            onDragEnd={() => handleDragEnd(node.gripper)}
                            onUpdate={(transform) => handleGizmoUpdate(node.gripper, transform)}>
-                        <Mesh node={nodes[node.gripper]} data={data.nodes[node.gripper]}/>
+                        <Mesh node={nodes[node.gripper]} data={visualData.nodes[node.gripper]}/>
                     </Gizmo>
                 </Gizmo>
             </Gizmo>
