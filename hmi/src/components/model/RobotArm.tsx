@@ -92,7 +92,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const currentHeight = currentPositions[nodeName] || 0;
             const initialHeight = startPosition[nodeName] || 0;
             const heightChange = currentHeight - initialHeight;
-            const angleChange = heightChange * 90;
+            const angleChange = heightChange * 90 * -1 * 2;
 
             console.log("==>> currentHeight:", currentHeight);
             console.log("==>> initialHeight:", initialHeight);
@@ -109,11 +109,13 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             };
 
             console.log(`Sending height change as angle for ${nodeName}:`, angleChange);
-        } else if (nodeName === node.gripper) {
+        } 
+        
+        if (nodeName === node.gripper) {
             const currentPosition = currentPositions[nodeName] || 0;
             const initialPosition = startPosition[nodeName] || 0;
             const positionChange = currentPosition - initialPosition;
-            const angleChange = positionChange * 90;
+            const angleChange = positionChange * 90 * -1 * 2;
 
             console.log("==>> currentPosition:", currentPosition);
             console.log("==>> initialPosition:", initialPosition);
@@ -130,13 +132,21 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             };
 
             console.log(`Sending position change as angle for ${nodeName}:`, angleChange);
-        } else {
+        } 
+        
+        if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(currentRotations[nodeName]);
             const endDegrees = (euler.y * 180) / Math.PI;
             let totalRotation = endDegrees - (startRotation[nodeName] || 0);
 
             if (nodeName === node.mainColumn) {
                 totalRotation *= 4;
+            }
+
+            console.log(666,  'nodeName:', nodeName)
+            if (nodeName === node.gripper) {
+                console.log(666,  'totalRotation:', totalRotation)
+                totalRotation *= 0.5;
             }
 
             newData.nodes[nodeName] = {
