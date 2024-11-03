@@ -26,6 +26,8 @@ export const Gizmo = ({
     rotationLimits,
     userData,
     onUpdate,
+    onDragStart,
+    onDragEnd,
     children,
 }: Robot.GizmoProperties) => {
     const invalidate = useThree((state) => state.invalidate)
@@ -74,6 +76,7 @@ export const Gizmo = ({
     const configuration = {
         onDragStart: () => {
             console.log('Drag start');
+            onDragStart();
             localMatrix0.copy(matrixGroup.current.matrix)
             worldMatrix0.copy(matrixGroup.current.matrixWorld)
             invalidate()
@@ -104,6 +107,7 @@ export const Gizmo = ({
 
         onDragEnd: () => {
             console.log('Drag end');
+            onDragEnd();
             invalidate()
         },
 

@@ -92,6 +92,10 @@ export namespace Robot {
 
         onUpdate: (matrix: [number, number, number]) => void
 
+        onDragStart: () => void;
+
+        onDragEnd: () => void;
+
     }
 
     /**

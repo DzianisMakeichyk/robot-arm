@@ -593,46 +593,43 @@ def handle_robot_update(data):
             del state['action']
             
         nodes = state.get('nodes', {})
-        # print("====>>>> Received state update:", nodes)
         response = {"status": "success", "message": [], "state": state}
         
-        # Handle base rotation (main_column)
-        if 'main_column' in nodes and 'rotation' in nodes['main_column'] and motors['A']:
-            # print("------>>>> main")
-            rotation = nodes['main_column']['rotation'][1]
+        updated_node = None
+        for node_name, node_data in nodes.items():
+            if 'rotation' in node_data and node_data.get('_updated', False):
+                updated_node = node_name
+                break
+
+        if updated_node == 'gripper' and motors['A']:
+            rotation = nodes['gripper']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(-180, min(180, angle))
-
-            # print("------>>>> rotation:", rotation)
-            # print("------>>>> angle:", angle)
-            # print("------>>>> angle:", angle)
             try:
                 motors['A'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
-                response["message"].append("Base motor moved")
+                response["message"].append("Gripper motor moved")
             except Exception as e:
-                response["message"].append("Base motor error: " + str(e))
+                response["message"].append("Gripper motor error: " + str(e))
 
-        # Handle elbow movement (upper_arm)
-        if 'upper_arm' in nodes and 'rotation' in nodes['upper_arm'] and motors['B']:
+        elif updated_node == 'upper_arm' and motors['B']:
             rotation = nodes['upper_arm']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(-90, min(90, angle))
             try:
                 motors['B'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
-                response["message"].append("Elbow motor moved")
+                response["message"].append("Height motor moved")
             except Exception as e:
-                response["message"].append("Elbow motor error: " + str(e))
+                response["message"].append("Height motor error: " + str(e))
 
-        # Handle height adjustment (gripper)
-        if 'gripper' in nodes and 'rotation' in nodes['gripper'] and motors['C']:
-            rotation = nodes['gripper']['rotation'][1]
+        elif updated_node == 'main_column' and motors['C']:
+            rotation = nodes['main_column']['rotation'][1]
             angle = (rotation * 180) / 3.14159
             angle = max(0, min(120, angle))
             try:
                 motors['C'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
-                response["message"].append("Height motor moved")
+                response["message"].append("Base motor moved")
             except Exception as e:
-                response["message"].append("Height motor error: " + str(e))
+                response["message"].append("Base motor error: " + str(e))
             
         response["message"] = "; ".join(response["message"])
         return response
@@ -2092,23 +2089,30 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
                     rotation: data.nodes[nodeName].rotation,
-                    // Note: problem with rotation hand and gripper
-                    // when use 
-                    // rotation: newMatrix
+                    _updated: true
                 }
             }
         };
-
+    
         // Preserve initial rotations for hand and gripper
         if (newData.nodes) {
             if (newData.nodes.hand) {
                 newData.nodes.hand.rotation = data.nodes.hand.rotation;
             }
-            if (newData.nodes.gripper) {
+            if (newData.nodes.gripper && nodeName !== node.gripper) {
                 newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
             }
         }
-
+    
+        // Reset _updated flag for other nodes
+        Object.keys(newData.nodes || {}).forEach((key) => {
+            // @ts-ignore
+            if (key !== nodeName && newData.nodes && newData.nodes[key]) {
+                // @ts-ignore
+                newData.nodes[key]._updated = false;
+            }
+        });
+    
         console.log('Sending update:', newData);
         onUpdate(newData);
     };

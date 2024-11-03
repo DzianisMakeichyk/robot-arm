@@ -2,6 +2,8 @@ import {Gizmo} from '@components/gizmo'
 import {useGLTF} from '@react-three/drei'
 import {Robot} from '@types'
 import Mesh from "@components/mesh/Mesh"
+import { useState } from 'react';
+import { Euler } from 'three';
 
 interface RobotProps {
     data: Robot.RobotNodes;
@@ -11,10 +13,35 @@ interface RobotProps {
 export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const {nodes} = useGLTF('/robot.glb') as unknown as Robot.DreiGLTF;
     const node = Robot.NodeName;
+    const [startRotation, setStartRotation] = useState<{[key: string]: number}>({});
+    const [currentRotation, setCurrentRotation] = useState<[number, number, number]>([0,0,0]);
+    
+    const handleGizmoUpdate = (nodeName: Robot.NodeName, newRotation: [number, number, number]) => {
+        setCurrentRotation(newRotation);
+        const euler = new Euler().fromArray(newRotation);
+        const currentDegrees = (euler.y * 180) / Math.PI;
+        console.log('Current rotation during drag:', currentDegrees);
+    };
 
-    const handleGizmoUpdate = (nodeName: Robot.NodeName, newMatrix: [number, number, number]) => {
-        console.log(`Updating ${nodeName}:`, newMatrix);
-        
+    const handleDragStart = (nodeName: Robot.NodeName, rotation: [number, number, number]) => {
+        const euler = new Euler().fromArray(rotation);
+        const degrees = (euler.y * 180) / Math.PI;
+        setStartRotation(prev => ({
+            ...prev,
+            [nodeName]: degrees
+        }));
+        console.log('Start rotation:', degrees);
+    };
+
+    const handleDragEnd = (nodeName: Robot.NodeName) => {
+        const euler = new Euler().fromArray(currentRotation);
+        const endDegrees = (euler.y * 180) / Math.PI;
+        const totalRotation = endDegrees - (startRotation[nodeName] || 0);
+
+        console.log('End degrees:', endDegrees);
+        console.log('Start rotation was:', startRotation[nodeName]);
+        console.log('Total rotation:', totalRotation);
+
         const newData: Partial<Robot.RobotNodes> = {
             nodes: {
                 ...data.nodes,
@@ -22,23 +49,13 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                     ...data.nodes[nodeName],
                     position: data.nodes[nodeName].position,
                     scale: data.nodes[nodeName].scale,
-                    rotation: data.nodes[nodeName].rotation,
+                    rotation: currentRotation,
+                    rotationDegrees: totalRotation * 4,
                     _updated: true
                 }
             }
         };
-    
-        // Preserve initial rotations for hand and gripper
-        if (newData.nodes) {
-            if (newData.nodes.hand) {
-                newData.nodes.hand.rotation = data.nodes.hand.rotation;
-            }
-            if (newData.nodes.gripper && nodeName !== node.gripper) {
-                newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
-            }
-        }
-    
-        // Reset _updated flag for other nodes
+
         Object.keys(newData.nodes || {}).forEach((key) => {
             // @ts-ignore
             if (key !== nodeName && newData.nodes && newData.nodes[key]) {
@@ -46,10 +63,11 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                 newData.nodes[key]._updated = false;
             }
         });
-    
-        console.log('Sending update:', newData);
+
+        console.log('Sending final rotation to robot:', totalRotation);
         onUpdate(newData);
     };
+
 
     return (
         <group>
@@ -57,7 +75,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                    disableTranslation
                    activeAxes={[true, false, true]}
                    userData={[node.mainColumn]}
-                   onUpdate={(newMatrix) => handleGizmoUpdate(node.mainColumn, newMatrix)}>
+                   onUpdate={(newMatrix) => handleGizmoUpdate(node.mainColumn, newMatrix)}
+                   onDragStart={() => handleDragStart(node.mainColumn, currentRotation)}
+                   onDragEnd={() => handleDragEnd(node.mainColumn)}
+                >
                 <Mesh node={nodes[node.mainColumn]} data={data.nodes[node.mainColumn]}/>
 
                 <Gizmo activeAxes={[false, true, false]}
@@ -66,7 +87,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                        anchor={[-0.8, 1.5, 0]}
                        scale={1}
                        userData={[node.upperArm]}
-                       onUpdate={(newMatrix) => handleGizmoUpdate(node.upperArm, newMatrix)}>
+                       onUpdate={(newMatrix) => handleGizmoUpdate(node.upperArm, newMatrix)}
+                       onDragStart={() => handleDragStart(node.mainColumn, currentRotation)}
+                       onDragEnd={() => handleDragEnd(node.mainColumn)}
+                       >
 
                     <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
                     <Mesh node={nodes[node.wristExtension]} data={data.nodes[node.wristExtension]}/>
@@ -77,7 +101,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                            anchor={[2, 0, 2]}
                            scale={0.75}
                            userData={[node.gripper]}
-                           onUpdate={(newMatrix) => handleGizmoUpdate(node.gripper, newMatrix)}>
+                           onUpdate={(newMatrix) => handleGizmoUpdate(node.gripper, newMatrix)}
+                           onDragStart={() => handleDragStart(node.mainColumn, currentRotation)}
+                           onDragEnd={() => handleDragEnd(node.mainColumn)}
+                           >
                         <Mesh node={nodes[node.gripper]} data={data.nodes[node.gripper]}/>
                     </Gizmo>
                 </Gizmo>

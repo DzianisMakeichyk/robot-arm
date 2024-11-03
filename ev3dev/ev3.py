@@ -223,7 +223,6 @@ def initialize_motors():
         print("Error initializing port C: " + str(e))
 
 def handle_robot_update(data):
-    """Handle robot update using global motors"""
     try:
         state = json.loads(data)
         if 'action' in state:
@@ -239,31 +238,26 @@ def handle_robot_update(data):
                 break
 
         if updated_node == 'gripper' and motors['A']:
-            rotation = nodes['gripper']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(-180, min(180, angle))
+            angle = nodes['gripper'].get('rotationDegrees', 0)
             try:
-                motors['A'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['A'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Gripper motor moved")
             except Exception as e:
                 response["message"].append("Gripper motor error: " + str(e))
 
         elif updated_node == 'upper_arm' and motors['B']:
-            rotation = nodes['upper_arm']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(-90, min(90, angle))
+            angle = nodes['upper_arm'].get('rotationDegrees', 0)
             try:
-                motors['B'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['B'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Height motor moved")
             except Exception as e:
                 response["message"].append("Height motor error: " + str(e))
 
         elif updated_node == 'main_column' and motors['C']:
-            rotation = nodes['main_column']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(0, min(120, angle))
+            angle = nodes['main_column'].get('rotationDegrees', 0)
+            print("=====>>>>> Main column angle: " + str(angle))
             try:
-                motors['C'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['C'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Base motor moved")
             except Exception as e:
                 response["message"].append("Base motor error: " + str(e))
