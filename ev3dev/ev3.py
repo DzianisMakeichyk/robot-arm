@@ -239,6 +239,7 @@ def handle_robot_update(data):
 
         if updated_node == 'gripper' and motors['A']:
             angle = nodes['gripper'].get('rotationDegrees', 0)
+            print("=====>>>>> Gripper angle: " + str(angle))
             try:
                 motors['A'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Gripper motor moved")
@@ -247,6 +248,7 @@ def handle_robot_update(data):
 
         elif updated_node == 'upper_arm' and motors['B']:
             angle = nodes['upper_arm'].get('rotationDegrees', 0)
+            print("=====>>>>> Upper arm angle: " + str(angle))
             try:
                 motors['B'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Height motor moved")

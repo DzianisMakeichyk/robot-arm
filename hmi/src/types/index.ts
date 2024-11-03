@@ -58,6 +58,11 @@ export namespace Robot {
         data: RobotNode
     }
 
+    export type GizmoTransform = {
+        position: [number, number, number];
+        rotation: [number, number, number];
+    };
+
     /**
      * Properties we receive for a Robot Gizmo
      */
@@ -90,7 +95,7 @@ export namespace Robot {
         
         children?: ReactNode
 
-        onUpdate: (matrix: [number, number, number]) => void
+        onUpdate: (transform: GizmoTransform) => void;
 
         onDragStart: () => void;
 

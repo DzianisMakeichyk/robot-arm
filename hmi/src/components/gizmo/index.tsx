@@ -3,7 +3,7 @@ import {useThree} from '@react-three/fiber'
 import {Translate} from './Translate'
 import {Rotate} from './Rotate'
 import {context} from './context'
-import {Vector3, Matrix4, Box3, Group, Euler} from 'three'
+import {Vector3, Matrix4, Box3, Group, Euler, Quaternion} from 'three'
 import {Robot} from '@types'
 
 const localMatrix = new Matrix4()
@@ -84,25 +84,32 @@ export const Gizmo = ({
 
         onDrag: (worldDeltaMatrix: Matrix4) => {
             console.log('Dragging');
-            parentMatrix.copy(parentGroup.current.matrixWorld)
-            parentMatrixInv.copy(parentMatrix).invert()
-            worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix)
-            localMatrix.copy(worldMatrix).premultiply(parentMatrixInv)
-            localMatrix0Inv.copy(localMatrix0).invert()
-            localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv)
-            matrixGroup.current.matrix.copy(localMatrix)
-
-            // Extract rotation from matrix
-            
-            const rotation = new Euler().setFromRotationMatrix(localMatrix);
-            const rotationArray: [number, number, number] = [rotation.x, rotation.y, rotation.z];
-
-            console.log('Updating rotation:', rotationArray);
+            parentMatrix.copy(parentGroup.current.matrixWorld);
+            parentMatrixInv.copy(parentMatrix).invert();
+            worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix);
+            localMatrix.copy(worldMatrix).premultiply(parentMatrixInv);
+            localMatrix0Inv.copy(localMatrix0).invert();
+            localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv);
+            matrixGroup.current.matrix.copy(localMatrix);
+    
+            // Extract position and rotation from matrix
+            const position = new Vector3();
+            const rotation = new Euler();
+            const quaternion = new Quaternion();
+            const scale = new Vector3();
+    
+            localMatrix.decompose(position, quaternion, scale);
+            rotation.setFromQuaternion(quaternion);
+    
             if (onUpdate) {
-                onUpdate(rotationArray);
+                // Pass both position and rotation
+                onUpdate({
+                    position: [position.x, position.y, position.z],
+                    rotation: [rotation.x, rotation.y, rotation.z]
+                });
             }
-
-            invalidate()
+    
+            invalidate();
         },
 
         onDragEnd: () => {
