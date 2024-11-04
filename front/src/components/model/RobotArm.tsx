@@ -69,8 +69,6 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                 [nodeName]: degrees
             }));
         }
-
-        console.log(9999999999, nodeName, node.mainColumn, nodeName === node.mainColumn);
     };
 
     const handleDragEnd = (nodeName: Robot.NodeName) => {
@@ -99,29 +97,31 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
         else if (nodeName === node.gripper) {
             const currentPosition = currentPositions[nodeName] || 0;
             const initialPosition = startPosition[nodeName] || 0;
+            
             const positionChange = currentPosition - initialPosition;
-            const rotationDegrees = positionChange * 90 * -1 * 2;
+            // Mapowanie 0->-70, 0.4->70
+            const angle = (positionChange * (140/0.4)) - 70;
+            
+            // Określ kierunek
+            // const direction = currentPosition > initialPosition ? 1 : -1;
+            const rotationDegrees = angle;
 
-            console.log('===>>> rotationDegrees <<<===', rotationDegrees);
-
+            console.log(1000000, rotationDegrees)
+         
             ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                ...data.nodes[nodeName],
                 position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: data.nodes[nodeName].rotation,
                 rotationDegrees,
                 _updated: true
             };
-        }
+         }
         else if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(currentPositions[nodeName]);
             const endDegrees = (euler.y * 180) / Math.PI;
             const totalRotation = endDegrees - (startRotation[nodeName] || 0);
             const rotationDegrees = totalRotation * 4 * -1;
-
-            console.log('===>>> endDegrees <<<===', endDegrees);
-            console.log('===>>> Rotation <<<===', totalRotation);
-            console.log('===>>> startRotation <<<===', startRotation);
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane
