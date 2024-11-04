@@ -38,4 +38,6 @@ wscat -c ws://192.168.2.3:4000
 ip -4 addr show usb0
 netstat -nr
 
+ssh robot@ev3dev.local
+
 

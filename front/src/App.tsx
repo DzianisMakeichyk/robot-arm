@@ -63,6 +63,7 @@ export default function App() {
                 console.error('Parse error:', e);
             }
         };
+        
 
         websocket.onclose = (event) => {
             console.log('WebSocket closed:', event);
