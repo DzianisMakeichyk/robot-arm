@@ -5,14 +5,11 @@
   "dependencies": {
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.15",
-    "@types/cors": "^2.8.17",
-    "cors": "^2.8.5",
     "leva": "^0.9.35",
     "lodash.clamp": "^4.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "stats.js": "^0.17.0",
     "three": "^0.161.0"
   },
   "devDependencies": {

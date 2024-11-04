@@ -1,5 +1,4 @@
  
-import React from 'react'
 import {Robot} from '@types'
 import { Euler } from 'three'
 

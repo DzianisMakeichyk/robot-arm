@@ -31,45 +31,52 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     };
     
     const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+        let param;
+
         if (nodeName === node.upperArm) {
-            const height = transform.position[1];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: height
-            }));
-        } else if (nodeName === node.gripper) {
-            const position = transform.position[2];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: position
-            }));
-        } else {
-            setCurrentRotations(prev => ({
-                ...prev,
-                [nodeName]: transform.rotation
-            }));
+            param = transform.position[1];
+        } 
+
+        if (nodeName === node.gripper) {
+            param = transform.position[2];
+        } 
+        
+        if (nodeName === node.mainColumn) {
+            param = transform.rotation
         }
+
+        if (!param) return;
+
+        setCurrentPositions(prev => ({
+            ...prev,
+            [nodeName]: param
+        }));
     };
 
     const handleDragStart = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+        let param;
+
         if (nodeName === node.upperArm) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[1]
-            }));
-        } else if (nodeName === node.gripper) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[2]
-            }));
-        } else {
+            param = transform.position[1];
+        } 
+        
+        if (nodeName === node.gripper) {
+            param = transform.position[2];
+        } 
+
+        if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(transform.rotation);
             const degrees = (euler.y * 180) / Math.PI;
-            setStartRotation(prev => ({
-                ...prev,
-                [nodeName]: degrees
-            }));
+
+            param = degrees;
         }
+
+        if (!param) return;
+
+        setStartRotation(prev => ({
+            ...prev,
+            [nodeName]: param
+        }));
     };
 
 
@@ -85,7 +92,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const currentHeight = currentPositions[nodeName] || 0;
             const initialHeight = startPosition[nodeName] || 0;
             const heightChange = currentHeight - initialHeight;
-            const angleChange = heightChange * 90 * -1 * 2;
+            const angleChange = heightChange * SCALE_FACTORS[nodeName] * -1;
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane
@@ -100,7 +107,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const currentPosition = currentPositions[nodeName] || 0;
             const initialPosition = startPosition[nodeName] || 0;
             const positionChange = currentPosition - initialPosition;
-            const angleChange = positionChange * 90 * -1 * 2;
+            const angleChange = positionChange * SCALE_FACTORS[nodeName] * -1;
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane
@@ -115,7 +122,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const euler = new Euler().fromArray(currentRotations[nodeName]);
             const endDegrees = (euler.y * 180) / Math.PI;
             let totalRotation = endDegrees - (startRotation[nodeName] || 0);
-            totalRotation *= 4;
+            totalRotation *= SCALE_FACTORS[nodeName];
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane

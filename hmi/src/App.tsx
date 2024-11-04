@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
 import {Shadows, Ground} from '@components/stage';
@@ -122,11 +122,6 @@ export default function App() {
         initWebSocket();
         return () => ws?.close();
     }, []);
-
-
-    useEffect(() => {
-        console.log('=====>>>>', robotData)
-    }, [robotData]);
 
     const testMotor = useCallback(() => {
         if (ws?.readyState === WebSocket.OPEN) {
