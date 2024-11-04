@@ -1,5 +1,6 @@
 # dependencies
-hmi/node_modules/
+node_modules/
+front/node_modules/
 api/node_modules/
 
 # IDE

@@ -2,7 +2,7 @@
 
 ```
 # dependencies
-hmi/node_modules/
+front/node_modules/
 api/node_modules/
 
 # IDE
@@ -586,7 +586,6 @@ def initialize_motors():
         print("Error initializing port C: " + str(e))
 
 def handle_robot_update(data):
-    """Handle robot update using global motors"""
     try:
         state = json.loads(data)
         if 'action' in state:
@@ -602,31 +601,28 @@ def handle_robot_update(data):
                 break
 
         if updated_node == 'gripper' and motors['A']:
-            rotation = nodes['gripper']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(-180, min(180, angle))
+            angle = nodes['gripper'].get('rotationDegrees', 0)
+            print("=====>>>>> Gripper angle: " + str(angle))
             try:
-                motors['A'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['A'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Gripper motor moved")
             except Exception as e:
                 response["message"].append("Gripper motor error: " + str(e))
 
         elif updated_node == 'upper_arm' and motors['B']:
-            rotation = nodes['upper_arm']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(-90, min(90, angle))
+            angle = nodes['upper_arm'].get('rotationDegrees', 0)
+            print("=====>>>>> Upper arm angle: " + str(angle))
             try:
-                motors['B'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['B'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Height motor moved")
             except Exception as e:
                 response["message"].append("Height motor error: " + str(e))
 
         elif updated_node == 'main_column' and motors['C']:
-            rotation = nodes['main_column']['rotation'][1]
-            angle = (rotation * 180) / 3.14159
-            angle = max(0, min(120, angle))
+            angle = nodes['main_column'].get('rotationDegrees', 0)
+            print("=====>>>>> Main column angle: " + str(angle))
             try:
-                motors['C'].on_for_degrees(speed=20, degrees=random.randint(-2, 2))
+                motors['C'].on_for_degrees(speed=20, degrees=angle)
                 response["message"].append("Base motor moved")
             except Exception as e:
                 response["message"].append("Base motor error: " + str(e))
@@ -942,7 +938,7 @@ if __name__ == "__main__":
     test_websocket()
 ```
 
-# hmi/config-overrides.js
+# front/config-overrides.js
 
 ```js
 const { alias } = require('react-app-rewire-alias')
@@ -968,11 +964,11 @@ module.exports = function override(config, env) {
 }
 ```
 
-# hmi/package.json
+# front/package.json
 
 ```json
 {
-  "name": "hmi",
+  "name": "front",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -1028,7 +1024,7 @@ module.exports = function override(config, env) {
 
 ```
 
-# hmi/public/index.html
+# front/public/index.html
 
 ```html
 <!DOCTYPE html>
@@ -1063,7 +1059,7 @@ module.exports = function override(config, env) {
 
 ```
 
-# hmi/public/manifest.json
+# front/public/manifest.json
 
 ```json
 {
@@ -1084,15 +1080,15 @@ module.exports = function override(config, env) {
 
 ```
 
-# hmi/public/robot_v2.glb
+# front/public/robot_v2.glb
 
 This is a binary file of the type: Binary
 
-# hmi/public/robot.glb
+# front/public/robot.glb
 
 This is a binary file of the type: Binary
 
-# hmi/public/robots.txt
+# front/public/robots.txt
 
 ```txt
 # https://www.robotstxt.org/robotstxt.html
@@ -1101,7 +1097,7 @@ Disallow:
 
 ```
 
-# hmi/README.md
+# front/README.md
 
 ```md
 # Hmi
@@ -1115,7 +1111,7 @@ Disallow:
 
 ```
 
-# hmi/src/App.tsx
+# front/src/App.tsx
 
 ```tsx
 import React, {useState, useEffect, useCallback} from 'react';
@@ -1243,11 +1239,6 @@ export default function App() {
         return () => ws?.close();
     }, []);
 
-
-    useEffect(() => {
-        console.log('=====>>>>', robotData)
-    }, [robotData]);
-
     const testMotor = useCallback(() => {
         if (ws?.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ action: 'test_motor' }));
@@ -1357,7 +1348,7 @@ export default function App() {
 }
 ```
 
-# hmi/src/components/gizmo/context.ts
+# front/src/components/gizmo/context.ts
 
 ```ts
  
@@ -1368,15 +1359,15 @@ export const context = createContext<Robot.GizmoState>(null!)
 
 ```
 
-# hmi/src/components/gizmo/index.tsx
+# front/src/components/gizmo/index.tsx
 
 ```tsx
-import React, {useEffect, useRef} from 'react'
+import {useEffect, useRef} from 'react'
 import {useThree} from '@react-three/fiber'
 import {Translate} from './Translate'
 import {Rotate} from './Rotate'
 import {context} from './context'
-import {Vector3, Matrix4, Box3, Group, Euler} from 'three'
+import {Vector3, Matrix4, Box3, Group, Euler, Quaternion} from 'three'
 import {Robot} from '@types'
 
 const localMatrix = new Matrix4()
@@ -1399,6 +1390,8 @@ export const Gizmo = ({
     rotationLimits,
     userData,
     onUpdate,
+    onDragStart,
+    onDragEnd,
     children,
 }: Robot.GizmoProperties) => {
     const invalidate = useThree((state) => state.invalidate)
@@ -1447,6 +1440,7 @@ export const Gizmo = ({
     const configuration = {
         onDragStart: () => {
             console.log('Drag start');
+            onDragStart();
             localMatrix0.copy(matrixGroup.current.matrix)
             worldMatrix0.copy(matrixGroup.current.matrixWorld)
             invalidate()
@@ -1454,29 +1448,37 @@ export const Gizmo = ({
 
         onDrag: (worldDeltaMatrix: Matrix4) => {
             console.log('Dragging');
-            parentMatrix.copy(parentGroup.current.matrixWorld)
-            parentMatrixInv.copy(parentMatrix).invert()
-            worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix)
-            localMatrix.copy(worldMatrix).premultiply(parentMatrixInv)
-            localMatrix0Inv.copy(localMatrix0).invert()
-            localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv)
-            matrixGroup.current.matrix.copy(localMatrix)
-
-            // Extract rotation from matrix
-            
-            const rotation = new Euler().setFromRotationMatrix(localMatrix);
-            const rotationArray: [number, number, number] = [rotation.x, rotation.y, rotation.z];
-
-            console.log('Updating rotation:', rotationArray);
+            parentMatrix.copy(parentGroup.current.matrixWorld);
+            parentMatrixInv.copy(parentMatrix).invert();
+            worldMatrix.copy(worldMatrix0).premultiply(worldDeltaMatrix);
+            localMatrix.copy(worldMatrix).premultiply(parentMatrixInv);
+            localMatrix0Inv.copy(localMatrix0).invert();
+            localDeltaMatrix.copy(localMatrix).multiply(localMatrix0Inv);
+            matrixGroup.current.matrix.copy(localMatrix);
+    
+            // Extract position and rotation from matrix
+            const position = new Vector3();
+            const rotation = new Euler();
+            const quaternion = new Quaternion();
+            const scale = new Vector3();
+    
+            localMatrix.decompose(position, quaternion, scale);
+            rotation.setFromQuaternion(quaternion);
+    
             if (onUpdate) {
-                onUpdate(rotationArray);
+                // Pass both position and rotation
+                onUpdate({
+                    position: [position.x, position.y, position.z],
+                    rotation: [rotation.x, rotation.y, rotation.z]
+                });
             }
-
-            invalidate()
+    
+            invalidate();
         },
 
         onDragEnd: () => {
             console.log('Drag end');
+            onDragEnd();
             invalidate()
         },
 
@@ -1514,7 +1516,7 @@ export const Gizmo = ({
 }
 ```
 
-# hmi/src/components/gizmo/Rotate.tsx
+# front/src/components/gizmo/Rotate.tsx
 
 ```tsx
  
@@ -1782,7 +1784,7 @@ export const Rotate: FC<{ axis: 0 | 1 | 2 }> = ({axis}) => {
 
 ```
 
-# hmi/src/components/gizmo/Translate.tsx
+# front/src/components/gizmo/Translate.tsx
 
 ```tsx
  
@@ -2012,11 +2014,10 @@ export const Translate: FC<{ axis: 0 | 1 | 2 }> = ({axis}) => {
 
 ```
 
-# hmi/src/components/mesh/Mesh.tsx
+# front/src/components/mesh/Mesh.tsx
 
 ```tsx
  
-import React from 'react'
 import {Robot} from '@types'
 import { Euler } from 'three'
 
@@ -2046,28 +2047,23 @@ export default Mesh
 
 ```
 
-# hmi/src/components/model/index.ts
+# front/src/components/model/index.ts
 
 ```ts
- 
-
-/**
- * The model folder contains the models we want to render.
- * Model is created in Blender, exported to glb and converted to tsx.
- *
- * Using a Barrel for clean import
- */
 export {RobotArm} from './RobotArm'
 
 ```
 
-# hmi/src/components/model/RobotArm.tsx
+# front/src/components/model/RobotArm.tsx
 
 ```tsx
+// @ts-nocheck
 import {Gizmo} from '@components/gizmo'
 import {useGLTF} from '@react-three/drei'
 import {Robot} from '@types'
 import Mesh from "@components/mesh/Mesh"
+import { useState } from 'react';
+import { Euler } from 'three';
 
 interface RobotProps {
     data: Robot.RobotNodes;
@@ -2077,44 +2073,137 @@ interface RobotProps {
 export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const {nodes} = useGLTF('/robot.glb') as unknown as Robot.DreiGLTF;
     const node = Robot.NodeName;
+    const [startRotation, setStartRotation] = useState<{[key: string]: number}>({});
+    const [startPosition, setStartPosition] = useState<{[key: string]: number}>({});
+    const [currentPositions, setCurrentPositions] = useState<{[key: string]: number}>({});
+    const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
+    const [currentRotations, setCurrentRotations] = useState<{[key: string]: [number, number, number]}>({
+        [node.mainColumn]: [0,0,0],
+        [node.upperArm]: [0,0,0],
+        [node.gripper]: [0,0,0]
+    });
 
-    const handleGizmoUpdate = (nodeName: Robot.NodeName, newMatrix: [number, number, number]) => {
-        console.log(`Updating ${nodeName}:`, newMatrix);
+    const SCALE_FACTORS = {
+        [node.mainColumn]: 4,
+        [node.upperArm]: 180,  // Zwiększony współczynnik dla upperArm
+        [node.gripper]: 180    // Taki sam współczynnik dla grippera
+    };
+    
+    const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+        let param;
+
+        if (nodeName === node.upperArm) {
+            param = transform.position[1];
+        } 
+
+        if (nodeName === node.gripper) {
+            param = transform.position[2];
+        } 
         
-        const newData: Partial<Robot.RobotNodes> = {
+        if (nodeName === node.mainColumn) {
+            param = transform.rotation
+        }
+
+        if (!param) return;
+
+        setCurrentPositions(prev => ({
+            ...prev,
+            [nodeName]: param
+        }));
+    };
+
+    const handleDragStart = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+        let param;
+
+        if (nodeName === node.upperArm) {
+            param = transform.position[1];
+        } 
+        
+        if (nodeName === node.gripper) {
+            param = transform.position[2];
+        } 
+
+        if (nodeName === node.mainColumn) {
+            const euler = new Euler().fromArray(transform.rotation);
+            const degrees = (euler.y * 180) / Math.PI;
+
+            param = degrees;
+        }
+
+        if (!param) return;
+
+        setStartRotation(prev => ({
+            ...prev,
+            [nodeName]: param
+        }));
+    };
+
+
+    const handleDragEnd = (nodeName: Robot.NodeName) => {
+        // Dane dla EV3
+        const ev3Data: Partial<Robot.RobotNodes> = {
             nodes: {
-                ...data.nodes,
-                [nodeName]: {
-                    ...data.nodes[nodeName],
-                    position: data.nodes[nodeName].position,
-                    scale: data.nodes[nodeName].scale,
-                    rotation: data.nodes[nodeName].rotation,
-                    _updated: true
-                }
+                ...data.nodes // Kopiujemy wszystkie oryginalne dane
             }
         };
-    
-        // Preserve initial rotations for hand and gripper
-        if (newData.nodes) {
-            if (newData.nodes.hand) {
-                newData.nodes.hand.rotation = data.nodes.hand.rotation;
-            }
-            if (newData.nodes.gripper && nodeName !== node.gripper) {
-                newData.nodes.gripper.rotation = data.nodes.gripper.rotation;
-            }
+
+        if (nodeName === node.upperArm) {
+            const currentHeight = currentPositions[nodeName] || 0;
+            const initialHeight = startPosition[nodeName] || 0;
+            const heightChange = currentHeight - initialHeight;
+            const angleChange = heightChange * SCALE_FACTORS[nodeName] * -1;
+
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                position: data.nodes[nodeName].position,
+                scale: data.nodes[nodeName].scale,
+                rotation: data.nodes[nodeName].rotation,
+                rotationDegrees: angleChange,
+                _updated: true
+            };
+        } 
+        else if (nodeName === node.gripper) {
+            const currentPosition = currentPositions[nodeName] || 0;
+            const initialPosition = startPosition[nodeName] || 0;
+            const positionChange = currentPosition - initialPosition;
+            const angleChange = positionChange * SCALE_FACTORS[nodeName] * -1;
+
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                position: data.nodes[nodeName].position,
+                scale: data.nodes[nodeName].scale,
+                rotation: data.nodes[nodeName].rotation,
+                rotationDegrees: angleChange,
+                _updated: true
+            };
         }
-    
-        // Reset _updated flag for other nodes
-        Object.keys(newData.nodes || {}).forEach((key) => {
-            // @ts-ignore
-            if (key !== nodeName && newData.nodes && newData.nodes[key]) {
-                // @ts-ignore
-                newData.nodes[key]._updated = false;
+        else if (nodeName === node.mainColumn) {
+            const euler = new Euler().fromArray(currentRotations[nodeName]);
+            const endDegrees = (euler.y * 180) / Math.PI;
+            let totalRotation = endDegrees - (startRotation[nodeName] || 0);
+            totalRotation *= SCALE_FACTORS[nodeName];
+
+            ev3Data.nodes[nodeName] = {
+                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                position: data.nodes[nodeName].position,
+                scale: data.nodes[nodeName].scale,
+                rotation: currentRotations[nodeName],
+                rotationDegrees: totalRotation,
+                _updated: true
+            };
+        }
+
+        // Reset updated flag dla innych węzłów
+        Object.keys(ev3Data.nodes).forEach((key) => {
+            if (key !== nodeName) {
+                ev3Data.nodes[key] = {
+                    ...data.nodes[key], // Zachowujemy oryginalne dane
+                    _updated: false
+                };
             }
         });
-    
-        console.log('Sending update:', newData);
-        onUpdate(newData);
+
+        onUpdate(ev3Data);
     };
 
     return (
@@ -2123,8 +2212,10 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                    disableTranslation
                    activeAxes={[true, false, true]}
                    userData={[node.mainColumn]}
-                   onUpdate={(newMatrix) => handleGizmoUpdate(node.mainColumn, newMatrix)}>
-                <Mesh node={nodes[node.mainColumn]} data={data.nodes[node.mainColumn]}/>
+                   onDragStart={() => handleDragStart(node.mainColumn, {position: visualData.nodes[node.mainColumn].position, rotation: visualData.nodes[node.mainColumn].rotation})}
+                   onDragEnd={() => handleDragEnd(node.mainColumn)}
+                   onUpdate={(transform) => handleGizmoUpdate(node.mainColumn, transform)}>
+                <Mesh node={nodes[node.mainColumn]} data={visualData.nodes[node.mainColumn]}/>
 
                 <Gizmo activeAxes={[false, true, false]}
                        translationLimits={[undefined, [-1, .8], undefined]}
@@ -2132,19 +2223,22 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
                        anchor={[-0.8, 1.5, 0]}
                        scale={1}
                        userData={[node.upperArm]}
-                       onUpdate={(newMatrix) => handleGizmoUpdate(node.upperArm, newMatrix)}>
-
-                    <Mesh node={nodes[node.upperArm]} data={data.nodes[node.upperArm]}/>
-                    <Mesh node={nodes[node.wristExtension]} data={data.nodes[node.wristExtension]}/>
-                    <Mesh node={nodes[node.hand]} data={data.nodes[node.hand]}/>
+                       onDragStart={() => handleDragStart(node.upperArm, {position: visualData.nodes[node.upperArm].position, rotation: visualData.nodes[node.upperArm].rotation})}
+                       onDragEnd={() => handleDragEnd(node.upperArm)}
+                       onUpdate={(transform) => handleGizmoUpdate(node.upperArm, transform)}>
+                    <Mesh node={nodes[node.upperArm]} data={visualData.nodes[node.upperArm]}/>
+                    <Mesh node={nodes[node.wristExtension]} data={visualData.nodes[node.wristExtension]}/>
+                    <Mesh node={nodes[node.hand]} data={visualData.nodes[node.hand]}/>
 
                     <Gizmo activeAxes={[false, false, true]}
                            translationLimits={[undefined, undefined, [0, 0.4]]}
                            anchor={[2, 0, 2]}
                            scale={0.75}
                            userData={[node.gripper]}
-                           onUpdate={(newMatrix) => handleGizmoUpdate(node.gripper, newMatrix)}>
-                        <Mesh node={nodes[node.gripper]} data={data.nodes[node.gripper]}/>
+                           onDragStart={() => handleDragStart(node.gripper, {position: visualData.nodes[node.gripper].position, rotation: visualData.nodes[node.gripper].rotation})}
+                           onDragEnd={() => handleDragEnd(node.gripper)}
+                           onUpdate={(transform) => handleGizmoUpdate(node.gripper, transform)}>
+                        <Mesh node={nodes[node.gripper]} data={visualData.nodes[node.gripper]}/>
                     </Gizmo>
                 </Gizmo>
             </Gizmo>
@@ -2155,7 +2249,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
 useGLTF.preload('/robot.glb');
 ```
 
-# hmi/src/components/stage/Ground.tsx
+# front/src/components/stage/Ground.tsx
 
 ```tsx
  
@@ -2185,7 +2279,7 @@ export const Ground = () => {
 
 ```
 
-# hmi/src/components/stage/index.ts
+# front/src/components/stage/index.ts
 
 ```ts
  
@@ -2202,7 +2296,7 @@ export {Ground} from './Ground'
 
 ```
 
-# hmi/src/components/stage/Shadows.tsx
+# front/src/components/stage/Shadows.tsx
 
 ```tsx
  
@@ -2220,7 +2314,7 @@ export const Shadows = memo(() => (
 
 ```
 
-# hmi/src/index.tsx
+# front/src/index.tsx
 
 ```tsx
  
@@ -2237,7 +2331,7 @@ root.render(<App/>)
 
 ```
 
-# hmi/src/types/index.ts
+# front/src/types/index.ts
 
 ```ts
  
@@ -2300,6 +2394,11 @@ export namespace Robot {
         data: RobotNode
     }
 
+    export type GizmoTransform = {
+        position: [number, number, number];
+        rotation: [number, number, number];
+    };
+
     /**
      * Properties we receive for a Robot Gizmo
      */
@@ -2332,7 +2431,11 @@ export namespace Robot {
         
         children?: ReactNode
 
-        onUpdate: (matrix: [number, number, number]) => void
+        onUpdate: (transform: GizmoTransform) => void;
+
+        onDragStart: () => void;
+
+        onDragEnd: () => void;
 
     }
 
@@ -2362,7 +2465,7 @@ export namespace Robot {
 
 ```
 
-# hmi/src/utils/index.ts
+# front/src/utils/index.ts
 
 ```ts
  
@@ -2472,7 +2575,7 @@ export {
 
 ```
 
-# hmi/tsconfig.json
+# front/tsconfig.json
 
 ```json
 {
@@ -2519,7 +2622,7 @@ export {
 
 ```
 
-# hmi/webserver.config.js
+# front/webserver.config.js
 
 ```js
 module.exports = {
@@ -2555,7 +2658,7 @@ This is a binary file of the type: Binary
 ```jsx
 /*
 Auto-generated by: https://github.com/pmndrs/gltfjsx
-Command: npx gltfjsx@6.5.2 ./hmi/public/robot_v2.glb 
+Command: npx gltfjsx@6.5.2 ./front/public/robot_v2.glb 
 */
 
 import React from 'react'
@@ -2676,7 +2779,7 @@ netstat -nr
 ```jsx
 /*
 Auto-generated by: https://github.com/pmndrs/gltfjsx
-Command: npx gltfjsx@6.5.2 ./hmi/public/robot_v2.glb 
+Command: npx gltfjsx@6.5.2 ./front/public/robot_v2.glb 
 */
 
 import React from 'react'
@@ -2704,7 +2807,7 @@ useGLTF.preload('/robot_v2.glb')
 ```jsx
 /*
 Auto-generated by: https://github.com/pmndrs/gltfjsx
-Command: npx gltfjsx@6.5.2 ./hmi/public/robot.glb 
+Command: npx gltfjsx@6.5.2 ./front/public/robot.glb 
 */
 
 import React from 'react'
