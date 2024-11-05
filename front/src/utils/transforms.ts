@@ -16,10 +16,11 @@ export const calculateRobotTransforms = {
 
   gripper: (currentPosition: number, initialPosition: number) => {
     // Gdy gripper przesunie się z 0 do 0.4 (cały zakres):
-    const positionChange = 0.4 - 0;
+    const change = 0.4 - 0;
+    const totalRange = 140;
     const positionChange = currentPosition - initialPosition;
     
-    return (positionChange * (totalRange/positionChange)) - totalRange/2;
+    return (positionChange * (totalRange/change)) - totalRange/2;
   },
 
   mainColumn: (currentPositions: number[], startRotation: number) => {

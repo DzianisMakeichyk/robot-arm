@@ -21,6 +21,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
 
     const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
+        console.log(1)
         if (nodeName === node.upperArm) {
             setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
