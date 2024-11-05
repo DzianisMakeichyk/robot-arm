@@ -1,9 +1,10 @@
 // @ts-nocheck
-import {Gizmo} from '@components/gizmo'
-import {useGLTF} from '@react-three/drei'
-import {Robot} from '@types'
-import Mesh from "@components/mesh/Mesh"
+import { Gizmo } from '@components/gizmo';
+import { useGLTF } from '@react-three/drei';
+import { Robot } from '@types';
+import Mesh from "@components/mesh/Mesh";
 import { useState } from 'react';
+import { calculateRobotTransforms, createNodeUpdate } from 'src/utils/transforms';
 import { Euler } from 'three';
 
 interface RobotProps {
@@ -18,131 +19,43 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const [startPosition, setStartPosition] = useState<{[key: string]: number}>({});
     const [currentPositions, setCurrentPositions] = useState<{[key: string]: number}>({});
     const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
-    const [currentRotations, setCurrentRotations] = useState<{[key: string]: [number, number, number]}>({
-        [node.mainColumn]: [0,0,0],
-        [node.upperArm]: [0,0,0],
-        [node.gripper]: [0,0,0]
-    });
-    const SCALE_FACTORS = {
-        [node.mainColumn]: 4,
-        [node.upperArm]: 180,  // Zwiększony współczynnik dla upperArm
-        [node.gripper]: 180    // Taki sam współczynnik dla grippera
-    };
 
-    const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+    const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
         if (nodeName === node.upperArm) {
-            const height = transform.position[1];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: height
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
-            const position = transform.position[2];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: position
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[2]}));
         } else {
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: transform.rotation
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.rotation}));
         }
     };
 
-    const handleDragStart = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+    const handleDragStart = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
         if (nodeName === node.upperArm) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[1]
-            }));
+            setStartPosition(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[2]
-            }));
-        } else if (nodeName === node.mainColumn){
+            setStartPosition(prev => ({...prev, [nodeName]: transform.position[2]}));
+        } else if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(transform.rotation);
             const degrees = (euler.y * 180) / Math.PI;
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: degrees
-            }));
+            setStartPosition(prev => ({...prev, [nodeName]: degrees}));
         }
     };
 
     const handleDragEnd = (nodeName: Robot.NodeName) => {
-        // Dane dla EV3
-        const ev3Data: Partial<Robot.RobotNodes> = {
-            nodes: {
-                ...data.nodes // Kopiujemy wszystkie oryginalne dane
-            }
-        };
+        const current = currentPositions[nodeName] || 0;
+        const initial = startPosition[nodeName] || 0;
+        let rotationDegrees = 0;
 
         if (nodeName === node.upperArm) {
-            const currentHeight = currentPositions[nodeName] || 0;
-            const initialHeight = startPosition[nodeName] || 0;
-            const heightChange = currentHeight - initialHeight;
-            const rotationDegrees = heightChange * 90 * -1 * 2;
-
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: data.nodes[nodeName].rotation,
-                rotationDegrees,
-                _updated: true
-            };
-        } 
-        else if (nodeName === node.gripper) {
-            const currentPosition = currentPositions[nodeName] || 0;
-            const initialPosition = startPosition[nodeName] || 0;
-            
-            const positionChange = currentPosition - initialPosition;
-            // Mapowanie 0->-70, 0.4->70
-            const angle = (positionChange * (140/0.4)) - 70;
-            
-            // Określ kierunek
-            // const direction = currentPosition > initialPosition ? 1 : -1;
-            const rotationDegrees = angle;
-
-            console.log(1000000, rotationDegrees)
-         
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName],
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: data.nodes[nodeName].rotation,
-                rotationDegrees,
-                _updated: true
-            };
-         }
-        else if (nodeName === node.mainColumn) {
-            const euler = new Euler().fromArray(currentPositions[nodeName]);
-            const endDegrees = (euler.y * 180) / Math.PI;
-            const totalRotation = endDegrees - (startRotation[nodeName] || 0);
-            const rotationDegrees = totalRotation * 4 * -1;
-
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: currentPositions[nodeName],
-                rotationDegrees,
-                _updated: true
-            };
+            rotationDegrees = calculateRobotTransforms.upperArm(current, initial);
+        } else if (nodeName === node.gripper) {
+            rotationDegrees = calculateRobotTransforms.gripper(current, initial);
+        } else if (nodeName === node.mainColumn) {
+            rotationDegrees = calculateRobotTransforms.mainColumn(currentPositions[nodeName], startRotation[nodeName]);
         }
 
-        // Reset updated flag dla innych węzłów
-        Object.keys(ev3Data.nodes).forEach((key) => {
-            if (key !== nodeName) {
-                ev3Data.nodes[key] = {
-                    ...data.nodes[key], // Zachowujemy oryginalne dane
-                    _updated: false
-                };
-            }
-        });
-
+        const ev3Data = createNodeUpdate(nodeName, data, rotationDegrees);
         onUpdate(ev3Data);
     };
 

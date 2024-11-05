@@ -2,6 +2,7 @@
 
 ```
 # dependencies
+node_modules/
 front/node_modules/
 api/node_modules/
 
@@ -351,12 +352,6 @@ This is a binary file of the type: Binary
 # data/WiredTigerLAS.wt
 
 This is a binary file of the type: Binary
-
-# docker-entrypoint.sh
-
-```sh
-
-```
 
 # ev3dev/ev3.py
 
@@ -942,7 +937,6 @@ if __name__ == "__main__":
 
 ```js
 const { alias } = require('react-app-rewire-alias')
-const webpackConfig = require('./webserver.config');
 
 module.exports = function override(config, env) {
   // Wyłącz HMR i WebSocket
@@ -974,14 +968,11 @@ module.exports = function override(config, env) {
   "dependencies": {
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.15",
-    "@types/cors": "^2.8.17",
-    "cors": "^2.8.5",
     "leva": "^0.9.35",
     "lodash.clamp": "^4.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "stats.js": "^0.17.0",
     "three": "^0.161.0"
   },
   "devDependencies": {
@@ -1114,7 +1105,7 @@ Disallow:
 # front/src/App.tsx
 
 ```tsx
-import React, {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
 import {Shadows, Ground} from '@components/stage';
@@ -1179,6 +1170,7 @@ export default function App() {
                 console.error('Parse error:', e);
             }
         };
+        
 
         websocket.onclose = (event) => {
             console.log('WebSocket closed:', event);
@@ -2082,62 +2074,53 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
         [node.upperArm]: [0,0,0],
         [node.gripper]: [0,0,0]
     });
-
     const SCALE_FACTORS = {
         [node.mainColumn]: 4,
         [node.upperArm]: 180,  // Zwiększony współczynnik dla upperArm
         [node.gripper]: 180    // Taki sam współczynnik dla grippera
     };
-    
+
     const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
-        let param;
-
         if (nodeName === node.upperArm) {
-            param = transform.position[1];
-        } 
-
-        if (nodeName === node.gripper) {
-            param = transform.position[2];
-        } 
-        
-        if (nodeName === node.mainColumn) {
-            param = transform.rotation
+            const height = transform.position[1];
+            setCurrentPositions(prev => ({
+                ...prev,
+                [nodeName]: height
+            }));
+        } else if (nodeName === node.gripper) {
+            const position = transform.position[2];
+            setCurrentPositions(prev => ({
+                ...prev,
+                [nodeName]: position
+            }));
+        } else {
+            setCurrentPositions(prev => ({
+                ...prev,
+                [nodeName]: transform.rotation
+            }));
         }
-
-        if (!param) return;
-
-        setCurrentPositions(prev => ({
-            ...prev,
-            [nodeName]: param
-        }));
     };
 
     const handleDragStart = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
-        let param;
-
         if (nodeName === node.upperArm) {
-            param = transform.position[1];
-        } 
-        
-        if (nodeName === node.gripper) {
-            param = transform.position[2];
-        } 
-
-        if (nodeName === node.mainColumn) {
+            setStartPosition(prev => ({
+                ...prev,
+                [nodeName]: transform.position[1]
+            }));
+        } else if (nodeName === node.gripper) {
+            setStartPosition(prev => ({
+                ...prev,
+                [nodeName]: transform.position[2]
+            }));
+        } else if (nodeName === node.mainColumn){
             const euler = new Euler().fromArray(transform.rotation);
             const degrees = (euler.y * 180) / Math.PI;
-
-            param = degrees;
+            setStartPosition(prev => ({
+                ...prev,
+                [nodeName]: degrees
+            }));
         }
-
-        if (!param) return;
-
-        setStartRotation(prev => ({
-            ...prev,
-            [nodeName]: param
-        }));
     };
-
 
     const handleDragEnd = (nodeName: Robot.NodeName) => {
         // Dane dla EV3
@@ -2151,44 +2134,52 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
             const currentHeight = currentPositions[nodeName] || 0;
             const initialHeight = startPosition[nodeName] || 0;
             const heightChange = currentHeight - initialHeight;
-            const angleChange = heightChange * SCALE_FACTORS[nodeName] * -1;
+            const rotationDegrees = heightChange * 90 * -1 * 2;
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane
                 position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: data.nodes[nodeName].rotation,
-                rotationDegrees: angleChange,
+                rotationDegrees,
                 _updated: true
             };
         } 
         else if (nodeName === node.gripper) {
             const currentPosition = currentPositions[nodeName] || 0;
             const initialPosition = startPosition[nodeName] || 0;
+            
             const positionChange = currentPosition - initialPosition;
-            const angleChange = positionChange * SCALE_FACTORS[nodeName] * -1;
+            // Mapowanie 0->-70, 0.4->70
+            const angle = (positionChange * (140/0.4)) - 70;
+            
+            // Określ kierunek
+            // const direction = currentPosition > initialPosition ? 1 : -1;
+            const rotationDegrees = angle;
 
+            console.log(1000000, rotationDegrees)
+         
             ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
+                ...data.nodes[nodeName],
                 position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
                 rotation: data.nodes[nodeName].rotation,
-                rotationDegrees: angleChange,
+                rotationDegrees,
                 _updated: true
             };
-        }
+         }
         else if (nodeName === node.mainColumn) {
-            const euler = new Euler().fromArray(currentRotations[nodeName]);
+            const euler = new Euler().fromArray(currentPositions[nodeName]);
             const endDegrees = (euler.y * 180) / Math.PI;
-            let totalRotation = endDegrees - (startRotation[nodeName] || 0);
-            totalRotation *= SCALE_FACTORS[nodeName];
+            const totalRotation = endDegrees - (startRotation[nodeName] || 0);
+            const rotationDegrees = totalRotation * 4 * -1;
 
             ev3Data.nodes[nodeName] = {
                 ...data.nodes[nodeName], // Zachowujemy oryginalne dane
                 position: data.nodes[nodeName].position,
                 scale: data.nodes[nodeName].scale,
-                rotation: currentRotations[nodeName],
-                rotationDegrees: totalRotation,
+                rotation: currentPositions[nodeName],
+                rotationDegrees,
                 _updated: true
             };
         }
@@ -2245,8 +2236,6 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
         </group>
     );
 };
-
-useGLTF.preload('/robot.glb');
 ```
 
 # front/src/components/stage/Ground.tsx
@@ -2465,6 +2454,32 @@ export namespace Robot {
 
 ```
 
+# front/src/utils/angles.ts
+
+```ts
+export const normalizeRotation = (rotation: number, min: number, max: number) => {
+  return Math.max(min, Math.min(max, rotation));
+}
+
+export const degreesToNormalizedRotation = (degrees: number) => {
+  // Convert degrees (-70 to 70) to rotation range (0 to 0.4)
+  const normalizedDegrees = normalizeRotation(degrees, -70, 70);
+  return (normalizedDegrees + 70) * (0.4 / 140); 
+}
+
+export const rotationToDegrees = (rotation: number) => {
+  // Convert rotation (0 to 0.4) to degrees range (-70 to 70) 
+  const normalizedRotation = normalizeRotation(rotation, 0, 0.4);
+  return (normalizedRotation * (140 / 0.4)) - 70;
+}
+
+export const preserveRotationState = (prevRotation: number, newRotation: number) => {
+  // Keep track of full rotations
+  const fullRotations = Math.floor(prevRotation / (Math.PI * 2));
+  return newRotation + (fullRotations * Math.PI * 2);
+}
+```
+
 # front/src/utils/index.ts
 
 ```ts
@@ -2622,65 +2637,6 @@ export {
 
 ```
 
-# front/webserver.config.js
-
-```js
-module.exports = {
-  devServer: {
-    hot: false,
-    webSocketServer: false
-  }
-};
-```
-
-# model/crane copy.blend
-
-This is a binary file of the type: Binary
-
-# model/crane_lego.blend
-
-This is a binary file of the type: Binary
-
-# model/crane.blend
-
-This is a binary file of the type: Binary
-
-# model/crane.blend1
-
-This is a binary file of the type: Binary
-
-# model/crane.glb
-
-This is a binary file of the type: Binary
-
-# model/Crane.jsx
-
-```jsx
-/*
-Auto-generated by: https://github.com/pmndrs/gltfjsx
-Command: npx gltfjsx@6.5.2 ./front/public/robot_v2.glb 
-*/
-
-import React from 'react'
-import { useGLTF } from '@react-three/drei'
-
-export function Model(props) {
-  const { nodes, materials } = useGLTF('/robot_v2.glb')
-  return (
-    <group {...props} dispose={null}>
-      <mesh geometry={nodes.main_column.geometry} material={nodes.main_column.material} position={[0, 1.462, 0]} />
-      <mesh geometry={nodes.upper_arm.geometry} material={nodes.upper_arm.material} position={[2.335, 0, 0.094]} scale={[0.684, 1, 1]} />
-      <mesh geometry={nodes.wrist_extension.geometry} material={nodes.wrist_extension.material} position={[3.241, 6.541, 0.007]} scale={0.264} />
-      <mesh geometry={nodes.hand.geometry} material={nodes.hand.material} position={[3.318, 5.71, -0.101]} rotation={[0, Math.PI / 2, 0]} scale={[1, 0.068, 0.327]} />
-      <mesh geometry={nodes.gripper.geometry} material={nodes.gripper.material} position={[3.275, 5.505, 0.286]} rotation={[Math.PI, -Math.PI / 2, 0]} scale={[-0.01, -0.132, -0.325]} />
-    </group>
-  )
-}
-
-useGLTF.preload('/robot_v2.glb')
-
-```
-
 # model/README.md
 
 ```md
@@ -2715,17 +2671,6 @@ to a ready to use jsx file.
 # model/robot_v2.glb
 
 This is a binary file of the type: Binary
-
-# package.json
-
-```json
-{
-  "dependencies": {
-    "serialport": "^12.0.0"
-  }
-}
-
-```
 
 # README.md
 
@@ -2769,6 +2714,8 @@ wscat -c ws://192.168.2.3:4000
 ### EV3
 ip -4 addr show usb0
 netstat -nr
+
+ssh robot@ev3dev.local
 
 
 
