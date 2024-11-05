@@ -5,19 +5,32 @@ import { Euler } from 'three';
 export const calculateRobotTransforms = {
   upperArm: (currentHeight: number, initialHeight: number) => {
     const heightChange = currentHeight - initialHeight;
-    return heightChange * 90 * -1 * 2;
+    // Gear ratio is 6:1 and direction is reversed
+    const gearRatioElbow = 6;
+    // Height ratio is 30:1 and direction is reversed
+    const heightRatioElbow = 30;
+    const direction = -1;
+
+    return heightChange * heightRatioElbow * direction * gearRatioElbow;
   },
 
   gripper: (currentPosition: number, initialPosition: number) => {
+    // Gdy gripper przesunie się z 0 do 0.4 (cały zakres):
+    const positionChange = 0.4 - 0;
     const positionChange = currentPosition - initialPosition;
-    return (positionChange * (140/0.4)) - 70;
+    
+    return (positionChange * (totalRange/positionChange)) - totalRange/2;
   },
 
   mainColumn: (currentPositions: number[], startRotation: number) => {
     const euler = new Euler().fromArray(currentPositions);
     const endDegrees = (euler.y * 180) / Math.PI;
     const totalRotation = endDegrees - (startRotation || 0);
-    return totalRotation * 4 * -1;
+    // Gear ratio is 4:1 and direction is reversed
+    const gearRatioBase = 4;
+    const direction = -1;
+
+    return totalRotation * gearRatioBase * direction;
   }
 };
 
