@@ -1105,222 +1105,37 @@ Disallow:
 # front/src/App.tsx
 
 ```tsx
-import {useState, useEffect, useCallback} from 'react';
-import {Canvas} from '@react-three/fiber';
-import {GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera} from '@react-three/drei';
-import {Shadows, Ground} from '@components/stage';
-import {Robot} from '@types';
-import {RobotArm} from "@components/model/RobotArm";
-
-const SOCKET_SERVER_URL = 'ws://localhost:4001';
+import { Canvas } from '@react-three/fiber';
+import { GizmoHelper, GizmoViewport, OrbitControls, Environment, Stats, PerspectiveCamera } from '@react-three/drei';
+import { Shadows, Ground } from '@components/stage';
+import { RobotArm } from "@components/model/RobotArm";
+import { useWebSocket } from './hooks/useWebSocket';
+import { StatusDisplay } from '@components/status';
+import { ErrorDisplay } from '@components/error';
 
 export default function App() {
-    const [robotData, setRobotData] = useState<Robot.RobotNodes>();    
-    const [ws, setWs] = useState<WebSocket | null>(null);
-    const [connectionStatus, setConnectionStatus] = useState('disconnected');
-    const [error, setError] = useState<string>('');
-    const [motorStatus, setMotorStatus] = useState<{[key: string]: string}>({
-        base: 'unknown',
-        elbow: 'unknown',
-        height: 'unknown'
-    });
-
-    useEffect(() => {
-        console.log('Connecting to:', SOCKET_SERVER_URL);
-        const websocket = new WebSocket(SOCKET_SERVER_URL);
-        
-        websocket.onopen = () => {
-            console.log('WebSocket Connected');
-            setConnectionStatus('connected');
-            setWs(websocket);
-            
-            // Request initial state
-            // websocket.send(JSON.stringify({ action: 'test_motor' }));
-        };
-
-        websocket.onmessage = (event) => {
-            console.log('Received raw message:', event.data);
-            try {
-                const response = JSON.parse(event.data);
-                console.log('Parsed response:', response);
-                
-                if (response.state && response.state.nodes) {
-                    console.log('Updating robot data with:', response.state);
-                    setRobotData(response.state);
-                }
-                
-                if (response.status === 'error') {
-                    console.error('Server error:', response.message);
-                    setError(response.message);
-                }
-                if (response.message) {
-                    const newStatus = {...motorStatus};
-                    if (response.message.includes('Base motor')) {
-                        newStatus.base = response.message.includes('not available') ? 'disconnected' : 'connected';
-                    }
-                    if (response.message.includes('Elbow motor')) {
-                        newStatus.elbow = response.message.includes('not available') ? 'disconnected' : 'connected';
-                    }
-                    if (response.message.includes('Height motor')) {
-                        newStatus.height = response.message.includes('not available') ? 'disconnected' : 'connected';
-                    }
-                    setMotorStatus(newStatus);
-                }
-            } catch (e) {
-                console.error('Parse error:', e);
-            }
-        };
-        
-
-        websocket.onclose = (event) => {
-            console.log('WebSocket closed:', event);
-            setConnectionStatus('disconnected');
-            setWs(null);
-        };
-        
-        websocket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            setConnectionStatus('error');
-        };
-
-        
-        
-        return () => websocket.close();
-    }, []);
-
-    const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
-        if (!ws || ws.readyState !== WebSocket.OPEN) {
-            console.error('WebSocket not connected');
-            initWebSocket();
-            return;
-        }
-
-        setRobotData(prevData => {
-            if (prevData) {
-                const updatedData = {...prevData, ...newData};
-                console.log('Sending update:', updatedData);
-                ws.send(JSON.stringify({
-                    action: 'update',
-                    ...updatedData
-                }));
-                return updatedData;
-            }
-            return prevData;
-        });
-    }, [ws])
-
-    const initWebSocket = useCallback(() => {
-        console.log('Initializing WebSocket...');
-        const websocket = new WebSocket(SOCKET_SERVER_URL);
-        
-        websocket.onclose = (event) => {
-            console.log('WebSocket closed:', event);
-            // Próba ponownego połączenia po 1s
-            setTimeout(initWebSocket, 1000);
-        };
-    
-        websocket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-    
-        setWs(websocket);
-    }, []);
-    
-    useEffect(() => {
-        initWebSocket();
-        return () => ws?.close();
-    }, []);
-
-    const testMotor = useCallback(() => {
-        if (ws?.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ action: 'test_motor' }));
-        } else {
-            console.error('WebSocket not connected');
-        }
-    }, [ws]);
-
-    useEffect(() => {
-        console.log('Current robot data:', robotData);
-    }, [robotData]);
+    const {
+        robotData,
+        connectionStatus,
+        error,
+        motorStatus,
+        updateRobotData,
+        testMotor
+    } = useWebSocket();
 
     if (error) {
         return (
-            <div style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: '#ff4444',
-                color: 'white',
-                padding: '20px',
-                borderRadius: '5px',
-                textAlign: 'center'
-            }}>
-                <div>{error}</div>
-                <button 
-                    onClick={() => window.location.reload()}
-                    style={{
-                        marginTop: '10px',
-                        padding: '5px 15px',
-                        backgroundColor: 'white',
-                        border: 'none',
-                        borderRadius: '3px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    Retry
-                </button>
-            </div>
+           <ErrorDisplay error={error} />
         );
     }
 
     return (
         <>
-            <div style={{
-                position: 'fixed',
-                top: '10px',
-                left: '10px',
-                zIndex: 1000,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-            }}>
-                <div style={{
-                    padding: '5px',
-                    background: connectionStatus === 'connected' ? '#4CAF50' : '#f44336',
-                    color: 'white',
-                    borderRadius: '4px'
-                }}>
-                    Socket Status: {connectionStatus}
-                </div>
-                <button
-                    onClick={testMotor}
-                    style={{
-                        padding: '10px',
-                        background: '#2196F3',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    Test Motor
-                </button>
-                <div style={{
-                    padding: '5px',
-                    background: '#333',
-                    color: 'white',
-                    borderRadius: '4px'
-                }}>
-                    Motors: 
-                    <br />
-                    Base: {motorStatus.base}
-                    <br />
-                    Elbow: {motorStatus.elbow}
-                    <br />
-                    Height: {motorStatus.height}
-                </div>
-            </div>
+            <StatusDisplay 
+                connectionStatus={connectionStatus}
+                motorStatus={motorStatus}
+                onTestMotor={testMotor}
+            />
             {robotData && (
                 <Canvas>
                     <PerspectiveCamera makeDefault fov={40} position={[10, 8, 25]}/>
@@ -1338,6 +1153,52 @@ export default function App() {
         </>
     );
 }
+```
+
+# front/src/components/error/ErrorDisplay.tsx
+
+```tsx
+interface ErrorDisplayProps {
+  error: string;
+}
+
+export const ErrorDisplay = ({ error }: ErrorDisplayProps) => {
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: '#ff4444',
+      color: 'white',
+      padding: '20px',
+      borderRadius: '5px',
+      textAlign: 'center'
+  }}>
+      <div>{error}</div>
+      <button 
+          onClick={() => window.location.reload()}
+          style={{
+              marginTop: '10px',
+              padding: '5px 15px',
+              backgroundColor: 'white',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer'
+          }}
+      >
+          Retry
+      </button>
+  </div>
+  );
+};
+```
+
+# front/src/components/error/index.ts
+
+```ts
+export {ErrorDisplay} from './ErrorDisplay'
+
 ```
 
 # front/src/components/gizmo/context.ts
@@ -2050,11 +1911,12 @@ export {RobotArm} from './RobotArm'
 
 ```tsx
 // @ts-nocheck
-import {Gizmo} from '@components/gizmo'
-import {useGLTF} from '@react-three/drei'
-import {Robot} from '@types'
-import Mesh from "@components/mesh/Mesh"
+import { Gizmo } from '@components/gizmo';
+import { useGLTF } from '@react-three/drei';
+import { Robot } from '@types';
+import Mesh from "@components/mesh/Mesh";
 import { useState } from 'react';
+import { calculateRobotTransforms, createNodeUpdate } from 'src/utils/transforms';
 import { Euler } from 'three';
 
 interface RobotProps {
@@ -2069,131 +1931,43 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const [startPosition, setStartPosition] = useState<{[key: string]: number}>({});
     const [currentPositions, setCurrentPositions] = useState<{[key: string]: number}>({});
     const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
-    const [currentRotations, setCurrentRotations] = useState<{[key: string]: [number, number, number]}>({
-        [node.mainColumn]: [0,0,0],
-        [node.upperArm]: [0,0,0],
-        [node.gripper]: [0,0,0]
-    });
-    const SCALE_FACTORS = {
-        [node.mainColumn]: 4,
-        [node.upperArm]: 180,  // Zwiększony współczynnik dla upperArm
-        [node.gripper]: 180    // Taki sam współczynnik dla grippera
-    };
 
-    const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+    const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
         if (nodeName === node.upperArm) {
-            const height = transform.position[1];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: height
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
-            const position = transform.position[2];
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: position
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[2]}));
         } else {
-            setCurrentPositions(prev => ({
-                ...prev,
-                [nodeName]: transform.rotation
-            }));
+            setCurrentPositions(prev => ({...prev, [nodeName]: transform.rotation}));
         }
     };
 
-    const handleDragStart = (nodeName: Robot.NodeName, transform: { position: [number, number, number], rotation: [number, number, number] }) => {
+    const handleDragStart = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
         if (nodeName === node.upperArm) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[1]
-            }));
+            setStartPosition(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: transform.position[2]
-            }));
-        } else if (nodeName === node.mainColumn){
+            setStartPosition(prev => ({...prev, [nodeName]: transform.position[2]}));
+        } else if (nodeName === node.mainColumn) {
             const euler = new Euler().fromArray(transform.rotation);
             const degrees = (euler.y * 180) / Math.PI;
-            setStartPosition(prev => ({
-                ...prev,
-                [nodeName]: degrees
-            }));
+            setStartPosition(prev => ({...prev, [nodeName]: degrees}));
         }
     };
 
     const handleDragEnd = (nodeName: Robot.NodeName) => {
-        // Dane dla EV3
-        const ev3Data: Partial<Robot.RobotNodes> = {
-            nodes: {
-                ...data.nodes // Kopiujemy wszystkie oryginalne dane
-            }
-        };
+        const current = currentPositions[nodeName] || 0;
+        const initial = startPosition[nodeName] || 0;
+        let rotationDegrees = 0;
 
         if (nodeName === node.upperArm) {
-            const currentHeight = currentPositions[nodeName] || 0;
-            const initialHeight = startPosition[nodeName] || 0;
-            const heightChange = currentHeight - initialHeight;
-            const rotationDegrees = heightChange * 90 * -1 * 2;
-
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: data.nodes[nodeName].rotation,
-                rotationDegrees,
-                _updated: true
-            };
-        } 
-        else if (nodeName === node.gripper) {
-            const currentPosition = currentPositions[nodeName] || 0;
-            const initialPosition = startPosition[nodeName] || 0;
-            
-            const positionChange = currentPosition - initialPosition;
-            // Mapowanie 0->-70, 0.4->70
-            const angle = (positionChange * (140/0.4)) - 70;
-            
-            // Określ kierunek
-            // const direction = currentPosition > initialPosition ? 1 : -1;
-            const rotationDegrees = angle;
-
-            console.log(1000000, rotationDegrees)
-         
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName],
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: data.nodes[nodeName].rotation,
-                rotationDegrees,
-                _updated: true
-            };
-         }
-        else if (nodeName === node.mainColumn) {
-            const euler = new Euler().fromArray(currentPositions[nodeName]);
-            const endDegrees = (euler.y * 180) / Math.PI;
-            const totalRotation = endDegrees - (startRotation[nodeName] || 0);
-            const rotationDegrees = totalRotation * 4 * -1;
-
-            ev3Data.nodes[nodeName] = {
-                ...data.nodes[nodeName], // Zachowujemy oryginalne dane
-                position: data.nodes[nodeName].position,
-                scale: data.nodes[nodeName].scale,
-                rotation: currentPositions[nodeName],
-                rotationDegrees,
-                _updated: true
-            };
+            rotationDegrees = calculateRobotTransforms.upperArm(current, initial);
+        } else if (nodeName === node.gripper) {
+            rotationDegrees = calculateRobotTransforms.gripper(current, initial);
+        } else if (nodeName === node.mainColumn) {
+            rotationDegrees = calculateRobotTransforms.mainColumn(currentPositions[nodeName], startRotation[nodeName]);
         }
 
-        // Reset updated flag dla innych węzłów
-        Object.keys(ev3Data.nodes).forEach((key) => {
-            if (key !== nodeName) {
-                ev3Data.nodes[key] = {
-                    ...data.nodes[key], // Zachowujemy oryginalne dane
-                    _updated: false
-                };
-            }
-        });
-
+        const ev3Data = createNodeUpdate(nodeName, data, rotationDegrees);
         onUpdate(ev3Data);
     };
 
@@ -2301,6 +2075,186 @@ export const Shadows = memo(() => (
     </AccumulativeShadows>
 ))
 
+```
+
+# front/src/components/status/index.ts
+
+```ts
+export {StatusDisplay} from './StatusDisplay'
+
+```
+
+# front/src/components/status/StatusDisplay.tsx
+
+```tsx
+interface StatusDisplayProps {
+  connectionStatus: string;
+  motorStatus: {[key: string]: string};
+  onTestMotor: () => void;
+}
+
+export const StatusDisplay = ({ connectionStatus, motorStatus, onTestMotor }: StatusDisplayProps) => {
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '10px',
+      left: '10px',
+      zIndex: 1000,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px'
+    }}>
+      <div style={{
+        padding: '5px',
+        background: connectionStatus === 'connected' ? '#4CAF50' : '#f44336',
+        color: 'white',
+        borderRadius: '4px'
+      }}>
+        Socket Status: {connectionStatus}
+      </div>
+      <button
+        onClick={onTestMotor}
+        style={{
+          padding: '10px',
+          background: '#2196F3',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        Test Motor
+      </button>
+      <div style={{
+        padding: '5px',
+        background: '#333',
+        color: 'white',
+        borderRadius: '4px'
+      }}>
+        Motors: 
+        <br />
+        Base: {motorStatus.base}
+        <br />
+        Elbow: {motorStatus.elbow}
+        <br />
+        Height: {motorStatus.height}
+      </div>
+    </div>
+  );
+};
+```
+
+# front/src/hooks/useWebSocket.ts
+
+```ts
+import { useState, useEffect, useCallback } from 'react';
+import { Robot } from '@types';
+
+const SOCKET_SERVER_URL = 'ws://localhost:4001';
+
+export const useWebSocket = () => {
+  const [robotData, setRobotData] = useState<Robot.RobotNodes>();
+  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState('disconnected');
+  const [error, setError] = useState<string>('');
+  const [motorStatus, setMotorStatus] = useState<{[key: string]: string}>({
+    base: 'unknown',
+    elbow: 'unknown',
+    height: 'unknown'
+  });
+
+  const initWebSocket = useCallback(() => {
+    const websocket = new WebSocket(SOCKET_SERVER_URL);
+    
+    websocket.onopen = () => {
+      setConnectionStatus('connected');
+      setWs(websocket);
+    };
+
+    websocket.onmessage = (event) => {
+      try {
+        const response = JSON.parse(event.data);
+        
+        if (response.state?.nodes) {
+          setRobotData(response.state);
+        }
+        
+        if (response.status === 'error') {
+          setError(response.message);
+        }
+
+        if (response.message) {
+          setMotorStatus(prev => {
+            const newStatus = {...prev};
+            if (response.message.includes('Base motor')) {
+              newStatus.base = response.message.includes('not available') ? 'disconnected' : 'connected';
+            }
+            if (response.message.includes('Elbow motor')) {
+              newStatus.elbow = response.message.includes('not available') ? 'disconnected' : 'connected';
+            }
+            if (response.message.includes('Height motor')) {
+              newStatus.height = response.message.includes('not available') ? 'disconnected' : 'connected';
+            }
+            return newStatus;
+          });
+        }
+      } catch (e) {
+        console.error('Parse error:', e);
+      }
+    };
+
+    websocket.onclose = () => {
+      setConnectionStatus('disconnected');
+      setWs(null);
+      setTimeout(initWebSocket, 1000);
+    };
+    
+    websocket.onerror = () => {
+      setConnectionStatus('error');
+    };
+
+    setWs(websocket);
+  }, []);
+
+  const updateRobotData = useCallback((newData: Partial<Robot.RobotNodes>) => {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      initWebSocket();
+      return;
+    }
+
+    setRobotData(prevData => {
+      if (prevData) {
+        const updatedData = {...prevData, ...newData};
+        ws.send(JSON.stringify({
+          action: 'update',
+          ...updatedData
+        }));
+        return updatedData;
+      }
+      return prevData;
+    });
+  }, [ws, initWebSocket]);
+
+  const testMotor = useCallback(() => {
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ action: 'test_motor' }));
+    }
+  }, [ws]);
+
+  useEffect(() => {
+    initWebSocket();
+    return () => ws?.close();
+  }, []);
+
+  return {
+    robotData,
+    connectionStatus,
+    error,
+    motorStatus,
+    updateRobotData,
+    testMotor
+  };
+};
 ```
 
 # front/src/index.tsx
@@ -2588,6 +2542,74 @@ export {
     calculateOffset
 }
 
+```
+
+# front/src/utils/transforms.ts
+
+```ts
+// @ts-nocheck
+import { Robot } from '@types';
+import { Euler } from 'three';
+
+export const calculateRobotTransforms = {
+  upperArm: (currentHeight: number, initialHeight: number) => {
+    const heightChange = currentHeight - initialHeight;
+    // Gear ratio is 6:1 and direction is reversed
+    const gearRatioElbow = 6;
+    // Height ratio is 30:1 and direction is reversed
+    const heightRatioElbow = 30;
+    const direction = -1;
+
+    return heightChange * heightRatioElbow * direction * gearRatioElbow;
+  },
+
+  gripper: (currentPosition: number, initialPosition: number) => {
+    // Gdy gripper przesunie się z 0 do 0.4 (cały zakres):
+    const positionChange = 0.4 - 0;
+    const positionChange = currentPosition - initialPosition;
+    
+    return (positionChange * (totalRange/positionChange)) - totalRange/2;
+  },
+
+  mainColumn: (currentPositions: number[], startRotation: number) => {
+    const euler = new Euler().fromArray(currentPositions);
+    const endDegrees = (euler.y * 180) / Math.PI;
+    const totalRotation = endDegrees - (startRotation || 0);
+    // Gear ratio is 4:1 and direction is reversed
+    const gearRatioBase = 4;
+    const direction = -1;
+
+    return totalRotation * gearRatioBase * direction;
+  }
+};
+
+export const createNodeUpdate = (nodeName: string, data: Robot.RobotNodes, rotationDegrees: number): Partial<Robot.RobotNodes> => {
+  const ev3Data: Partial<Robot.RobotNodes> = {
+    nodes: {
+      ...data.nodes
+    }
+  };
+
+  Object.keys(ev3Data.nodes).forEach((key) => {
+    if (key === nodeName) {
+      ev3Data.nodes[key] = {
+        ...data.nodes[key],
+        position: data.nodes[key].position,
+        scale: data.nodes[key].scale,
+        rotation: data.nodes[key].rotation,
+        rotationDegrees,
+        _updated: true
+      };
+    } else {
+      ev3Data.nodes[key] = {
+        ...data.nodes[key],
+        _updated: false
+      };
+    }
+  });
+
+  return ev3Data;
+};
 ```
 
 # front/tsconfig.json

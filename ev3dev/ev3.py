@@ -115,19 +115,6 @@ def get_motor(port):
         print("Error initializing motor on port " + port + ": " + str(e))
         return None
 
-def convert_to_motor_angle(rotation, motor_type):
-    # Convert radians to degrees
-    degrees = (rotation * 180) / 3.14159
-    
-    # Apply motor-specific limits and scaling
-    if motor_type == "BASE":
-        return max(-180, min(180, degrees))
-    elif motor_type == "ELBOW":
-        return max(-90, min(90, degrees))
-    elif motor_type == "HEIGHT":
-        return max(0, min(120, degrees))
-    return 0
-
 def decode_message(data):
     try:
         if len(data) < 2:
