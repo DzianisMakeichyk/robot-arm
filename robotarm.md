@@ -2,35 +2,7 @@
 
 ![Robot Arm Demo](placeholder-for-complete-setup.gif)
 
-## Table of Contents
-- [Overview](#overview) 
-- [Features](#features)
-- [Technologies](#technologies)
-- [Architecture](#architecture)
-- [Data Flow Between Interface and Robot](#data-flow-between-interface-and-robot)
-- [Detailed Data Types and Movement Control](#detailed-data-types-and-movement-control)
-- [Implementation Details](#implementation-details)
-- [Challenges & Solutions](#challenges--solutions)
-- - [WebSocket Communication Challenges](#webSocket-communication-challenges)
-- - - [Frame Decoding Issues](#frame-decoding-issues)
-- - - [Connection Stability Problems](#connection-stability-problems)
-- - - [Data Synchronization Between Frontend and Backend](#data-synchronization-between-frontend-and-backend)
-- - - [WebSocket Proxy Implementation](#websocket-proxy-implementation)
-- - - [Binary Data Handling](#binary-data-handling)
-- - [Motor Control Challenges](#motor-control-challenges)
-- - [3D Visualization Challenges](#3d-visualization-challenges)
-- - - [GLTF Model Loading and Manipulation](#gltf-model-loading-and-manipulation)
-- - - [Real-time Updates Synchronization](#real-time-updates-synchronization)
-- - [Error Handling Challenges](#error-handling-challenges)
-- - - [Connection Loss Recovery](#connection-loss-recovery)
-
-- - [State Management Challenges](#state-management-challenges)
-- - - [Multiple Component State Synchronization](#multiple-component-state-synchronization)
-- - [Performance Issues in Robot Arm Project](#performance-issues-in-robot-arm-project)
-- [Conclusion](#conclusion)
-- [Future Development](#future-development)
-
-## Overview
+# Overview
 
 ### The Beginning: Inspiration from Industry
 
@@ -42,8 +14,82 @@ The project combines **React**, **TypeScript** and **Python** to create a seamle
 
 [GIF needed: Show the complete robot arm setup responding to real-time controls through the web interface]
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies](#technologies)
+  - [Hardware](#hardware)
+  - [Software](#software)
+  - [Project Structure](#project-structure)
+  - [Architecture](#architecture)
+  - [Data Flow Between Interface and Robot](#data-flow-between-interface-and-robot)
+  - [WebSocket Message Format](#websocket-message-format)
+    - [Update Message](#update-message)
+    - [Response Format](#response-format)
+    - [Length Encoding](#length-encoding)
+  - [Supported Data Types](#supported-data-types)
+    - [Robot Node Structure](#robot-node-structure)
+    - [Motor Commands](#motor-commands)
+    - [Message Validation and Processing](#message-validation-and-processing)
+    - [Transform Calculations and Data Mapping](#transform-calculations-and-data-mapping)
+    - [State Updates and Error Handling](#state-updates-and-error-handling)
+    - [Node Updates and Movement Processing](#node-updates-and-movement-processing)
+    - [Motor Response Processing](#motor-response-processing)
+  - [Detailed Data Types and Movement Control](#detailed-data-types-and-movement-control)
+- [Implementation Details](#implementation-details)
+  - [Core EV3 System Functions](#core-ev3-system-functions)
+    - [Motor Detection](#motor-detection)
+    - [Motor Type Resolution](#motor-type-resolution)
+    - [WebSocket Frame Creation](#websocket-frame-creation)
+    - [Robot State Updates](#robot-state-updates)
+    - [WebSocket Server Connection](#websocket-server-connection)
+    - [Robot State Management](#robot-state-management)
+  - [WebSocket Proxy Server](#websocket-proxy-server)
+    - [Core Implementation](#core-implementation)
+    - [Connection Management](#connection-management)
+    - [Data Relay](#data-relay)
+    - [Error Handling](#error-handling)
+  - [Frontend-Backend Connection](#frontend-backend-connection)
+    - [WebSocket Hook Implementation](#websocket-hook-implementation)
+    - [Connection Initialization](#connection-initialization)
+    - [Robot Data Updates](#robot-data-updates)
+    - [Error Management](#error-management)
+    - [Motor Testing Interface](#motor-testing-interface)
+  - [Three.js + React Integration](#threejs--react-integration)
+    - [Main Robot Arm Component](#main-robot-arm-component)
+    - [Gizmo Control System](#gizmo-control-system)
+    - [Transform Calculations](#transform-calculations)
+    - [Movement Constraints](#movement-constraints)
+    - [Mesh Handling](#mesh-handling)
+    - [Scene Setup](#scene-setup)
+- [Challenges & Solutions](#challenges--solutions)
+  - [WebSocket Communication Challenges](#websocket-communication-challenges)
+    - [Frame Decoding Issues](#frame-decoding-issues)
+    - [Connection Stability Problems](#connection-stability-problems)
+    - [Data Synchronization](#data-synchronization)
+    - [WebSocket Proxy Implementation](#websocket-proxy-implementation)
+    - [Binary Data Handling](#binary-data-handling)
+  - [Motor Control Challenges](#motor-control-challenges)
+    - [Gear Ratio Calculations](#gear-ratio-calculations)
+  - [3D Visualization Challenges](#3d-visualization-challenges)
+    - [GLTF Model Loading](#gltf-model-loading)
+    - [Real-time Updates Synchronization](#real-time-updates-synchronization)
+  - [Error Handling Challenges](#error-handling-challenges)
+    - [Connection Loss Recovery](#connection-loss-recovery)
+    - [Motor Failure Handling](#motor-failure-handling)
+  - [State Management Challenges](#state-management-challenges)
+    - [Multiple Component State Synchronization](#multiple-component-state-synchronization)
+  - [Performance Issues](#performance-issues)
+    - [WebSocket Message Processing](#websocket-message-processing)
+    - [Movement Calculations Optimization](#movement-calculations-optimization)
+- [Conclusion](#conclusion)
+  - [Project Overview](#project-overview)
+  - [Technical Achievements](#technical-achievements)
+  - [Technical Challenges Overcome](#technical-challenges-overcome)
+  - [Future Improvements](#future-improvements)
+  - [Final Thoughts](#final-thoughts)
 
-## Features
+# Features
 - Real-time **WebSocket** communication
 - 3D visualization with **Three.js**
 - Custom motor control system
@@ -52,7 +98,7 @@ The project combines **React**, **TypeScript** and **Python** to create a seamle
 
 ![Interface Demo](placeholder-for-interface-demo.gif)
 
-## Technologies
+# Technologies
 ### Hardware
 - LEGO EV3 Mindstorms (model H25)
 - Motors: 2x Large Motor, 1x Medium Motor
@@ -63,7 +109,7 @@ The project combines **React**, **TypeScript** and **Python** to create a seamle
 - 3D: Blender (.glb models)
 - EV3: [ev3dev](https://www.ev3dev.org/)
 
-### Project Structure
+# Project Structure
 ```
 robot-arm/
 │
@@ -245,6 +291,64 @@ def create_websocket_frame(data):
         return None
 ```
 The WebSocket frame creation follows the standard WebSocket protocol specification. This implementation handles different payload sizes and ensures proper frame formatting. The function supports both small and medium-sized messages, with appropriate length encoding.
+
+```python
+def create_websocket_frame(data):
+    frame = bytearray()
+    frame.append(0x81)  # Text frame
+```
+
+The `0x81` byte is composed of:
+- `1000` (0x8) - FIN bit set to 1, indicating this is the final fragment
+- `0001` (0x1) - Opcode for text frame
+
+## Length Encoding
+```python
+if length <= 125:
+    frame.append(length)
+elif length <= 65535:
+    frame.append(126)
+    frame.append((length >> 8) & 0xFF)
+    frame.append(length & 0xFF)
+```
+
+The WebSocket protocol defines specific length thresholds:
+1. **0-125 bytes**: Length stored in a single byte
+   - Most efficient for small messages
+   - Common for simple commands and status updates
+
+2. **126-65535 bytes**: 
+   - Uses `126` as marker
+   - Followed by 2 bytes (16 bits) for actual length
+   - Supports messages up to 64KB
+
+3. **> 65535 bytes**: 
+   - Uses `127` as marker (not implemented in our code)
+   - Followed by 8 bytes for length
+   - Supports messages up to 2^64 bytes
+
+Our implementation uses only first two formats because:
+- Robot commands are typically small (<125 bytes)
+- State updates rarely exceed 65KB
+- Larger frames would increase latency
+- EV3's limited memory better suits smaller frames
+
+```python
+frame.append((length >> 8) & 0xFF)  # High byte
+frame.append(length & 0xFF)         # Low byte
+```
+
+For 16-bit length encoding:
+1. `length >> 8`: Shifts right 8 bits to get high byte
+2. `& 0xFF`: Masks to ensure single byte (0-255)
+3. Two bytes allow length range: 0 to 65535
+
+Example for length 1000:
+```
+1000 in binary:    0000 0011 1110 1000
+High byte (>>8):   0000 0011 (3)
+Low byte (& 0xFF): 1110 1000 (232)
+```
 
 ## Supported Data Types
 
@@ -577,12 +681,9 @@ const [error, setError] = useState<string>('');
 ```
 The state management system uses specific types to track various aspects of the robot's operation. Motor status tracking provides real-time feedback about each motor's condition. Connection and error states ensure proper system monitoring and error handling.
 
+# Implementation Details
 
-
-
-## Implementation Details
-
-# Core EV3 System Functions
+## Core EV3 System Functions
 
 ## 1. Motor Detection
 ```python
@@ -1134,12 +1235,7 @@ Scene components:
 [GIF needed: Camera movement and environment lighting demonstration]
 
 
-
-
-
-## Challenges & Solutions
-
-# WebSocket Communication Challenges
+# Challenges & Solutions
 
 ## Frame Decoding Issues
 
@@ -1192,7 +1288,6 @@ def decode_message(data):
 - Successful handling of all message types
 - Zero message corruption
 - Proper fragmentation handling
-- 99.9% successful decode rate
 
 ## Connection Stability Problems
 
@@ -1202,9 +1297,8 @@ During early testing, I noticed frequent connection drops, especially during rap
 ### Investigation
 Monitoring revealed several issues:
 1. No connection heartbeat
-2. No automatic reconnection
-3. No connection state tracking
-4. Buffer overflow during rapid commands
+2. No automatic reconnection & connection state tracking
+3. Buffer overflow during rapid commands
 
 ### Solution
 Implemented a robust connection management system:
@@ -1281,7 +1375,6 @@ const processMessageQueue = () => {
 - Perfect synchronization between UI and robot
 - No more out-of-order commands
 - Clear message flow tracking
-- Improved reliability
 
 ## WebSocket Proxy Implementation
 
@@ -1362,9 +1455,8 @@ def create_binary_frame(data):
 ```
 
 ### Outcome
-- 60% reduction in message size
+- Reduction in message size
 - Zero data corruption
-- Improved transmission speed
 - Better resource utilization
 
 ## Motor Control Challenges
@@ -1489,13 +1581,9 @@ const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTrans
 ```
 
 ### Outcome
-- Sub-50ms visual update latency
 - Smooth continuous motion
 - No state desynchronization
 - Efficient render cycles
-
-[Should I continue with Error Handling challenges?]
-
 
 
 # Error Handling Challenges
@@ -1541,7 +1629,6 @@ def monitor_connection():
 
 ### Results
 - Automatic recovery from USB disconnects
-- Graceful WebSocket reconnection
 - Clear user feedback during connection issues
 - No need for manual system restarts
 
@@ -1575,7 +1662,6 @@ def handle_motor_command(motor_id, command):
 # State Management Challenges
 
 ## Multiple Component State Synchronization
-
 
 When I started building this project, one of the most complex challenges was managing the state between:
 - The 3D visualization (what user sees)
@@ -1889,6 +1975,32 @@ Key learnings:
 - Connection state management
 - Real-time data synchronization
 - Proxy server implementation for protocol bridging
+
+
+### TCP/IP 
+
+Key TCP/IP learnings from the project:
+
+1. **Socket Management**
+   - Implementation of non-blocking sockets for real-time communication
+   - Port management between browser (4001) and robot (4000)
+
+2. **Connection Handling**
+   - Setup of socket reuse with SO_REUSEADDR
+   - Universal binding with '0.0.0.0' for all interface access
+   - Single client connection management
+
+3. **Data Flow Control**
+   - Efficient data buffering with 1024-byte receive buffer
+   - Error handling for connection drops and reconnections
+
+These implementations provided practical experience with:
+- TCP socket programming
+- Network proxy development
+- Real-time data transmission
+- Connection state management
+- Error recovery in networked systems
+
 
 ### Three.js Integration
 Working with Three.js and React revealed important aspects of 3D visualization:
