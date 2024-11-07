@@ -1,6 +1,6 @@
 # Robot Arm Control System
 
-![Robot Arm Demo](placeholder-for-complete-setup.gif)
+![Robot Arm Demo](./gifs/demo.gif)
 
 # Overview
 
@@ -96,7 +96,7 @@ The project combines **React**, **TypeScript** and **Python** to create a seamle
 - Error recovery and connection management
 - Position tracking and feedback
 
-![Interface Demo](placeholder-for-interface-demo.gif)
+![Interface Demo](./gifs/placeholder-for-interface-demo.gif)
 
 # Technologies
 ### Hardware
@@ -839,7 +839,7 @@ This state management system was designed to:
 - **Atomic Updates**: Each motor movement is handled independently
 
 
-![Motor Control Demo](placeholder-for-motor-control.gif)
+![Motor Control Demo](./gifs/placeholder-for-motor-control.gif)
 
 
 # WebSocket Proxy Server
@@ -1119,7 +1119,7 @@ Implementation features:
 - **State Updates**: Atomic updates for each drag operation
 - **Transform Mapping**: Direct mapping between 3D transforms and motor positions
 
-[GIF needed: Show Gizmo controls in action, demonstrating different axis constraints]
+![ Gizmo controls](./gifs/placeholder-controls.gif)
 
 ## Transform Calculations
 ```typescript
@@ -1154,8 +1154,6 @@ Key calculations:
 - **Angle Conversion**: Conversion between radians and degrees
 - **Initial Position Offset**: Compensation for starting positions
 
-[GIF needed: Visualization of gear ratios and movement conversions]
-
 ## Movement Constraints
 ```typescript
 <Gizmo scale={5}
@@ -1177,7 +1175,7 @@ Design considerations:
 - **Event Handling**: Complete drag cycle management
 - **Visual Updates**: Real-time mesh updates during manipulation
 
-[GIF needed: Demonstration of movement constraints and axis locks]
+![ Gizmo controls in action](./gifs/placeholder-controls-in-action.gif)
 
 ## Mesh Handling
 ```typescript
@@ -1202,8 +1200,6 @@ Implementation details:
 - **Default Values**: Fallback values for undefined rotations
 - **Property Mapping**: Direct mapping between data and Three.js properties
 - **Material Preservation**: Maintains original model materials
-
-[GIF needed: Show mesh transformations and material rendering]
 
 ## Scene Setup
 ```typescript
@@ -1231,8 +1227,6 @@ Scene components:
 - **Controls**: Orbit controls for view manipulation
 - **Helpers**: Gizmo viewport for orientation
 - **Performance**: Stats component for monitoring
-
-[GIF needed: Camera movement and environment lighting demonstration]
 
 
 # Challenges & Solutions
@@ -1324,6 +1318,8 @@ export const useWebSocket = () => {
     return () => clearInterval(interval);
   }, []);
 ```
+
+![Connection Stability](./gifs/connection-stability.gif)
 
 ## Data Synchronization Between Frontend and Backend
 
@@ -1584,6 +1580,8 @@ const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTrans
 - Smooth continuous motion
 - No state desynchronization
 - Efficient render cycles
+
+![Real-time Updates Synchronization](./gifs/real-time-updates-sync.gif)
 
 
 # Error Handling Challenges
@@ -1943,6 +1941,8 @@ The optimizations led to:
    - More efficient state updates
 
 # Conclusion
+
+![Robot Arm Full Demo](./gifs/full-demo.gif)
 
 ## Project Overview
 
