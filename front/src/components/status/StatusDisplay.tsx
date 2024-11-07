@@ -36,7 +36,7 @@ export const StatusDisplay = ({ connectionStatus, motorStatus, onTestMotor }: St
       >
         Test Motor
       </button>
-      <div style={{
+      {/* <div style={{
         padding: '5px',
         background: '#333',
         color: 'white',
@@ -49,7 +49,7 @@ export const StatusDisplay = ({ connectionStatus, motorStatus, onTestMotor }: St
         Elbow: {motorStatus.elbow}
         <br />
         Height: {motorStatus.height}
-      </div>
+      </div> */}
     </div>
   );
 };

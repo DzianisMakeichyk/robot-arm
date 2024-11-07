@@ -21,7 +21,6 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
 
     const handleGizmoUpdate = (nodeName: Robot.NodeName, transform: Robot.GizmoTransform) => {
-        console.log(1)
         if (nodeName === node.upperArm) {
             setCurrentPositions(prev => ({...prev, [nodeName]: transform.position[1]}));
         } else if (nodeName === node.gripper) {
@@ -37,8 +36,9 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
         } else if (nodeName === node.gripper) {
             setStartPosition(prev => ({...prev, [nodeName]: transform.position[2]}));
         } else if (nodeName === node.mainColumn) {
-            const euler = new Euler().fromArray(transform.rotation);
+            const euler = new Euler().fromArray(currentPositions[nodeName] || 0);
             const degrees = (euler.y * 180) / Math.PI;
+;
             setStartPosition(prev => ({...prev, [nodeName]: degrees}));
         }
     };
@@ -53,7 +53,7 @@ export const RobotArm = ({data, onUpdate}: RobotProps) => {
         } else if (nodeName === node.gripper) {
             rotationDegrees = calculateRobotTransforms.gripper(current, initial);
         } else if (nodeName === node.mainColumn) {
-            rotationDegrees = calculateRobotTransforms.mainColumn(currentPositions[nodeName], startRotation[nodeName]);
+            rotationDegrees = calculateRobotTransforms.mainColumn(currentPositions[nodeName], initial);
         }
 
         const ev3Data = createNodeUpdate(nodeName, data, rotationDegrees);

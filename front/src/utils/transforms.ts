@@ -17,7 +17,7 @@ export const calculateRobotTransforms = {
   gripper: (currentPosition: number, initialPosition: number) => {
     // Gdy gripper przesunie się z 0 do 0.4 (cały zakres):
     const change = 0.4 - 0;
-    const totalRange = 140;
+    const totalRange = -140;
     const positionChange = currentPosition - initialPosition;
     
     return (positionChange * (totalRange/change)) - totalRange/2;
@@ -26,7 +26,8 @@ export const calculateRobotTransforms = {
   mainColumn: (currentPositions: number[], startRotation: number) => {
     const euler = new Euler().fromArray(currentPositions);
     const endDegrees = (euler.y * 180) / Math.PI;
-    const totalRotation = endDegrees - (startRotation || 0);
+    const totalRotation = endDegrees - startRotation;
+
     // Gear ratio is 4:1 and direction is reversed
     const gearRatioBase = 4;
     const direction = -1;
