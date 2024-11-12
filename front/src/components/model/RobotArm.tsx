@@ -15,7 +15,6 @@ interface RobotProps {
 export const RobotArm = ({data, onUpdate}: RobotProps) => {
     const {nodes} = useGLTF('/robot.glb') as unknown as Robot.DreiGLTF;
     const node = Robot.NodeName;
-    const [startRotation, setStartRotation] = useState<{[key: string]: number}>({});
     const [startPosition, setStartPosition] = useState<{[key: string]: number}>({});
     const [currentPositions, setCurrentPositions] = useState<{[key: string]: number}>({});
     const [visualData, setVisualData] = useState<Robot.RobotNodes>(data);
